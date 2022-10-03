@@ -1,13 +1,15 @@
 from flask import Flask
+from flask import render_template
 app = Flask(__name__)
 
 @app.route('/')
 def home_page():
-    return '<p>This is the home page. <a href="/donation-form">Click here</a> to go to the donation page</p>'
+    return render_template('hello.html', name="Tricia", price="3")
 
 @app.route('/login')
-def login_page():
-    return 'This is the login page.'
+@app.route('/login/<name>')
+def login_page(name=None):
+    return render_template('hello.html', name=name)
 
 @app.route('/profile')
 def profile_page():
@@ -17,9 +19,9 @@ def profile_page():
 def donation_form_page():
     return 'This is the donation form page.'
 
-@app.route('/fundraiser')
-def fundraiser_page():
-    return 'This is the fundraiser page.'
+@app.route('/fundraiser/<fundraiser_name>')
+def fundraiser_page(fundraiser_name=None):
+    return render_template('fundraiser.html', fundraiser_name=fundraiser_name)
 
 @app.route('/new-fundraiser-form')
 def fundraiser_form_page():
