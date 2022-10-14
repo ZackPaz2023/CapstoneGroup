@@ -1,6 +1,3 @@
-CREATE DATABASE bankdb;
-use bankdb;
-
 CREATE TABLE USER
 	(Username char(30) NOT NULL,
 	 Password char(30) NOT NULL,
@@ -20,10 +17,10 @@ CREATE TABLE USER
      
 CREATE TABLE FUNDRAISER
 	(Title char(50) NOT NULL,
-	 Description char(1000),
+	 Description TEXT(1000),
 	 Goal decimal(15, 2) NOT NULL CHECK (Goal > 0),
 	 Balance decimal(15, 2),
-	 CreationDate Datetime CHECK (CreationDate >= 2022-01-01),
+	 CreationDate Datetime CHECK (CreationDate >= '2022-01-01 00:00:00'),
 	 Timeframe Datetime,
 	 FundID int NOT NULL,
 	 PRIMARY KEY (FundID));
@@ -35,7 +32,7 @@ ALTER TABLE FUNDRAISER
 CREATE TABLE DONATION
 	(DonationAmount decimal(15, 2) CHECK (DonationAmount > 0),
 	 TransactionID int NOT NULL,
-	 TransactionDate Datetime NOT NULL CHECK (TransactionDate >= 2022-01-01),
+	 TransactionDate Datetime NOT NULL CHECK (TransactionDate >= '2022-01-01 00:00:00'),
 	 PRIMARY KEY (TransactionID));
      
 CREATE TABLE OWNS
@@ -54,7 +51,7 @@ CREATE TABLE DONATES
 	 FOREIGN KEY (FundNo) REFERENCES FUNDRAISER (FundID));
      
 CREATE TABLE GIVES
-	(Email_Address char(50) NOT NULL,
+	(EmailAddress char(50) NOT NULL,
 	 TransactionNo int NOT NULL,
 	 PRIMARY KEY (EmailAddress, TransactionNo),
 	 FOREIGN KEY (EmailAddress) REFERENCES USER (Email),
