@@ -11,8 +11,8 @@ def monthLengths(month, year):
 def main():
     dbConnection = mysql.connector.connect(host = "localhost",
                                            user = "root",
-                                           password = "p", #ADD YOUR PASSWORD HERE FOR IT TO CONNECT
-                                           database = "dbname") #AND THE NAME OF YOUR DATABASE
+                                           password = "password",
+                                           database = "test")
 
     dbCursor = dbConnection.cursor()
 
@@ -54,34 +54,33 @@ def main():
 
     #Some basic strings that can be executed by the mySQL cursor when passed the right arguments: cursor.execute(statement, tuple)
     userInsert = 'INSERT INTO user (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, CardNumber, ExpirationDate, RouteNo, AccountNo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-    fundraiserInsert = 'INSERT INTO fundraiser (FundID, Title, Description, Goal, CreationDate, Timeframe) VALUES (%d, %s, %s, %s, %s, %s)'
-    donationInsert = 'INSERT INTO donation (TransactionID, TransactionDate, DonationAmount) VALUES (%d, %s, %s)'
+    fundraiserInsert = 'INSERT INTO fundraiser (FundID, Title, Description, Goal, CreationDate, Timeframe) VALUES (%s, %s, %s, %s, %s, %s)'
+    donationInsert = 'INSERT INTO donation (TransactionID, TransactionDate, DonationAmount) VALUES (%s, %s, %s)'
     ownsInsert = 'INSERT INTO owns (EmailAddress, FundNo) VALUES (%s, %s)'
     donatesInsert = 'INSERT INTO donates (EmailAddress, FundNo, DonationsToFund) VALUES (%s, %s, %s)'
     givesInsert = 'INSERT INTO gives (EmailAddress, TransactionNo) VALUES (%s, %s)'
-    fundsInsert = 'INSERT INTO funds (TransactionNo, FundNo) VALUES (%d, %s)'
+    fundsInsert = 'INSERT INTO funds (TransactionNo, FundNo) VALUES (%s, %s)'
     donatesUpdate = 'UPDATE donates SET DonationAmount = %s WHERE FundNo = %s AND EmailAddress = %s'
 
     checkDonor = 'SELECT DonationsToFund FROM donates WHERE EmailAddress = %s AND FundNo = %s'
 
     for u in userInfo:
-        print(userInsert % u)
-        dbCursor.execute(userInsert % u)
+        dbCursor.execute(userInsert, u)
 
     for f in FundInfo:
-        dbCursor.execute(fundraiserInsert % f[1:])
-        dbCursor.execute(ownsInsert % f[0:2])
+        dbCursor.execute(fundraiserInsert, f[1:])
+        dbCursor.execute(ownsInsert, f[0:2])
 
     for t in TranInfo:
-        dbCursor.execute(donationInsert % (t[1], t[4], t[3]))
-        dbCursor.execute(givesInsert % (t[2], t[0]))
-        dbCursor.execute(fundsInsert % t[0:2])
-        dbCursor.execute(checkDonor % (t[2], t[1]))
+        dbCursor.execute(donationInsert, (t[1], t[4], t[3]))
+        dbCursor.execute(givesInsert, (t[2], t[0]))
+        dbCursor.execute(fundsInsert, t[0:2])
+        dbCursor.execute(checkDonor, (t[2], t[1]))
         currentDonateAmount = dbCursor.fetchone()
         if currentDonateAmount is None:
-            dbCursor.execute(donatesInsert % (t[2], t[0], t[3]))
+            dbCursor.execute(donatesInsert, (t[2], t[0], t[3]))
         else:
-            dbCursor.execute(donatesUpdate % (t[3] + currentDonateAmount, t[2], t[0]))
+            dbCursor.execute(donatesUpdate, (t[3] + currentDonateAmount, t[2], t[0]))
 
         dbConnection.commit()
 
