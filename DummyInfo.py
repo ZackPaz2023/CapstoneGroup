@@ -46,21 +46,21 @@ def main():
                 (8, 1939, "DenverNotColorodo@gmail.com", 100, "2022-09-27 09-45-25"),
                 (9, 1812, "personalcomputer@outlook.com", 1000, "2022-09-30 04-35-09"),
                 (10, 1243, "nbonaparte@yahoo.com", 200, "2022-10-03 09-38-23"),
-                (11, 1243, "vinividivici@outlook.com", 500, "2022-10-04 08-10-49"),
+                (11, 1243, "venividivici@outlook.com", 500, "2022-10-04 08-10-49"),
                 (12, 1939, "personalcomputer@outlook.com", 1000, "2022-10-09 10-55-10"),
                 (13, 315, "kirayoshikage@aol.com", 30, "2022-10-15 09-33-13"),
                 (14, 666, "kirayoshikage@aol.com", 100, "2022-11-02 14-44-21"),
-                (15, 315, "2ofakind@gmail.com", 933.13, "2022-09-45 04-27-12")]
+                (15, 315, "2ofakind@gmail.com", 933.13, "2022-11-05 04-27-12")]
 
     #Some basic strings that can be executed by the mySQL cursor when passed the right arguments: cursor.execute(statement, tuple)
-    userInsert = 'INSERT INTO user (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, CardNumber, ExpirationDate, RouteNo, AccountNo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+    userInsert = 'INSERT INTO user (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, City, State, Country, CardNumber, ExpirationDate, RouteNo, AccountNo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
     fundraiserInsert = 'INSERT INTO fundraiser (FundID, Title, Description, Goal, CreationDate, Timeframe) VALUES (%s, %s, %s, %s, %s, %s)'
     donationInsert = 'INSERT INTO donation (TransactionID, TransactionDate, DonationAmount) VALUES (%s, %s, %s)'
     ownsInsert = 'INSERT INTO owns (EmailAddress, FundNo) VALUES (%s, %s)'
     donatesInsert = 'INSERT INTO donates (EmailAddress, FundNo, DonationsToFund) VALUES (%s, %s, %s)'
     givesInsert = 'INSERT INTO gives (EmailAddress, TransactionNo) VALUES (%s, %s)'
     fundsInsert = 'INSERT INTO funds (TransactionNo, FundNo) VALUES (%s, %s)'
-    donatesUpdate = 'UPDATE donates SET DonationAmount = %s WHERE FundNo = %s AND EmailAddress = %s'
+    donatesUpdate = 'UPDATE donates SET DonationsToFund = %s WHERE FundNo = %s AND EmailAddress = %s'
 
     checkDonor = 'SELECT DonationsToFund FROM donates WHERE EmailAddress = %s AND FundNo = %s'
 
@@ -72,20 +72,20 @@ def main():
         dbCursor.execute(ownsInsert, f[0:2])
 
     for t in TranInfo:
-        dbCursor.execute(donationInsert, (t[1], t[4], t[3]))
+        dbCursor.execute(donationInsert, (t[0], t[4], t[3]))
         dbCursor.execute(givesInsert, (t[2], t[0]))
         dbCursor.execute(fundsInsert, t[0:2])
         dbCursor.execute(checkDonor, (t[2], t[1]))
         currentDonateAmount = dbCursor.fetchone()
         if currentDonateAmount is None:
-            dbCursor.execute(donatesInsert, (t[2], t[0], t[3]))
+            dbCursor.execute(donatesInsert, (t[2], t[1], t[3]))
         else:
-            dbCursor.execute(donatesUpdate, (t[3] + currentDonateAmount, t[2], t[0]))
+            dbCursor.execute(donatesUpdate, (t[3] + currentDonateAmount[0], t[1], t[2]))
 
-        dbConnection.commit()
+    dbConnection.commit()
 
-        dbCursor.close()
-        dbConnection.close()
+    dbCursor.close()
+    dbConnection.close()
 
 if __name__ == "__main__":
     main()
