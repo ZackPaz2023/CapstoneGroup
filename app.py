@@ -3,21 +3,21 @@ from flask import render_template
 app = Flask(__name__)
 
 @app.route('/')
-def home_page():
-    return render_template('hello.html', name="Tricia", price="3")
+def home_page(name=None, price=None):
+    return render_template('hello.html', name=name, price=price)
 
 @app.route('/login')
-@app.route('/login/<name>')
-def login_page(name=None):
-    return render_template('hello.html', name=name)
+@app.route('/login/')
+def login_page(username=None, password=None):
+    return render_template('loginForm.html', username=username, password=password)
 
 @app.route('/profile')
-def profile_page():
-    return 'This is the profile page.'
+def profile_page(name=None, email=None):
+    return render_template('profile.html', name=name, email=email)
 
 @app.route('/donation-form')
-def donation_form_page():
-    return 'This is the donation form page.'
+def donation_form_page(name=None):
+    return render_template('new-donation.html', name="tricia")
 
 @app.route('/fundraiser/<fundraiser_name>')
 def fundraiser_page(fundraiser_name=None):
