@@ -1,13 +1,36 @@
 <!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Setup</title>
+</head>
 <title>Welcome!</title>
-{% if name %}
-  <h1>Hello {{ name }}!</h1>
-{% else %}
-  <h2>Hello, Guest!</h2>
-{% endif %}
 
-{% if price %}
-    <p>This is price {{ price }}</p>
-{% else %}
-    <p>No price to display</p>
-{% endif %}
+<h1>Hello {{ name }}!</h1>
+<br>
+<h2>Welcome to Commerce Bank Fundraising</h2>
+
+
+<h3>Current fundraisers:</h3>
+<table>
+    <thread>
+        <tr>
+            <th>TITLE</th>
+            <th>DESCRIPTION</th>
+            <th>GOAL</th>
+            <th>BALANCE</th>
+        </tr>
+    </thread>
+    <tbody>
+        {% for row in table %}
+        <tr>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}}</td>
+            <td>{{row[3]}}</td>
+        </tr>
+            {% endfor %}
+    </tbody>
+</table>
+
+

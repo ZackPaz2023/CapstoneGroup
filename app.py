@@ -6,14 +6,17 @@ app = Flask(__name__)
 
 class User:
     emailPK = ""
+    name = "Guest"
     def __init__(self):
         self.isGuest = True
 
 currentUser = User()
 
 @app.route('/')
-def home_page(name=None, price=None):
-    return render_template('hello.html', name=name, price=price)
+def home_page():
+    cursor.execute("SELECT Title, Description, Goal, Balance FROM FUNDRAISER")
+    homePageFundraiserData = cursor.fetchmany(20) #size restricted to prevent overloading front page
+    return render_template('hello.html', name=currentUser.name, table=homePageFundraiserData)
 
 @app.route('/login')
 @app.route('/login/')
