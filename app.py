@@ -6,10 +6,9 @@ app = Flask(__name__)
 def home_page(name=None, price=None):
     return render_template('hello.html', name=name, price=price)
 
-@app.route('/login')
-@app.route('/login/')
-def login_page(username=None, password=None):
-    return render_template('loginForm.html', username=username, password=password)
+@app.route('/login', methods = ['POST', 'GET'])
+def login_page():
+    return render_template('loginForm.html')
 
 @app.route('/profile')
 def profile_page(name=None, email=None):
