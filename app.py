@@ -4,6 +4,13 @@ from DB_Connection import *
 
 app = Flask(__name__)
 
+class User:
+    emailPK = ""
+    def __init__(self):
+        self.isGuest = True
+
+currentUser = User()
+
 @app.route('/')
 def home_page(name=None, price=None):
     return render_template('hello.html', name=name, price=price)
