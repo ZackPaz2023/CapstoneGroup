@@ -6,9 +6,11 @@ app = Flask(__name__)
 
 class User:
     emailPK = ""
-    name = "Guest"
+    name = ""
+    username = ""
     def __init__(self):
         self.isGuest = True
+        self.name = "Guest"
 
 currentUser = User()
 
@@ -16,28 +18,44 @@ currentUser = User()
 def home_page(): #create landing page later
     return render_template('login.html')
 
-@app.route('/dashboard/<username>') # <username> be used to get username-info from MySQL database
-def dashboard(username):
+@app.route('/dashboard')
+def dashboard():
     cursor.execute("SELECT Title, Description, Goal, Balance FROM FUNDRAISER")
     homePageFundraiserData = cursor.fetchmany(20)  # size restricted to prevent overloading front page
-    # **** dashboard expects USERNAME as a route parameter. use USERNAME to locate user records ****
-    return render_template('hello.html', name=username, table=homePageFundraiserData)
+    return render_template('hello.html', name=currentUser.name, table=homePageFundraiserData)
 
 
-@app.route('/login', methods = ['POST', 'GET']) #hardcoded database *currently*
+@app.route('/login', methods = ['POST', 'GET'])
 def login():
-    database = {"gib": "123", "scott": "111", "slow": "069"}  # replace with MySQL database
+    cursor.execute("SELECT UserName FROM USER")
+    DB_Usernames = list(cursor)
+    #DB_Usernames usernames returned in ("string",) format. Usernames were reformatted below for comparison operations.
+    DB_UsernamesReformatted = []
+    for name in DB_Usernames:
+        DB_UsernamesReformatted.append(name[0])
 
     if request.method == 'POST':
-       name1 = request.form["username"]
-       pwd = request.form["password"]
+        userName = request.form["username"]
+        password = request.form["password"]
 
-       if name1 in database and database[name1] == pwd: #if username is in database and if it matches
-           return redirect(url_for('dashboard', username=name1))
-       else:
-           return redirect(url_for('login'))
+        if userName in DB_UsernamesReformatted:
+            cursor.execute("SELECT Password FROM USER WHERE Username = '%s'" % userName)
+            DB_Password = cursor.fetchone()[0]
+            if password == DB_Password:
+                cursor.execute("SELECT Name, Email, Username FROM USER WHERE UserName = '%s'" % userName)
+                nameAndEmail = cursor.fetchmany(2)
+                currentUser.name = nameAndEmail[0][0]
+                currentUser.emailPK = nameAndEmail[0][1]
+                currentUser.username = userName
+                return redirect(url_for('dashboard'))
+            else:
+                #incorrect password
+                return redirect(url_for('login'))
+        else:
+            #inccorrect Username
+            return redirect(url_for('login'))
     else:
-       return render_template("login.html")
+        return render_template("login.html")
 
 @app.route('/profile')
 def profile_page(name=None, email=None):
@@ -79,7 +97,7 @@ def recordNewUserForm():
 
     cursor.execute("INSERT INTO USER (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, CardNumber, ExpirationDate, RouteNo, AccountNo) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (userName, password, email, name, phoneNumber, zipCode, streetAddress, state, city, country, cardNumber, expirationDate, routingNumber, accountNumber))
     db.commit()
-    return redirect(url_for('home_page'))
+    return redirect(url_for('dashboard'))
 
 @app.route('/settings')
 def settings_page():
