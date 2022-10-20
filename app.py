@@ -27,7 +27,7 @@ def dashboard():
 
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
-    cursor.execute("SELECT UserName FROM USER")
+    cursor.execute("SELECT Username FROM USER")
     DB_Usernames = list(cursor)
     #DB_Usernames usernames returned in ("string",) format. Usernames were reformatted below for comparison operations.
     DB_UsernamesReformatted = []
@@ -42,6 +42,7 @@ def login():
             cursor.execute("SELECT Password FROM USER WHERE Username = '%s'" % userName)
             DB_Password = cursor.fetchone()[0]
             if password == DB_Password:
+                currentUser.isGuest = False
                 cursor.execute("SELECT Name, Email, Username FROM USER WHERE UserName = '%s'" % userName)
                 nameAndEmail = cursor.fetchmany(2)
                 currentUser.name = nameAndEmail[0][0]
@@ -63,7 +64,19 @@ def profile_page(name=None, email=None):
 
 @app.route('/donation-form')
 def donation_form_page(name=None):
-    return render_template('new-donation.html', name="tricia")
+    cursor.execute("SELECT StreetAddress, City, State, ZipCode, Country, CardNumber, ExpirationDate, RouteNo, AccountNo  FROM USER WHERE Email = '%s'" % currentUser.emailPK)
+    userInfo = cursor.fetchall()
+    userInfoList = []
+    for info in userInfo:
+        for item in info:
+            userInfoList.append(item)
+    streetAddress = userInfoList[0]
+    restOfAddress = userInfoList[1] + " " + userInfoList[2] + " " + str(userInfoList[3]) + " " + userInfoList[4]
+    cardNum = str(userInfoList[5])
+    expirationDate = str(userInfoList[6])
+    routeNo = str(userInfoList[7])
+    accountNo = str(userInfoList[8])
+    return render_template('new-donation.html', name=currentUser.name, email=currentUser.emailPK, streetAddress=streetAddress, restOfAddress=restOfAddress, cardNum=cardNum, expirationDate=expirationDate, routeNo=routeNo, accountNo=accountNo)
 
 @app.route('/fundraiser/<fundraiser_name>')
 def fundraiser_page(fundraiser_name=None):

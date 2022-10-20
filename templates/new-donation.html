@@ -8,7 +8,7 @@
 <body>
 <h2>Make a New Donation!</h2><br>
 
-{% if name %}
+
 <h2>Hello {{ name }} </h2>
 <form action="/action_page.php">
 
@@ -17,15 +17,15 @@
 
     <!-- email -->
     <label for="email">Email: </label><br>
-    <input type="text" class="form-control" id="email" placeholder="Email"><br><br>
+    <input type="text" class="form-control" id="email" value={{email}}><br><br>
 
     <!-- name -->
     <h3>Name: {{ donation_name }}</h3>
 
     <!-- billing address -->
     <label for="address">Billing Address:</label><br>
-    <input type="text" class="form-control" id="address" placeholder="Address"><br><br>
-    <input type="text" class="form-control" id="inputCountry" placeholder="City, State, Country">
+    <input type="text" class="form-control" id="address" value={{streetAddress}}><br><br>
+    <input type="text" class="form-control" id="inputCountry" value={{restOfAddress}}>
   </form>
 
 <hr>
@@ -37,7 +37,7 @@
 
   <div class="form-body">
     <!-- Card Number -->
-    <input type="text" class="card-number" placeholder="Card Number">
+    <input type="text" class="card-number" value="{{cardNum}}">
 
     <!-- Date Field -->
     <div class="date-field">
@@ -72,7 +72,7 @@
       </div>
     </div>
 
-    <!-- Card Verification Field -->
+    <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
     <div class="card-verification">
       <div class="cvv-input">
         <input type="text" placeholder="CVV">
@@ -98,7 +98,7 @@
           <div class="form__control">
             <label class="form__label" for="routing">Bank number</label>
             <br>
-            <input type="text" id="routing" placeholder="e.g. 122100024">
+            <input type="text" id="routing" value={{routeNo}}>
           </div>
         </div>
       </div>
@@ -108,7 +108,7 @@
           <div class="form__control">
             <label class="form__label" for="account-number">Account number</label>
             <br>
-            <input class="account-number" id="account-number" type="password" placeholder="e.g. 122039827" />
+            <input class="account-number" id="account-number" type="password" value={{accountNo}} />
             <span class="show__account--number">
               <i class="fa fa-eye-slash pword_icon"></i>
             </span>
@@ -119,11 +119,6 @@
   </div>
 </div>
 </form>
-
-{% else %}
-  <h2>Hello, Guest!</h2>
-
-{% endif %}
 
 
 </body>
