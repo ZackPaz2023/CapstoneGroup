@@ -13,15 +13,31 @@ class User:
 currentUser = User()
 
 @app.route('/')
-def home_page():
-    cursor.execute("SELECT Title, Description, Goal, Balance FROM FUNDRAISER")
-    homePageFundraiserData = cursor.fetchmany(20) #size restricted to prevent overloading front page
-    return render_template('hello.html', name=currentUser.name, table=homePageFundraiserData)
+def home_page(): #create landing page later
+    return render_template('login.html')
 
-@app.route('/login')
-@app.route('/login/')
-def login_page(username=None, password=None):
-    return render_template('loginForm.html', username=username, password=password)
+@app.route('/dashboard/<username>') # <username> be used to get username-info from MySQL database
+def dashboard(username):
+    cursor.execute("SELECT Title, Description, Goal, Balance FROM FUNDRAISER")
+    homePageFundraiserData = cursor.fetchmany(20)  # size restricted to prevent overloading front page
+    # **** dashboard expects USERNAME as a route parameter. use USERNAME to locate user records ****
+    return render_template('hello.html', name=username, table=homePageFundraiserData)
+
+
+@app.route('/login', methods = ['POST', 'GET']) #hardcoded database *currently*
+def login():
+    database = {"gib": "123", "scott": "111", "slow": "069"}  # replace with MySQL database
+
+    if request.method == 'POST':
+       name1 = request.form["username"]
+       pwd = request.form["password"]
+
+       if name1 in database and database[name1] == pwd: #if username is in database and if it matches
+           return redirect(url_for('dashboard', username=name1))
+       else:
+           return redirect(url_for('login'))
+    else:
+       return render_template("login.html")
 
 @app.route('/profile')
 def profile_page(name=None, email=None):
