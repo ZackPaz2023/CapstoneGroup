@@ -17,15 +17,15 @@
 
     <!-- email -->
     <label for="email">Email: </label><br>
-    <input type="text" class="form-control" id="email" value={{email}}><br><br>
+    <input type="text" class="form-control" id="email" value="{{email}}" disabled/><br><br>
 
     <!-- name -->
     <h3>Name: {{ donation_name }}</h3>
 
     <!-- billing address -->
     <label for="address">Billing Address:</label><br>
-    <input type="text" class="form-control" id="address" value={{streetAddress}}><br><br>
-    <input type="text" class="form-control" id="inputCountry" value={{restOfAddress}}>
+    <input type="text" class="form-control" id="address" value="{{streetAddress}}" disabled/><br><br>
+    <input type="text" class="form-control" id="inputCountry" value="{{restOfAddress}}"disabled/>
   </form>
 
 <hr>
@@ -37,39 +37,12 @@
 
   <div class="form-body">
     <!-- Card Number -->
-    <input type="text" class="card-number" value="{{cardNum}}">
+    <input type="text" class="card-number" value="{{cardNum}}"disabled/>
 
     <!-- Date Field -->
     <div class="date-field">
-      <div class="month">
-        <select name="Month">
-          <option value="january">January</option>
-          <option value="february">February</option>
-          <option value="march">March</option>
-          <option value="april">April</option>
-          <option value="may">May</option>
-          <option value="june">June</option>
-          <option value="july">July</option>
-          <option value="august">August</option>
-          <option value="september">September</option>
-          <option value="october">October</option>
-          <option value="november">November</option>
-          <option value="december">December</option>
-        </select>
-      </div>
-      <div class="year">
-        <select name="Year">
-          <option value="2016">2016</option>
-          <option value="2017">2017</option>
-          <option value="2018">2018</option>
-          <option value="2019">2019</option>
-          <option value="2020">2020</option>
-          <option value="2021">2021</option>
-          <option value="2022">2022</option>
-          <option value="2023">2023</option>
-          <option value="2024">2024</option>
-        </select>
-      </div>
+      <input type="text" value = "{{expirationDate}}"disabled/>
+
     </div>
 
     <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
@@ -98,7 +71,7 @@
           <div class="form__control">
             <label class="form__label" for="routing">Bank number</label>
             <br>
-            <input type="text" id="routing" value={{routeNo}}>
+            <input type="text" id="routing" value="{{routeNo}}"disabled/>
           </div>
         </div>
       </div>
@@ -108,7 +81,7 @@
           <div class="form__control">
             <label class="form__label" for="account-number">Account number</label>
             <br>
-            <input class="account-number" id="account-number" type="password" value={{accountNo}} />
+            <input class="account-number" id="account-number" type="password" value="{{accountNo}}"disabled/ />
             <span class="show__account--number">
               <i class="fa fa-eye-slash pword_icon"></i>
             </span>

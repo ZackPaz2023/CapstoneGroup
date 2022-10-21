@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, url_for
 from flask import render_template
 from DB_Connection import *
+from DummyInfo import monthLengths
 
 app = Flask(__name__)
 
@@ -16,7 +17,7 @@ currentUser = User()
 
 @app.route('/')
 def home_page(): #create landing page later
-    return render_template('login.html')
+    return redirect(url_for('dashboard'))
 
 @app.route('/dashboard')
 def dashboard():
@@ -70,6 +71,8 @@ def donation_form_page(name=None):
     for info in userInfo:
         for item in info:
             userInfoList.append(item)
+    for item in userInfoList:
+        print(item)
     streetAddress = userInfoList[0]
     restOfAddress = userInfoList[1] + " " + userInfoList[2] + " " + str(userInfoList[3]) + " " + userInfoList[4]
     cardNum = str(userInfoList[5])
@@ -103,8 +106,8 @@ def recordNewUserForm():
     city = request.form["City"]
     country = request.form["Country"]
     cardNumber = request.form["CardNumber"]
-    #expirationDate = request.form["ExpirationDate"]
-    expirationDate = "2022-10-10"
+    expirationDate = request.form["Year"] + "-" + request.form["Month"] + "-" + str(monthLengths(int(request.form["Month"]), int(request.form["Year"])))
+    print(expirationDate)
     routingNumber = request.form["RoutingNumber"]
     accountNumber = request.form["AccountNumber"]
 
