@@ -15,17 +15,21 @@ SET @fid = 0;
 
 SELECT DonationAmount
 FROM DONATION
-INNER JOIN FUNDRAISER ON DONATION.TransactionID = fid AND 
-FUNDRAISER.FundID = fid
+WHERE TransactionID IN 
+	(SELECT TransactionNo
+	FROM FUNDS
+	INNER JOIN FUNDRAISER ON FundNo = fid AND FundID = fid)
 ORDER BY DonationAmount DESC
 LIMIT 5;
 
--- NOT TESTED
+-- TESTED
 -- Return the 5 most recent donations of a fundraiser
-SELECT DonationAmount
+SELECT DonationAmount, TransactionDate
 FROM DONATION
-INNER JOIN FUNDRAISER ON DONATION.TransactionID = fid AND 
-FUNDRAISER.FundID = fid
+WHERE TransactionID IN 
+	(SELECT TransactionNo
+	FROM FUNDS
+	INNER JOIN FUNDRAISER ON FundNo = fid AND FundID = fid)
 ORDER BY TransactionDate DESC
 LIMIT 5;
 
