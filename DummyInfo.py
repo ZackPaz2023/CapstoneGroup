@@ -36,26 +36,26 @@ def main():
                 ("venividivici@outlook.com", 315, "Incursio Pecunia", "Simulate hoc satis est ad incursionem Galliae.", 30000, "2022-05-05 15-55-13", "2023-08-05 00-00-00")]
 
     #Transaction Info: Transaction ID, Fundraiser ID, Donor Email, Donation Amount, Transaction Date
-    TranInfo = [(1, 1939, "DenverNotColorodo@gmail.com", 150, "2022-06-23 14-50-33"),
-                (2, 1243, "nbonaparte@yahoo.com", 50, "2022-08-02 03-22-40"),
-                (3, 1939, "Tinman@gmail.com", 300, "2022-08-05 08-00-00"),
-                (4, 1812, "clownin@yahoo.com", 1, "2022-08-15 17-08-55"),
-                (5, 315, "clownin@yahoo.com", 10, "2022-08-15 19-03-49"),
-                (6, 1243, "venividivici@outlook.com", 100, "2022-09-13 13-14-09"),
-                (7, 1939, "2ofakind@gmail.com", 241.56, "2022-09-15 14-38-01"),
-                (8, 1939, "DenverNotColorodo@gmail.com", 100, "2022-09-27 09-45-25"),
-                (9, 1812, "personalcomputer@outlook.com", 1000, "2022-09-30 04-35-09"),
-                (10, 1243, "nbonaparte@yahoo.com", 200, "2022-10-03 09-38-23"),
-                (11, 1243, "venividivici@outlook.com", 500, "2022-10-04 08-10-49"),
-                (12, 1939, "personalcomputer@outlook.com", 1000, "2022-10-09 10-55-10"),
-                (13, 315, "kirayoshikage@aol.com", 30, "2022-10-15 09-33-13"),
-                (14, 666, "kirayoshikage@aol.com", 100, "2022-11-02 14-44-21"),
-                (15, 315, "2ofakind@gmail.com", 933.13, "2022-11-05 04-27-12")]
+    TranInfo = [(1939, "DenverNotColorodo@gmail.com", 150, "2022-06-23 14-50-33"),
+                (1243, "nbonaparte@yahoo.com", 50, "2022-08-02 03-22-40"),
+                (1939, "Tinman@gmail.com", 300, "2022-08-05 08-00-00"),
+                (1812, "clownin@yahoo.com", 1, "2022-08-15 17-08-55"),
+                (315, "clownin@yahoo.com", 10, "2022-08-15 19-03-49"),
+                (1243, "venividivici@outlook.com", 100, "2022-09-13 13-14-09"),
+                (1939, "2ofakind@gmail.com", 241.56, "2022-09-15 14-38-01"),
+                (1939, "DenverNotColorodo@gmail.com", 100, "2022-09-27 09-45-25"),
+                (1812, "personalcomputer@outlook.com", 1000, "2022-09-30 04-35-09"),
+                (1243, "nbonaparte@yahoo.com", 200, "2022-10-03 09-38-23"),
+                (1243, "venividivici@outlook.com", 500, "2022-10-04 08-10-49"),
+                (1939, "personalcomputer@outlook.com", 1000, "2022-10-09 10-55-10"),
+                (315, "kirayoshikage@aol.com", 30, "2022-10-15 09-33-13"),
+                (666, "kirayoshikage@aol.com", 100, "2022-11-02 14-44-21"),
+                (315, "2ofakind@gmail.com", 933.13, "2022-11-05 04-27-12")]
 
     #Some basic strings that can be executed by the mySQL cursor when passed the right arguments: cursor.execute(statement, tuple)
     userInsert = 'INSERT INTO user (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, City, State, Country, CardNumber, ExpirationDate, RouteNo, AccountNo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
     fundraiserInsert = 'INSERT INTO fundraiser (FundID, Title, Description, Goal, CreationDate, Timeframe) VALUES (%s, %s, %s, %s, %s, %s)'
-    donationInsert = 'INSERT INTO donation (TransactionID, TransactionDate, DonationAmount) VALUES (%s, %s, %s)'
+    donationInsert = 'INSERT INTO donation (TransactionDate, DonationAmount) VALUES (%s, %s)'
     ownsInsert = 'INSERT INTO owns (EmailAddress, FundNo) VALUES (%s, %s)'
     donatesInsert = 'INSERT INTO donates (EmailAddress, FundNo, DonationsToFund) VALUES (%s, %s, %s)'
     givesInsert = 'INSERT INTO gives (EmailAddress, TransactionNo) VALUES (%s, %s)'
@@ -63,6 +63,7 @@ def main():
     donatesUpdate = 'UPDATE donates SET DonationsToFund = %s WHERE FundNo = %s AND EmailAddress = %s'
 
     checkDonor = 'SELECT DonationsToFund FROM donates WHERE EmailAddress = %s AND FundNo = %s'
+    checkTranID = 'SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s'
 
     for u in userInfo:
         dbCursor.execute(userInsert, u)
@@ -70,17 +71,19 @@ def main():
     for f in FundInfo:
         dbCursor.execute(fundraiserInsert, f[1:])
         dbCursor.execute(ownsInsert, f[0:2])
-
+        
     for t in TranInfo:
-        dbCursor.execute(donationInsert, (t[0], t[4], t[3]))
-        dbCursor.execute(givesInsert, (t[2], t[0]))
-        dbCursor.execute(fundsInsert, t[0:2])
-        dbCursor.execute(checkDonor, (t[2], t[1]))
+        dbCursor.execute(checkTranID, ("test", "donation"))
+        tranID = dbCursor.fetchone()[0]
+        dbCursor.execute(donationInsert, (t[3], t[2]))
+        dbCursor.execute(givesInsert, (t[1], tranID))
+        dbCursor.execute(fundsInsert, (tranID, t[0]))
+        dbCursor.execute(checkDonor, (t[1], t[0]))
         currentDonateAmount = dbCursor.fetchone()
         if currentDonateAmount is None:
-            dbCursor.execute(donatesInsert, (t[2], t[1], t[3]))
+            dbCursor.execute(donatesInsert, (t[1], t[0], t[2]))
         else:
-            dbCursor.execute(donatesUpdate, (t[3] + currentDonateAmount[0], t[1], t[2]))
+            dbCursor.execute(donatesUpdate, (t[2] + currentDonateAmount[0], t[0], t[1]))
 
     dbConnection.commit()
 
