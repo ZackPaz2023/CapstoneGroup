@@ -12,22 +12,23 @@
 
 
 <h3>Current fundraisers:</h3>
-<table>
+<table style="border:1px solid black;">
+
     <thread>
-        <tr>
-            <th>TITLE</th>
-            <th>DESCRIPTION</th>
-            <th>GOAL</th>
-            <th>BALANCE</th>
+        <tr style="border:1px solid black;">
+            <th style="border:1px solid black;">TITLE</th>
+            <th style="border:1px solid black;">DESCRIPTION</th>
+            <th style="border:1px solid black;">GOAL</th>
+            <th style="border:1px solid black;">BALANCE</th>
         </tr>
     </thread>
     <tbody>
         {% for row in table %}
         <tr>
-            <td>{{row[0]}}</td>
-            <td>{{row[1]}}</td>
-            <td>{{row[2]}}</td>
-            <td>{{row[3]}}</td>
+            <td style="border:1px solid black;"><a href="fundraiser/{{ row[4] }}">{{row[0]}}</a></td>
+            <td style="border:1px solid black;">{{row[1]}}</td>
+            <td style="border:1px solid black;">{{row[2]}}</td>
+            <td style="border:1px solid black;">{{row[3]}}</td>
         </tr>
             {% endfor %}
     </tbody>

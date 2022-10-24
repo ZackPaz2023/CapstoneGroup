@@ -21,9 +21,9 @@ def home_page(): #create landing page later
 
 @app.route('/dashboard')
 def dashboard():
-    cursor.execute("SELECT Title, Description, Goal, Balance FROM FUNDRAISER")
+    cursor.execute("SELECT Title, Description, Goal, Balance, FundID FROM FUNDRAISER")
     homePageFundraiserData = cursor.fetchmany(20)  # size restricted to prevent overloading front page
-    return render_template('hello.html', name=currentUser.name, table=homePageFundraiserData)
+    return render_template('dashboard.html', name=currentUser.name, table=homePageFundraiserData)
 
 
 @app.route('/login', methods = ['POST', 'GET'])
@@ -71,19 +71,18 @@ def donation_form_page(name=None):
     for info in userInfo:
         for item in info:
             userInfoList.append(item)
-    for item in userInfoList:
-        print(item)
-    streetAddress = userInfoList[0]
     restOfAddress = userInfoList[1] + " " + userInfoList[2] + " " + str(userInfoList[3]) + " " + userInfoList[4]
-    cardNum = str(userInfoList[5])
-    expirationDate = str(userInfoList[6])
-    routeNo = str(userInfoList[7])
-    accountNo = str(userInfoList[8])
-    return render_template('new-donation.html', name=currentUser.name, email=currentUser.emailPK, streetAddress=streetAddress, restOfAddress=restOfAddress, cardNum=cardNum, expirationDate=expirationDate, routeNo=routeNo, accountNo=accountNo)
+    return render_template('new-donation.html', name=currentUser.name, email=currentUser.emailPK, streetAddress=userInfoList[0], restOfAddress=restOfAddress, cardNum=str(userInfoList[5]), expirationDate=str(userInfoList[6]), routeNo=str(userInfoList[7]), accountNo=str(userInfoList[8]))
 
-@app.route('/fundraiser/<fundraiser_name>')
-def fundraiser_page(fundraiser_name=None):
-    return render_template('fundraiser.html', fundraiser_name=fundraiser_name)
+@app.route('/fundraiser/<fundraiser_ID>')
+def fundraiser_page(fundraiser_ID=None):
+    cursor.execute("SELECT Title, Description, Goal, Balance, CreationDate, Timeframe FROM FUNDRAISER WHERE FundID = '%s'" % fundraiser_ID)
+    fundraiserInfo = []
+    for line in list(cursor):
+        for item in line:
+            fundraiserInfo.append(item)
+
+    return render_template('fundraiser.html', fund_name=fundraiserInfo[0], fund_desc = fundraiserInfo[1], fund_goal = fundraiserInfo[2], fund_balance = fundraiserInfo[3], fund_creationdate = fundraiserInfo[4], fund_timeline = fundraiserInfo[5])
 
 @app.route('/new-fundraiser-form')
 def fundraiser_form_page():
