@@ -31,9 +31,11 @@ ALTER TABLE FUNDRAISER
         
 CREATE TABLE DONATION
 	(DonationAmount decimal(15, 2) CHECK (DonationAmount > 0),
-	 TransactionID int NOT NULL,
+	 TransactionID int NOT NULL AUTO_INCREMENT,
 	 TransactionDate Datetime NOT NULL CHECK (TransactionDate >= '2022-01-01 00:00:00'),
 	 PRIMARY KEY (TransactionID));
+     
+ALTER TABLE DONATION AUTO_INCREMENT=1;
      
 CREATE TABLE OWNS
 	(EmailAddress char(50) NOT NULL,
