@@ -10,7 +10,9 @@
 
 
 <h2>Hello {{ name }} </h2>
-<form action="/action_page.php">
+    <!-- name -->
+ <h3>Donating To: {{ fundraiser_name }}</h3>
+<form action="/submittingDonation" method="post">
 
   <label for="amount">Amount: </label><br>
   <input type="text" class="form-control" id="amount" placeholder="enter amount"><br><br>
@@ -19,14 +21,11 @@
     <label for="email">Email: </label><br>
     <input type="text" class="form-control" id="email" value="{{email}}" disabled/><br><br>
 
-    <!-- name -->
-    <h3>Name: {{ donation_name }}</h3>
 
     <!-- billing address -->
     <label for="address">Billing Address:</label><br>
     <input type="text" class="form-control" id="address" value="{{streetAddress}}" disabled/><br><br>
     <input type="text" class="form-control" id="inputCountry" value="{{restOfAddress}}"disabled/>
-  </form>
 
 <hr>
 
@@ -91,7 +90,13 @@
     </div>
   </div>
 </div>
+  <br>
+  <input type="submit" value="SUBMIT">
+
 </form>
+
+
+
 
 
 </body>

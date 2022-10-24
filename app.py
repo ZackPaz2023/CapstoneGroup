@@ -63,16 +63,24 @@ def login():
 def profile_page(name=None, email=None):
     return render_template('profile.html', name=name, email=email)
 
-@app.route('/donation-form')
-def donation_form_page(name=None):
+@app.route('/donation-form/<fund_ID>')
+def donation_form_page(fund_ID=None):
     cursor.execute("SELECT StreetAddress, City, State, ZipCode, Country, CardNumber, ExpirationDate, RouteNo, AccountNo  FROM USER WHERE Email = '%s'" % currentUser.emailPK)
     userInfo = cursor.fetchall()
     userInfoList = []
-    for info in userInfo:
-        for item in info:
-            userInfoList.append(item)
+    for row in userInfo:
+        for attribute in row:
+            userInfoList.append(attribute)
     restOfAddress = userInfoList[1] + " " + userInfoList[2] + " " + str(userInfoList[3]) + " " + userInfoList[4]
-    return render_template('new-donation.html', name=currentUser.name, email=currentUser.emailPK, streetAddress=userInfoList[0], restOfAddress=restOfAddress, cardNum=str(userInfoList[5]), expirationDate=str(userInfoList[6]), routeNo=str(userInfoList[7]), accountNo=str(userInfoList[8]))
+
+    cursor.execute("SELECT * FROM FUNDRAISER WHERE FundID = '%s'" % fund_ID)
+    fundraiserInfo = cursor.fetchall()
+    fundraiserInfoList = []
+    for line in fundraiserInfo:
+        for item in line:
+            fundraiserInfoList.append(item)
+
+    return render_template('new-donation.html', fundraiser_name = fundraiserInfoList[0], name=currentUser.name, email=currentUser.emailPK, streetAddress=userInfoList[0], restOfAddress=restOfAddress, cardNum=str(userInfoList[5]), expirationDate=str(userInfoList[6]), routeNo=str(userInfoList[7]), accountNo=str(userInfoList[8]))
 
 @app.route('/fundraiser/<fundraiser_ID>')
 def fundraiser_page(fundraiser_ID=None):
@@ -88,7 +96,7 @@ def fundraiser_page(fundraiser_ID=None):
     for donation in donationTable:
         balance += float(donation[1])
 
-    return render_template('fundraiser.html', fund_name=fundraiserInfo[0], fund_desc = fundraiserInfo[1], fund_goal = fundraiserInfo[2], fund_balance = balance, fund_creationdate = fundraiserInfo[4], fund_timeline = fundraiserInfo[5], table = donationTable)
+    return render_template('fundraiser.html', fund_ID = fundraiser_ID, fund_name=fundraiserInfo[0], fund_desc = fundraiserInfo[1], fund_goal = fundraiserInfo[2], fund_balance = balance, fund_creationdate = fundraiserInfo[4], fund_timeline = fundraiserInfo[5], table = donationTable)
 
 @app.route('/new-fundraiser-form')
 def fundraiser_form_page():
