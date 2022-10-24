@@ -9,15 +9,31 @@
         <br><br>
         Description : {{ fund_desc }}
         <br><br>
-        GOAL: {{ fund_goal }}
-        CURRENT BALANCE: {{fund_balance}}
+        GOAL: ${{ fund_goal }}
+        CURRENT BALANCE: ${{fund_balance}}
         <br><br>
 
         Created: {{fund_creationdate}}
         Fundraiser End Date: {{fund_timeline}}
-
-
     </h1>
+    <h2> Donations: </h2>
+<table style="border:1px solid black;">
+
+    <thread>
+        <tr style="border:1px solid black;">
+            <th style="border:1px solid black;">Donor</th>
+            <th style="border:1px solid black;">Amount</th>
+        </tr>
+    </thread>
+    <tbody>
+        {% for row in table %}
+        <tr>
+            <td style="border:1px solid black;">{{row[0]}}</td>
+            <td style="border:1px solid black;">${{row[1]}}</td>
+        </tr>
+            {% endfor %}
+    </tbody>
+</table>
 
 </body>
 </html>

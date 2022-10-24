@@ -21,7 +21,7 @@ def home_page(): #create landing page later
 
 @app.route('/dashboard')
 def dashboard():
-    cursor.execute("SELECT Title, Description, Goal, Balance, FundID FROM FUNDRAISER")
+    cursor.execute("SELECT Title, Description, Goal, FundID FROM FUNDRAISER")
     homePageFundraiserData = cursor.fetchmany(20)  # size restricted to prevent overloading front page
     return render_template('dashboard.html', name=currentUser.name, table=homePageFundraiserData)
 
@@ -82,7 +82,13 @@ def fundraiser_page(fundraiser_ID=None):
         for item in line:
             fundraiserInfo.append(item)
 
-    return render_template('fundraiser.html', fund_name=fundraiserInfo[0], fund_desc = fundraiserInfo[1], fund_goal = fundraiserInfo[2], fund_balance = fundraiserInfo[3], fund_creationdate = fundraiserInfo[4], fund_timeline = fundraiserInfo[5])
+    cursor.execute("SELECT Name, DonationsToFund FROM USER INNER JOIN DONATES ON Email = EmailAddress WHERE fundNo = %s" % fundraiser_ID)
+    donationTable = cursor.fetchall()
+    balance = 0.00
+    for donation in donationTable:
+        balance += float(donation[1])
+
+    return render_template('fundraiser.html', fund_name=fundraiserInfo[0], fund_desc = fundraiserInfo[1], fund_goal = fundraiserInfo[2], fund_balance = balance, fund_creationdate = fundraiserInfo[4], fund_timeline = fundraiserInfo[5], table = donationTable)
 
 @app.route('/new-fundraiser-form')
 def fundraiser_form_page():
