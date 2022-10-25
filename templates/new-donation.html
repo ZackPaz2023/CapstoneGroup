@@ -14,7 +14,7 @@
  <h3>Donating To: {{ fundraiser_name }}</h3>
 <form action="/submittingDonation" method="post">
 
-  <input type="hidden" name="fund_id" value="{{ fundraiser_ID }}">
+  <input type="hidden" name="fund_id" value="{{ fundraiser_ID }}"/>
 
   <label for="amount">Amount: </label><br>
   <input type="text" class="form-control" id="amount" name="amount" autocomplete="off" placeholder="enter amount"><br><br>
@@ -28,9 +28,6 @@
     <label for="address">Billing Address:</label><br>
     <input type="text" class="form-control" id="address" value="{{streetAddress}}" readonly="readonly" /><br><br>
     <input type="text" class="form-control" id="inputCountry" value="{{restOfAddress}}" readonly="readonly"/>
-
-<hr>
-
 
   <div class="form-header">
     <h4 class="title">Credit card detail</h4>
@@ -91,15 +88,13 @@
       </div>
     </div>
   </div>
+  </div>
 </div>
   <br>
-  <input type="submit" value="SUBMIT">
+  <input type="submit" value="SUBMIT"/>
 
 </form>
-
-
-
-
-
+<br>
+<button onclick="history.back()">Go Back</button>
 </body>
 </html>
