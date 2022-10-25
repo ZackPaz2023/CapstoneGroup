@@ -22,8 +22,8 @@ def home_page(): #create landing page later
 
 @app.route('/dashboard')
 def dashboard():
-    cursor.execute("SELECT Title, Description, Goal, FundID FROM FUNDRAISER")
-    homePageFundraiserData = cursor.fetchmany(20)  # size restricted to prevent overloading front page
+    cursor.execute("SELECT Title, Description, FundID FROM FUNDRAISER")
+    homePageFundraiserData = cursor.fetchall()
     return render_template('dashboard.html', name=currentUser.name, table=homePageFundraiserData)
 
 
@@ -92,7 +92,6 @@ def recordingDonation():
     # inserting new record into DONATES table
     cursor.execute("SELECT EmailAddress, FundNo FROM DONATES WHERE EXISTS (SELECT 1 FROM DONATES WHERE EmailAddress = %s AND FundNo = %s)" , (email, fund_id))
     doesExistInDB = cursor.fetchall()
-    print(doesExistInDB)
     if not doesExistInDB:
         cursor.execute("INSERT INTO DONATES (EmailAddress, FundNo, DonationsToFund) VALUES (%s,%s,%s)", (email, fund_id, amount))
     else:
@@ -120,13 +119,19 @@ def fundraiser_page(fundraiser_ID=None):
         for item in line:
             fundraiserInfo.append(item)
 
+    #Reformatting time constraints to be more user friendly
+    fundraiserCreationDate = str(fundraiserInfo[4])[0:10]
+    fundraiserCreationDate = fundraiserCreationDate[5:8] + fundraiserCreationDate[8:10] + "-" + fundraiserCreationDate[0:4]
+    fundraiserTimeline = str(fundraiserInfo[5])[0:10]
+    fundraiserTimeline = fundraiserTimeline[5:8] + fundraiserTimeline[8:10] + "-" + fundraiserTimeline[0:4]
+
     cursor.execute("SELECT Name, DonationsToFund FROM USER INNER JOIN DONATES ON Email = EmailAddress WHERE fundNo = %s" % fundraiser_ID)
     donationTable = cursor.fetchall()
     balance = 0.00
     for donation in donationTable:
         balance += float(donation[1])
 
-    return render_template('fundraiser.html', fund_ID = fundraiser_ID, fund_name=fundraiserInfo[0], fund_desc = fundraiserInfo[1], fund_goal = fundraiserInfo[2], fund_balance = balance, fund_creationdate = fundraiserInfo[4], fund_timeline = fundraiserInfo[5], table = donationTable)
+    return render_template('fundraiser.html', fund_ID = fundraiser_ID, fund_name=fundraiserInfo[0], fund_desc = fundraiserInfo[1], fund_goal = fundraiserInfo[2], fund_balance = balance, fund_creationdate = fundraiserCreationDate, fund_timeline = fundraiserTimeline, table = donationTable)
 
 @app.route('/new-fundraiser')
 def fundraiser_form_page():

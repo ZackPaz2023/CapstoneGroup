@@ -18,15 +18,13 @@
         <tr style="border:1px solid black;">
             <th style="border:1px solid black;">TITLE</th>
             <th style="border:1px solid black;">DESCRIPTION</th>
-            <th style="border:1px solid black;">GOAL</th>
         </tr>
     </thread>
     <tbody>
         {% for row in table %}
         <tr>
-            <td style="border:1px solid black;"><a href="fundraiser/{{ row[3] }}">{{row[0]}}</a></td>
+            <td style="border:1px solid black;"><a href="fundraiser/{{ row[2] }}">{{row[0]}}</a></td>
             <td style="border:1px solid black;">{{row[1]}}</td>
-            <td style="border:1px solid black;">{{row[2]}}</td>
         </tr>
             {% endfor %}
     </tbody>

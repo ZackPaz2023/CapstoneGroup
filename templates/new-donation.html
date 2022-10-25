@@ -17,7 +17,7 @@
   <input type="hidden" name="fund_id" value="{{ fundraiser_ID }}">
 
   <label for="amount">Amount: </label><br>
-  <input type="text" class="form-control" id="amount" name="amount" placeholder="enter amount"><br><br>
+  <input type="text" class="form-control" id="amount" name="amount" autocomplete="off" placeholder="enter amount"><br><br>
 
   <!-- email -->
   <label for="email">Email: </label><br>
@@ -49,7 +49,7 @@
     <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
     <div class="card-verification">
       <div class="cvv-input">
-        <input type="text" placeholder="CVV">
+        <input type="text" autocomplete="off" placeholder="CVV">
       </div>
     </div>
   </div>
