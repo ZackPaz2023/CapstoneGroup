@@ -180,8 +180,12 @@ def recordNewUserForm():
 
     cursor.execute("INSERT INTO USER (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, CardNumber, ExpirationDate, RouteNo, AccountNo) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (userName, password, email, name, phoneNumber, zipCode, streetAddress, state, city, country, cardNumber, expirationDate, routingNumber, accountNumber))
     db.commit()
-    return redirect(url_for('dashboard'))
 
+    currentUser.isGuest = False
+    currentUser.name = name
+    currentUser.emailPK = email
+    currentUser.username = userName
+    return redirect(url_for('dashboard'))
 @app.route('/settings')
 def settings_page():
     return 'This is the settings page.'
