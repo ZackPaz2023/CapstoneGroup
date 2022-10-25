@@ -1,3 +1,4 @@
+import time
 from flask import Flask, request, redirect, url_for
 from flask import render_template
 from DB_Connection import *
@@ -79,8 +80,31 @@ def donation_form_page(fund_ID=None):
     for line in fundraiserInfo:
         for item in line:
             fundraiserInfoList.append(item)
+    return render_template('new-donation.html', fundraiser_ID=fund_ID ,fundraiser_name = fundraiserInfoList[0], name=currentUser.name, email=currentUser.emailPK, streetAddress=userInfoList[0], restOfAddress=restOfAddress, cardNum=str(userInfoList[5]), expirationDate=str(userInfoList[6]), routeNo=str(userInfoList[7]), accountNo=str(userInfoList[8]))
 
-    return render_template('new-donation.html', fundraiser_name = fundraiserInfoList[0], name=currentUser.name, email=currentUser.emailPK, streetAddress=userInfoList[0], restOfAddress=restOfAddress, cardNum=str(userInfoList[5]), expirationDate=str(userInfoList[6]), routeNo=str(userInfoList[7]), accountNo=str(userInfoList[8]))
+
+@app.route('/submittingDonation', methods=["POST"])
+def recordingDonation():
+    amount = request.form["amount"]
+    email = request.form["email"]
+    fund_id = request.form["fund_id"]
+
+    #Inserting new record into DONATION table
+    cursor.execute("INSERT INTO DONATION (DonationAmount, TransactionDate) VALUES (%s, %s)", (amount, time.strftime('%Y-%m-%d %H:%M:%S')))
+
+    #inserting new record into GIVES table
+    cursor.execute("SELECT LAST_INSERT_ID()")
+    transactionID = cursor.fetchone()[0]
+    cursor.execute("INSERT INTO GIVES (EmailAddress, TransactionNo) VALUES (%s, %s)", (email, transactionID))
+
+    #Inserting new record into FUNDS table
+    cursor.execute("INSERT INTO FUNDS (TransactionNo, FundNo) VALUES (%s,%s)", (transactionID, fund_id))
+
+    #inserting new record into DONATES table
+    cursor.execute("INSERT INTO DONATES (EmailAddress, FundNo, DonationsToFund) VALUES (%s,%s,%s)", (email, fund_id, amount))
+    db.commit()
+    return redirect(url_for('dashboard'))
+
 
 @app.route('/fundraiser/<fundraiser_ID>')
 def fundraiser_page(fundraiser_ID=None):

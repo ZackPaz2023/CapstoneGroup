@@ -14,33 +14,35 @@
  <h3>Donating To: {{ fundraiser_name }}</h3>
 <form action="/submittingDonation" method="post">
 
-  <label for="amount">Amount: </label><br>
-  <input type="text" class="form-control" id="amount" placeholder="enter amount"><br><br>
+  <input type="hidden" name="fund_id" value="{{ fundraiser_ID }}">
 
-    <!-- email -->
-    <label for="email">Email: </label><br>
-    <input type="text" class="form-control" id="email" value="{{email}}" disabled/><br><br>
+  <label for="amount">Amount: </label><br>
+  <input type="text" class="form-control" id="amount" name="amount" placeholder="enter amount"><br><br>
+
+  <!-- email -->
+  <label for="email">Email: </label><br>
+  <input type="text" class="form-control" id="email" name="email" value="{{ email }}" readonly="readonly" /><br><br>
 
 
     <!-- billing address -->
     <label for="address">Billing Address:</label><br>
-    <input type="text" class="form-control" id="address" value="{{streetAddress}}" disabled/><br><br>
-    <input type="text" class="form-control" id="inputCountry" value="{{restOfAddress}}"disabled/>
+    <input type="text" class="form-control" id="address" value="{{streetAddress}}" readonly="readonly" /><br><br>
+    <input type="text" class="form-control" id="inputCountry" value="{{restOfAddress}}" readonly="readonly"/>
 
 <hr>
 
-<form class="credit-card">
+
   <div class="form-header">
     <h4 class="title">Credit card detail</h4>
   </div>
 
   <div class="form-body">
     <!-- Card Number -->
-    <input type="text" class="card-number" value="{{cardNum}}"disabled/>
+    <input type="text" class="card-number" value="{{cardNum}}"readonly="readonly"/>
 
     <!-- Date Field -->
     <div class="date-field">
-      <input type="text" value = "{{expirationDate}}"disabled/>
+      <input type="text" value = "{{expirationDate}}"readonly="readonly" />
 
     </div>
 
@@ -52,9 +54,9 @@
     </div>
   </div>
 
-</form>
 
-<form>
+
+
 <!-- Bank Account -->
 <div class="form-header">
     <h4 class="title">Bank Account detail</h4>
@@ -70,7 +72,7 @@
           <div class="form__control">
             <label class="form__label" for="routing">Bank number</label>
             <br>
-            <input type="text" id="routing" value="{{routeNo}}"disabled/>
+            <input type="text" id="routing" value="{{routeNo}}" readonly="readonly" />
           </div>
         </div>
       </div>
@@ -80,7 +82,7 @@
           <div class="form__control">
             <label class="form__label" for="account-number">Account number</label>
             <br>
-            <input class="account-number" id="account-number" type="password" value="{{accountNo}}"disabled/ />
+            <input class="account-number" id="account-number" type="password" value="{{accountNo}}"readonly="readonly" />
             <span class="show__account--number">
               <i class="fa fa-eye-slash pword_icon"></i>
             </span>
