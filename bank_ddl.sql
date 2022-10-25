@@ -19,11 +19,13 @@ CREATE TABLE FUNDRAISER
 	(Title char(50) NOT NULL,
 	 Description TEXT(1000),
 	 Goal decimal(15, 2) NOT NULL CHECK (Goal > 0),
-	 Balance decimal(15, 2),
+	 Balance decimal(15, 2) DEFAULT 0.00,
 	 CreationDate Datetime CHECK (CreationDate >= '2022-01-01 00:00:00'),
 	 Timeframe Datetime,
-	 FundID int NOT NULL,
+	 FundID int NOT NULL AUTO_INCREMENT,
 	 PRIMARY KEY (FundID));
+     
+ALTER TABLE FUNDRAISER AUTO_INCREMENT=1001;
      
 ALTER TABLE FUNDRAISER
 	ADD CONSTRAINT timeframe_CHECK
