@@ -89,6 +89,15 @@ def recordingDonation():
     email = request.form["email"]
     fund_id = request.form["fund_id"]
 
+    # inserting new record into DONATES table
+    cursor.execute("SELECT EmailAddress, FundNo FROM DONATES WHERE EXISTS (SELECT 1 FROM DONATES WHERE EmailAddress = %s AND FundNo = %s)" , (email, fund_id))
+    doesExistInDB = cursor.fetchall()
+    print(doesExistInDB)
+    if not doesExistInDB:
+        cursor.execute("INSERT INTO DONATES (EmailAddress, FundNo, DonationsToFund) VALUES (%s,%s,%s)", (email, fund_id, amount))
+    else:
+        cursor.execute("UPDATE DONATES SET DonationsToFund = DonationsToFund + %s WHERE (EmailAddress = %s AND FundNo = %s)", (int(amount), email, fund_id))
+
     #Inserting new record into DONATION table
     cursor.execute("INSERT INTO DONATION (DonationAmount, TransactionDate) VALUES (%s, %s)", (amount, time.strftime('%Y-%m-%d %H:%M:%S')))
 
@@ -99,9 +108,6 @@ def recordingDonation():
 
     #Inserting new record into FUNDS table
     cursor.execute("INSERT INTO FUNDS (TransactionNo, FundNo) VALUES (%s,%s)", (transactionID, fund_id))
-
-    #inserting new record into DONATES table
-    cursor.execute("INSERT INTO DONATES (EmailAddress, FundNo, DonationsToFund) VALUES (%s,%s,%s)", (email, fund_id, amount))
     db.commit()
     return redirect(url_for('dashboard'))
 
@@ -122,9 +128,28 @@ def fundraiser_page(fundraiser_ID=None):
 
     return render_template('fundraiser.html', fund_ID = fundraiser_ID, fund_name=fundraiserInfo[0], fund_desc = fundraiserInfo[1], fund_goal = fundraiserInfo[2], fund_balance = balance, fund_creationdate = fundraiserInfo[4], fund_timeline = fundraiserInfo[5], table = donationTable)
 
-@app.route('/new-fundraiser-form')
+@app.route('/new-fundraiser')
 def fundraiser_form_page():
-    return 'This is the new fundraiser form page.'
+    return render_template('new-fundraiser-form.html')
+
+@app.route('/fillingNewFundraiserForm', methods=["POST"])
+def recordNewFundraiserrForm():
+    title = request.form["title"]
+    description = request.form["description"]
+    goal = request.form["goal"]
+    day = request.form["day"]
+    if int(day) < 10:
+        day = "0%s" % day
+    timeline = request.form["Year"] + '-' + request.form["Month"] + '-' + day
+    creation = time.strftime('%Y-%m-%d %H:%M:%S')
+
+    cursor.execute("INSERT INTO FUNDRAISER (Title, Description, Goal, CreationDate, Timeframe) VALUES (%s,%s,%s,%s,%s)", (title, description, goal, creation, timeline))
+    cursor.execute("SELECT LAST_INSERT_ID()")
+    FundID = cursor.fetchone()[0]
+    cursor.execute("INSERT INTO OWNS (EmailAddress, FundNo) VALUES (%s, %s)", (currentUser.emailPK, FundID))
+    db.commit()
+
+    return redirect(url_for('dashboard'))
 
 @app.route('/new-user-form')
 def new_user_form_page():

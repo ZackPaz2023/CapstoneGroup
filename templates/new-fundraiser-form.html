@@ -1,1 +1,55 @@
+<!doctype html>
+<html>
+    <title>Make A Fundraiser</title>
+</html>
+    <body>
+        Make your Fundraiser!
 
+        <form action="/fillingNewFundraiserForm" method="post">
+            <label for="title">Title: </label><br>
+            <input type="text" id="title" name="title" placeholder="Enter your title here">
+            <br><br>
+            <textarea rows="5" cols="60" name = "description" placeholder="Enter a description for your fundraiser">
+
+            </textarea>
+            <br><br>
+            <label for="goal">Goal: </label><br>
+            <input type="text" id="goal" name="goal" placeholder="Enter you goal amount here">
+            <br><br>
+            <div class="month">
+                <select name="Month">
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="day">
+                <select name="day">
+                    {% for num in range(1, 32)%}
+                        <option value="{{num}}">{{num}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="year">
+                <select name="Year">
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+
+                </select>
+            </div>
+        </div>
+
+            <br>
+        <input type="submit" value="SUBMIT">
+        </form>
+    </body>
