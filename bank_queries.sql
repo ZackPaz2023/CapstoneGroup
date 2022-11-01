@@ -101,3 +101,15 @@ WHERE FundNo = fund AND TransactionNo IN
 	(SELECT TransactionID
     FROM DONATION
     WHERE target_amount < DonationAmount);
+    
+-- TESTED
+-- Return all the fundraisers a user has donated to
+SELECT Title, DonationsToFund
+FROM DONATES INNER JOIN FUNDRAISER ON FundNo = FundID
+WHERE EmailAddress = user_email;
+
+-- TESTED
+-- Return all the fundraisers a user owns
+SELECT Title
+FROM OWNS INNER JOIN FUNDRAISER ON FundNo = FundID
+WHERE EmailAddress = user_email;

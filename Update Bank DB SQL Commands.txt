@@ -1,0 +1,12 @@
+UPDATE FUNDRAISER
+SET Balance = [new_balance_number]
+WHERE FundID = [fundID]
+
+UPDATE USER
+SET Username = [new_name]
+WHERE Email = [user_email]
+
+//Storing the Encrypted password
+UPDATE USER
+SET Password = [new_password]
+WHERE Email = [user_email]
