@@ -24,7 +24,7 @@ def home_page(): #create landing page later
 def dashboard():
     cursor.execute("SELECT Title, Description, FundID FROM FUNDRAISER")
     homePageFundraiserData = cursor.fetchall()
-    return render_template('dashboard.html', name=currentUser.name, table=homePageFundraiserData)
+    return render_template('dashboard.html', name=currentUser.name, table=homePageFundraiserData, isGuest=currentUser.isGuest)
 
 
 @app.route('/login', methods = ['POST', 'GET'])
@@ -60,54 +60,79 @@ def login():
     else:
         return render_template("login.html")
 
+@app.route("/log-out")
+def loggingOut():
+    currentUser.emailPK = ""
+    currentUser.name = "Guest"
+    currentUser.username = ""
+    currentUser.isGuest = True
+    return redirect(url_for('dashboard'))
+
 @app.route('/profile')
 def profile_page(name=None, email=None):
     return render_template('profile.html', name=name, email=email)
 
 @app.route('/donation-form/<fund_ID>')
 def donation_form_page(fund_ID=None):
-    cursor.execute("SELECT StreetAddress, City, State, ZipCode, Country, CardNumber, ExpirationDate, RouteNo, AccountNo  FROM USER WHERE Email = '%s'" % currentUser.emailPK)
-    userInfo = cursor.fetchall()
-    userInfoList = []
-    for row in userInfo:
-        for attribute in row:
-            userInfoList.append(attribute)
-    restOfAddress = userInfoList[1] + " " + userInfoList[2] + " " + str(userInfoList[3]) + " " + userInfoList[4]
-
     cursor.execute("SELECT * FROM FUNDRAISER WHERE FundID = '%s'" % fund_ID)
     fundraiserInfo = cursor.fetchall()
     fundraiserInfoList = []
     for line in fundraiserInfo:
         for item in line:
             fundraiserInfoList.append(item)
-    return render_template('new-donation.html', fundraiser_ID=fund_ID ,fundraiser_name = fundraiserInfoList[0], name=currentUser.name, email=currentUser.emailPK, streetAddress=userInfoList[0], restOfAddress=restOfAddress, cardNum=str(userInfoList[5]), expirationDate=str(userInfoList[6]), routeNo=str(userInfoList[7]), accountNo=str(userInfoList[8]))
+
+    if not currentUser.isGuest:
+        cursor.execute("SELECT StreetAddress, City, State, ZipCode, Country, CardNumber, ExpirationDate, RouteNo, AccountNo  FROM USER WHERE Email = '%s'" % currentUser.emailPK)
+        userInfo = cursor.fetchall()
+        userInfoList = []
+        for row in userInfo:
+            for attribute in row:
+                userInfoList.append(attribute)
+        restOfAddress = userInfoList[1] + " " + userInfoList[2] + " " + str(userInfoList[3]) + " " + userInfoList[4]
+        return render_template('new-donation.html', isGuest=currentUser.isGuest, fundraiser_ID=fund_ID ,fundraiser_name = fundraiserInfoList[0], name=currentUser.name, email=currentUser.emailPK, streetAddress=userInfoList[0], restOfAddress=restOfAddress, cardNum=str(userInfoList[5]), expirationDate=str(userInfoList[6]), routeNo=str(userInfoList[7]), accountNo=str(userInfoList[8]))
+    else:
+        return render_template('new-donation.html', isGuest=currentUser.isGuest, fundraiser_ID=fund_ID ,fundraiser_name = fundraiserInfoList[0], name=currentUser.name)
 
 
 @app.route('/submittingDonation', methods=["POST"])
 def recordingDonation():
     amount = request.form["amount"]
-    email = request.form["email"]
     fund_id = request.form["fund_id"]
 
-    # inserting new record into DONATES table
-    cursor.execute("SELECT EmailAddress, FundNo FROM DONATES WHERE EXISTS (SELECT 1 FROM DONATES WHERE EmailAddress = %s AND FundNo = %s)" , (email, fund_id))
-    doesExistInDB = cursor.fetchall()
-    if not doesExistInDB:
-        cursor.execute("INSERT INTO DONATES (EmailAddress, FundNo, DonationsToFund) VALUES (%s,%s,%s)", (email, fund_id, amount))
+    if not currentUser.isGuest:
+        email = request.form["email"]
+
+        # inserting new record into DONATES table
+        cursor.execute("SELECT EmailAddress, FundNo FROM DONATES WHERE EXISTS (SELECT 1 FROM DONATES WHERE EmailAddress = %s AND FundNo = %s)" , (email, fund_id))
+        doesExistInDB = cursor.fetchall()
+        if not doesExistInDB:
+            cursor.execute("INSERT INTO DONATES (EmailAddress, FundNo, DonationsToFund) VALUES (%s,%s,%s)", (email, fund_id, amount))
+        else:
+            cursor.execute("UPDATE DONATES SET DonationsToFund = DonationsToFund + %s WHERE (EmailAddress = %s AND FundNo = %s)", (int(amount), email, fund_id))
+
+        #Inserting new record into DONATION table
+        cursor.execute("INSERT INTO DONATION (DonationAmount, TransactionDate) VALUES (%s, %s)", (amount, time.strftime('%Y-%m-%d %H:%M:%S')))
+
+        #inserting new record into GIVES table
+        cursor.execute("SELECT LAST_INSERT_ID()")
+        transactionID = cursor.fetchone()[0]
+        cursor.execute("INSERT INTO GIVES (EmailAddress, TransactionNo) VALUES (%s, %s)", (email, transactionID))
+
+        #Inserting new record into FUNDS table
+        cursor.execute("INSERT INTO FUNDS (TransactionNo, FundNo) VALUES (%s,%s)", (transactionID, fund_id))
+        db.commit()
+        return redirect(url_for('dashboard'))
     else:
-        cursor.execute("UPDATE DONATES SET DonationsToFund = DonationsToFund + %s WHERE (EmailAddress = %s AND FundNo = %s)", (int(amount), email, fund_id))
+        # Inserting new record into DONATION table
+        cursor.execute("INSERT INTO DONATION (DonationAmount, TransactionDate) VALUES (%s, %s)",(amount, time.strftime('%Y-%m-%d %H:%M:%S')))
 
-    #Inserting new record into DONATION table
-    cursor.execute("INSERT INTO DONATION (DonationAmount, TransactionDate) VALUES (%s, %s)", (amount, time.strftime('%Y-%m-%d %H:%M:%S')))
+        cursor.execute("SELECT LAST_INSERT_ID()")
+        transactionID = cursor.fetchone()[0]
 
-    #inserting new record into GIVES table
-    cursor.execute("SELECT LAST_INSERT_ID()")
-    transactionID = cursor.fetchone()[0]
-    cursor.execute("INSERT INTO GIVES (EmailAddress, TransactionNo) VALUES (%s, %s)", (email, transactionID))
+        # Inserting new record into FUNDS table
+        cursor.execute("INSERT INTO FUNDS (TransactionNo, FundNo) VALUES (%s,%s)", (transactionID, fund_id))
+        db.commit()
 
-    #Inserting new record into FUNDS table
-    cursor.execute("INSERT INTO FUNDS (TransactionNo, FundNo) VALUES (%s,%s)", (transactionID, fund_id))
-    db.commit()
     return redirect(url_for('dashboard'))
 
 
@@ -125,8 +150,16 @@ def fundraiser_page(fundraiser_ID=None):
     fundraiserTimeline = str(fundraiserInfo[5])[0:10]
     fundraiserTimeline = fundraiserTimeline[5:8] + fundraiserTimeline[8:10] + "-" + fundraiserTimeline[0:4]
 
+    #getting donations from registered users
     cursor.execute("SELECT Name, DonationsToFund FROM USER INNER JOIN DONATES ON Email = EmailAddress WHERE fundNo = %s" % fundraiser_ID)
     donationTable = cursor.fetchall()
+
+    #Getting guest donations
+    cursor.execute("SELECT 'Guest Donor' as Name, DonationAmount FROM (SELECT TransactionNo, DonationAmount, FundNo FROM FUNDS INNER JOIN DONATION ON FUNDS.TransactionNo = DONATION.TransactionID WHERE FundNo = %s) as R WHERE TransactionNo NOT IN (SELECT TransactionNo FROM GIVES)" % fundraiser_ID)
+    guestTable = cursor.fetchall()
+
+    donationTable += guestTable
+
     balance = 0.00
     for donation in donationTable:
         balance += float(donation[1])

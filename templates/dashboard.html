@@ -47,6 +47,7 @@ h2 {text-align: center;}
 
 
 <body>
+{% if isGuest == True  %}
 <div class="btn-group" style="width:100%" >
     <div class="btn-group" >
         <form action="/login">
@@ -57,11 +58,25 @@ h2 {text-align: center;}
             <input type="submit" value="Sign Up" class="btn btn-outline-success">
         </form>
 
+    </div>
+</div>
+
+{% endif %}
+
+{% if isGuest == False  %}
+<div class="btn-group" style="width:100%" >
+    <div class="btn-group" >
+        <form action="/log-out">
+            <input type="submit" value="Log Out" class="btn btn-outline-success">
+        </form>
+
         <form action="/new-fundraiser">
             <input type="submit" value="Make A New Fundraiser" class="btn btn-outline-success">
         </form>
     </div>
 </div>
+
+{% endif %}
 
 <div class="container-fluid p-5 bg-success text-white text-center">
     <h1>Hello {{ name }}!</h1>

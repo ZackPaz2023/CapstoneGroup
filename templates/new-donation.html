@@ -11,7 +11,7 @@
 <body>
 <h2>Make a New Donation!</h2><br>
 
-
+{% if isGuest == False %}
 <h2>Hello {{ name }} </h2>
     <!-- name -->
  <h3>Donating To: {{ fundraiser_name }}</h3>
@@ -97,6 +97,115 @@
   <input type="submit" value="SUBMIT"/>
 
 </form>
+{% endif %}
+
+{% if isGuest == True %}
+<h2>Hello, you'll be making your donation as a {{ name }} </h2>
+    <!-- name -->
+ <h3>Donating To: {{ fundraiser_name }}</h3>
+<form action="/submittingDonation" method="post">
+
+  <input type="hidden" name="fund_id" value="{{ fundraiser_ID }}"/>
+
+  <label for="amount">Amount: </label><br>
+  <input type="text" class="form-control" id="guestAmount" name="amount" autocomplete="off" placeholder="enter amount"><br><br>
+
+  <!-- billing address -->
+  <label for="address">Billing Address:</label><br>
+  <input type="text" class="form-control" placeholder="enter street address" /><br><br>
+  <input type="text" class="form-control" placeholder="enter city" /><br><br>
+  <input type="text" class="form-control" placeholder="enter state" /><br><br>
+  <input type="text" class="form-control" placeholder="enter zip code" /><br><br>
+  <input type="text" class="form-control" placeholder="enter country" /><br><br>
+
+  <div class="form-header">
+    <h4 class="title">Credit card detail</h4>
+  </div>
+
+  <div class="form-body">
+    <!-- Card Number -->
+    <input type="text" class="card-number" placeholder="enter card number"/>
+
+    <!-- Date Field -->
+    <div class="date-field">
+      <br>
+          <div class="month">
+              <select name="Month">
+                  <option>January</option>
+                  <option>February</option>
+                  <option>March</option>
+                  <option>April</option>
+                  <option>May</option>
+                  <option>June</option>
+                  <option>July</option>
+                  <option>August</option>
+                  <option>September</option>
+                  <option>October</option>
+                  <option>November</option>
+                  <option>December</option>
+              </select>
+          </div>
+          <div class="year">
+              <select name="Year">
+                  <option>2022</option>
+                  <option>2023</option>
+                  <option>2024</option>
+                  <option>2025</option>
+                  <option>2026</option>
+              </select>
+          </div>
+    </div>
+
+    <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
+    <div class="card-verification">
+      <div class="cvv-input">
+        <input type="text" autocomplete="off" placeholder="CVV">
+      </div>
+    </div>
+  </div>
+
+<!-- Bank Account -->
+<div class="form-header">
+    <h4 class="title">Bank Account detail</h4>
+  </div>
+
+<div class="bank--control">
+
+  <div class="bank--add__body">
+    <div class="container-fluid">
+      <div class="row">
+      <div class="row">
+        <div class="col-xs-12 col-md-8">
+          <div class="form__control">
+            <label class="form__label" for="routing">Bank number</label>
+            <br>
+            <input type="text" placeholder="enter bank routing number" />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12 col-md-8">
+          <div class="form__control">
+            <label class="form__label" for="account-number">Account number</label>
+            <br>
+            <input class="account-number" type="password" placeholder="enter bank account number" />
+            <span class="show__account--number">
+              <i class="fa fa-eye-slash pword_icon"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+  <br>
+  <input type="submit" value="SUBMIT"/>
+
+</form>
+{% endif %}
+
 <br>
 <button onclick="history.back()">Go Back</button>
 
