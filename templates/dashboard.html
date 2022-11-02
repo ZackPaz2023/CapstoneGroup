@@ -16,6 +16,10 @@
 
 h1 {text-align: center;}
 h2 {text-align: center;}
+h3 {text-align: center;}
+h4 {text-align: center;}
+h5 {text-align: center;}
+
 
 .btn-group input {
   background-color: #3BBA67; /* Green background */
@@ -84,7 +88,48 @@ h2 {text-align: center;}
     <h2>Welcome to Commerce Bank Fundraising</h2>
 </div>
 
-<h3>Current fundraisers:</h3>
+{% if isGuest == False%}
+<h3>Fundraisers You Own:</h3>
+<br>
+<table style="border:1px solid black;" align="center">
+    <thread>
+        <tr style="border:1px solid black;">
+            <th style="border:1px solid black;">Fundraisers You Own</th>
+        </tr>
+    </thread>
+    <tbody>
+    <tr>
+        {% for row in userOwnedFund %}
+        <td style="border:1px solid black;"><a href="fundraiser/{{ row[2] }}">{{row[0]}}</a></td>
+
+
+    </tr>
+        {% endfor%}
+    </tbody>
+</table>
+
+<h4>Donations You Have Made:</h4>
+<br>
+<table style="border:1px solid black;" align="center">
+    <thread>
+        <tr style="border:1px solid black;">
+            <th style="border:1px solid black;">Fundraisers You Donated to</th>
+            <th style="border:1px solid black;">Amount</th>
+        </tr>
+    </thread>
+    <tbody>
+    <tr>
+        {% for row in userDonorTable %}
+        <td style="border:1px solid black;"><a href="fundraiser/{{ row[2] }}">{{row[0]}}</a></td>
+        <td style="border:1px solid black;">{{row[1]}}</td>
+    </tr>
+        {% endfor%}
+    </tbody>
+</table>
+{% endif %}
+
+<h5>Current fundraisers:</h5>
+<br>
 <table style="border:1px solid black;" align="center">
 
     <thread>
@@ -94,7 +139,7 @@ h2 {text-align: center;}
         </tr>
     </thread>
     <tbody>
-        {% for row in table %}
+        {% for row in fundraiserTable %}
         <tr>
             <td style="border:1px solid black;"><a href="fundraiser/{{ row[2] }}">{{row[0]}}</a></td>
             <td style="border:1px solid black;">{{row[1]}}</td>

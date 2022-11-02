@@ -24,7 +24,15 @@ def home_page(): #create landing page later
 def dashboard():
     cursor.execute("SELECT Title, Description, FundID FROM FUNDRAISER")
     homePageFundraiserData = cursor.fetchall()
-    return render_template('dashboard.html', name=currentUser.name, table=homePageFundraiserData, isGuest=currentUser.isGuest)
+
+    if not currentUser.isGuest:
+        cursor.execute("SELECT Title, DonationsToFund, FundNo FROM DONATES INNER JOIN FUNDRAISER ON FundNo = FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
+        userDonationsTable = cursor.fetchall()
+        cursor.execute("SELECT Title, Description, FundNo FROM OWNS INNER JOIN FUNDRAISER ON OWNS.FundNo = FUNDRAISER.FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
+        userOwnedFundraisers = cursor.fetchall()
+        return render_template('dashboard.html', name=currentUser.name, userOwnedFund= userOwnedFundraisers, fundraiserTable=homePageFundraiserData, userDonorTable= userDonationsTable, isGuest=currentUser.isGuest)
+
+    return render_template('dashboard.html', name=currentUser.name, fundraiserTable=homePageFundraiserData, isGuest=currentUser.isGuest)
 
 
 @app.route('/login', methods = ['POST', 'GET'])
