@@ -6,81 +6,102 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+    <style>
+        button{
+        margin-left: 25px;
+        }
+    </style>
 </head>
 <body>
-    <h1>USER SETUP:</h1><br>
+    <h1 class="container-fluid p-3 bg-success text-white text-center">USER SETUP</h1><br>
 
     <form action="/fillingNewUserForm"  method="post">
-        <label for="UserName">UserName: </label><br>
-        <input type="text" id="UserName" name="UserName">
-        <br>
-        <label for="Password">Password: </label><br>
-        <input type="password" id="Password" name="Password">
-        <br>
-        <label for="Email">E-Mail: </label><br>
-        <input type="text" id="Email" name="Email">
-        <br>
-        <label for="Name">Full Name: </label><br>
-        <input type="text" id="Name" name="Name">
-        <br>
-        <label for="PhoneNumber">Phone Number: </label><br>
-        <input type="text" id="PhoneNumber" name="PhoneNumber">
-        <br>
-        <label for="StreetAddress">Street Address: </label><br>
-        <input type="text" id="StreetAddress" name="StreetAddress">
-        <br>
-        <label for="City">City: </label><br>
-        <input type="text" id="City" name="City">
-        <br>
-        <label for="State">State: </label><br>
-        <input type="text" id="State" name="State">
-        <br>
-        <label for="ZipCode">Zip Code: </label><br>
-        <input type="text" id="ZipCode" name="ZipCode">
-        <br>
-        <label for="Country">Country: </label><br>
-        <input type="text" id="Country" name="Country">
-        <br>
-        <label for="CardNumber">Card number: </label><br>
-        <input type="text" id="CardNumber" name="CardNumber">
-        <br>
-            <div class="month">
-                <select name="Month">
-                    <option value="01">January</option>
-                    <option value="02">February</option>
-                    <option value="03">March</option>
-                    <option value="04">April</option>
-                    <option value="05">May</option>
-                    <option value="06">June</option>
-                    <option value="07">July</option>
-                    <option value="08">August</option>
-                    <option value="09">September</option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12">December</option>
-                </select>
-            </div>
-            <div class="year">
-                <select name="Year">
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                </select>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <label for="UserName">UserName: </label><br>
+                    <input type="text" id="UserName" name="UserName">
+                    <br>
+                    <label for="Password">Password: </label><br>
+                    <input type="password" id="Password" name="Password">
+                    <br>
+                </div>
+
+                <div class="col-sm">
+                    <label for="Email">E-Mail: </label><br>
+                    <input type="text" id="Email" name="Email">
+                    <br>
+                    <label for="Name">Full Name: </label><br>
+                    <input type="text" id="Name" name="Name">
+                    <br>
+                    <label for="PhoneNumber">Phone Number: </label><br>
+                    <input type="text" id="PhoneNumber" name="PhoneNumber">
+                    <br>
+                    <label for="StreetAddress">Street Address: </label><br>
+                    <input type="text" id="StreetAddress" name="StreetAddress">
+                    <br>
+                    <label for="City">City: </label><br>
+                    <input type="text" id="City" name="City">
+                    <br>
+                    <label for="State">State: </label><br>
+                    <input type="text" id="State" name="State">
+                    <br>
+                    <label for="ZipCode">Zip Code: </label><br>
+                    <input type="text" id="ZipCode" name="ZipCode">
+                    <br>
+                    <label for="Country">Country: </label><br>
+                    <input type="text" id="Country" name="Country">
+                    <br>
+                </div>
+
+                <div class="col-sm">
+                    <label  for="CardNumber">Card number: </label><br>
+                    <input type="text" id="CardNumber" name="CardNumber">
+                    <br>
+                    <div class="dropdown">
+                        <div class="month">
+                            <select name="Month">
+                                <option value="01">January</option>
+                                <option value="02">February</option>
+                                <option value="05">May</option>
+                                <option value="06">June</option>
+                                <option value="07">July</option>
+                                <option value="08">August</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="year">
+                            <select name="Year">
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <label for="RoutingNumber">Routing Number: </label><br>
+                    <input type="text" id="RoutingNumber" name="RoutingNumber">
+                    <br>
+                    <label for="AccountNumber">Account Number: </label><br>
+                    <input type="text" id="AccountNumber" name="AccountNumber">
+                    <br>
+                    <input type="submit" value="SUBMIT">
+                </div>
             </div>
         </div>
-        <br>
-        <label for="RoutingNumber">Routing Number: </label><br>
-        <input type="text" id="RoutingNumber" name="RoutingNumber">
-        <br>
-        <label for="AccountNumber">Account Number: </label><br>
-        <input type="text" id="AccountNumber" name="AccountNumber">
-        <br>
-        <input type="submit" value="SUBMIT">
     </form>
-<br>
-<button onclick="history.back()">Go Back</button>
+  </div>
+</div>
+    <br><hr>
+    <button onclick="history.back()">Go Back</button>
+    <br><br>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>

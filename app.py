@@ -68,9 +68,9 @@ def loggingOut():
     currentUser.isGuest = True
     return redirect(url_for('dashboard'))
 
-@app.route('/profile')
+@app.route('/settings')
 def profile_page(name=None, email=None):
-    return render_template('profile.html', name=name, email=email)
+    return render_template('settings.html', name=name, email=email)
 
 @app.route('/donation-form/<fund_ID>')
 def donation_form_page(fund_ID=None):
