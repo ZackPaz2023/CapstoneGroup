@@ -136,23 +136,12 @@ h5 {text-align: center;}
     <h2 class="heading-1 mb4x">Featured Fundraisers</h2>
 </section>
 
-<table style="border:1px solid black;" align="center">
+<ul>
+    {% for row in fundraiserTable %}
+    <li><a href="fundraiser/{{ row[2] }}">{{row[0]}} <br> {{row[1]}} </a></li>
+    {% endfor %}
 
-    <thread>
-        <tr style="border:1px solid black;">
-            <th style="border:1px solid black;">TITLE</th>
-            <th style="border:1px solid black;">DESCRIPTION</th>
-        </tr>
-    </thread>
-    <tbody>
-        {% for row in fundraiserTable %}
-        <tr>
-            <td style="border:1px solid black;"><a href="fundraiser/{{ row[2] }}">{{row[0]}}</a></td>
-            <td style="border:1px solid black;">{{row[1]}}</td>
-        </tr>
-            {% endfor %}
-    </tbody>
-</table>
+</ul>
 <br>
 
 
