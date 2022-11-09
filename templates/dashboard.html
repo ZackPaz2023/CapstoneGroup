@@ -46,9 +46,16 @@ h5 {text-align: center;}
   background-color: #EEE494;
 }
 
-
-
-
+.fundraiserBoxes{
+float: left;
+display: inline-block;
+width: 400px;
+height: 650px;
+border: 5px solid black;
+list-style: none;
+background-color: #a0e9ed;
+padding: 10px;
+}
 
 </style>
 
@@ -136,12 +143,18 @@ h5 {text-align: center;}
     <h2 class="heading-1 mb4x">Featured Fundraisers</h2>
 </section>
 
-<ul>
-    {% for row in fundraiserTable %}
-    <li><a href="fundraiser/{{ row[2] }}">{{row[0]}} <br> {{row[1]}} </a></li>
-    {% endfor %}
-
-</ul>
+<section>
+    <ul>
+        {% for row in fundraiserTable %}
+            <div class="fundraiserBoxes" style="margin: 25px">
+                <center>
+                    <li><a href="fundraiser/{{ row[2] }}">  <h7 style="font-size: 20px"> {{row[0]}} </h7> <img src="https://www.state.gov/wp-content/uploads/2019/03/shutterstock_322199879-e1553865008177.jpg" width="300" height="350"/> </a></li
+                </center>{{row[1]}}
+            </div>
+            &nbsp
+        {% endfor %}
+    </ul>
+</section>
 <br>
 
 
