@@ -113,3 +113,11 @@ WHERE EmailAddress = user_email;
 SELECT Title
 FROM OWNS INNER JOIN FUNDRAISER ON FundNo = FundID
 WHERE EmailAddress = user_email;
+
+-- NOT TESTED
+-- Return all fundraisers with a certain tag
+SET @target_tag = "";
+
+SELECT Title
+FROM TAGS INNER JOIN FUNDRAISER ON TAGS.FundNo = FUNDRAISER.FundID
+WHERE Tag = target_tag;
