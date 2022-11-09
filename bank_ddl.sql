@@ -18,10 +18,12 @@ CREATE TABLE USER
 CREATE TABLE FUNDRAISER
 	(Title char(50) NOT NULL,
 	 Description TEXT(1000),
+     ImagePath char(50),
 	 Goal decimal(15, 2) NOT NULL CHECK (Goal > 0),
 	 Balance decimal(15, 2) DEFAULT 0.00,
 	 CreationDate Datetime CHECK (CreationDate >= '2022-01-01 00:00:00'),
 	 Timeframe Datetime,
+     
 	 FundID int NOT NULL AUTO_INCREMENT,
 	 PRIMARY KEY (FundID));
      
@@ -38,6 +40,13 @@ CREATE TABLE DONATION
 	 PRIMARY KEY (TransactionID));
      
 ALTER TABLE DONATION AUTO_INCREMENT=1;
+
+CREATE TABLE TAGS
+	(TagID int NOT NULL,
+     FundNo int NOT NULL,
+     Tag char(20),
+     PRIMARY KEY (TagID),
+     FOREIGN KEY (FundNo) REFERENCES FUNDRAISER (FundID));
      
 CREATE TABLE OWNS
 	(EmailAddress char(50) NOT NULL,
