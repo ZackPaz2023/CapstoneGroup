@@ -47,11 +47,12 @@ h5 {text-align: center;}
 }
 
 .fundraiserBoxes{
+border-radius: 25px;
 float: left;
 display: inline-block;
 width: 400px;
 height: 650px;
-border: 5px solid black;
+border: 5px solid #73AD21;
 list-style: none;
 background-color: #a0e9ed;
 padding: 10px;
@@ -148,7 +149,7 @@ padding: 10px;
         {% for row in fundraiserTable %}
             <div class="fundraiserBoxes" style="margin: 25px">
                 <center>
-                    <li><a href="fundraiser/{{ row[2] }}">  <h7 style="font-size: 20px"> {{row[0]}} </h7> <img src="https://www.state.gov/wp-content/uploads/2019/03/shutterstock_322199879-e1553865008177.jpg" width="300" height="350"/> </a></li
+                    <li><a href="fundraiser/{{ row[2] }}" style="text-decoration:none">  <h7 style="font-size: 20px"> {{row[0]}} </h7> <img src="https://www.state.gov/wp-content/uploads/2019/03/shutterstock_322199879-e1553865008177.jpg" width="300" height="350"/> </a></li
                 </center>{{row[1]}}
             </div>
             &nbsp
