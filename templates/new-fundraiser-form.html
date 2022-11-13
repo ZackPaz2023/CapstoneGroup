@@ -5,61 +5,183 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+    <style>
+    * {box-sizing: border-box;}
+
+        input[type=submit]{
+            margin-left: 10px;
+        }
+
+        button{
+            margin-left: 25px;
+        }
+
+        body{
+            background: #eee !important;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .wrapper{
+            margin-top: 300px;
+        }
+
+        form{
+         margin-top: 75px;
+         }
+
+        .wrapper{
+            max-width: 500px;
+            padding: 15px 35px 45px;
+            margin: auto;
+            background-color: #fff;
+            border: 5px solid rgba(0,0,0,0.1);
+
+            .container{
+                margin-top: 80px;
+                margin-bottom: 80px;
+            }
+
+            .form-details{
+                margin-bottom: 30px;
+            }
+
+            .form-control{
+                position: relative;
+                font-size: 16px;
+                height: auto;
+                padding: 10px;
+                @include box-sizing(border-box);
+
+                &:focus {
+                  z-index: 2;
+                }
+            }
+
+        .header {
+            overflow: hidden;
+            background-color: #f1f1f1;
+            padding: 20px 10px;
+        }
+
+        .header a {
+            float: left;
+            color: black;
+            text-align: center;
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            line-height: 25px;
+            border-radius: 4px;
+        }
+
+        .header a.logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .header a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .header a.active {
+            background-color: dodgerblue;
+            color: white;
+        }
+
+        .header-right {
+            float: right;
+        }
+
+        @media screen and (max-width: 500px) {
+            .header a {
+                float: none;
+                display: block;
+                text-align: left;
+            }
+
+            .header-right {
+                float: none;
+            }
+        }
+
+        input[type="text"]{
+                margin-left: 25px;
+                margin-bottom: -1px;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+        }
+    </style>
 </header>
-    <body>
-        Make your Fundraiser!
 
-        <form action="/fillingNewFundraiserForm" method="post">
-            <label for="title">Title: </label><br>
-            <input type="text" id="title" name="title" placeholder="Enter your title here">
-            <br><br>
-            <textarea rows="5" cols="60" name = "description" placeholder="Enter a description for your fundraiser">
+<body>
+    <!--menu-->
+    <div class="header">
+        <a href="/dashboard" class="logo">
+         <a href="/dashboard" class="logo">CapstoneGroup</a>
 
-            </textarea>
-            <br><br>
-            <label for="goal">Goal: </label><br>
-            <input type="text" id="goal" name="goal" placeholder="Enter you goal amount here">
-            <br><br>
-            <div class="month">
-                <select name="Month">
-                    <option value="01">January</option>
-                    <option value="02">February</option>
-                    <option value="03">March</option>
-                    <option value="04">April</option>
-                    <option value="05">May</option>
-                    <option value="06">June</option>
-                    <option value="07">July</option>
-                    <option value="08">August</option>
-                    <option value="09">September</option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12">December</option>
-                </select>
-            </div>
-            <div class="day">
-                <select name="day">
-                    {% for num in range(1, 32)%}
-                        <option value="{{num}}">{{num}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="year">
-                <select name="Year">
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
-
-                </select>
-            </div>
+        <div class="header-right">
+            <a class="active" href="/dashboard">Home</a>
+<!--            <a href="#contact">Contact</a>-->
+<!--            <a href="#about">About</a>-->
         </div>
+    </div>
 
-            <br>
-        <input type="submit" value="SUBMIT">
-        </form>
+    <!--    form-->
+    <form action="/fillingNewFundraiserForm" method="post">
+        <div class="wrapper">
+            <legend class="form-details">Make your Fundraiser!</legend>
+            <div class="container">
+                <label for="title">Title: </label><br>
+                <input type="text" id="title" name="title" class="form-control" placeholder="Enter your title here">
+                <br><br>
+                <textarea rows="5" cols="50" name="description"  placeholder="Enter a description for your fundraiser"></textarea>
+                <br><br>
+                <label for="goal">Goal: </label><br>
+                <input type="text" id="goal" name="goal" class="form-control" placeholder="Enter your goal amount">
+                <br><br>
+                <div class="month">
+                    <select name="Month">
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="day">
+                    <select name="day">
+                        {% for num in range(1, 32)%}
+                        <option value="{{num}}">{{num}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="year">
+                    <select name="Year">
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                    </select>
+                </div>
+            </div>
+             <br>
+            <input type="submit" value="SUBMIT">
+        </div>
+    </form>
     <br>
-    <button onclick="history.back()">Go Back</button>
+    <button class="btn btn-default" onclick="history.back()">Go Back</button>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
-    </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+</body>
 </html>
