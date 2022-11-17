@@ -18,7 +18,7 @@ CREATE TABLE USER
 CREATE TABLE FUNDRAISER
 	(Title char(50) NOT NULL,
 	 Description TEXT(1000),
-     ImagePath char(50),
+     ImagePath char(100),
 	 Goal decimal(15, 2) NOT NULL CHECK (Goal > 0),
 	 Balance decimal(15, 2) DEFAULT 0.00,
 	 CreationDate Datetime CHECK (CreationDate >= '2022-01-01 00:00:00'),

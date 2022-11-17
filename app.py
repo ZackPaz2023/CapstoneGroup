@@ -4,7 +4,7 @@ from flask import render_template
 from DB_Connection import *
 from DummyInfo import monthLengths
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 class User:
     emailPK = ""
@@ -22,7 +22,7 @@ def home_page(): #create landing page later
 
 @app.route('/dashboard')
 def dashboard():
-    cursor.execute("SELECT Title, Description, FundID FROM FUNDRAISER")
+    cursor.execute("SELECT Title, Description, FundID, ImagePath FROM FUNDRAISER")
     homePageFundraiserData = cursor.fetchall()
 
     if not currentUser.isGuest:

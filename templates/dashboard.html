@@ -150,7 +150,7 @@ padding: 10px;
         {% for row in fundraiserTable %}
             <div class="fundraiserBoxes" style="margin: 25px">
                 <center>
-                    <li><a href="fundraiser/{{ row[2] }}" style="text-decoration:none">  <h7 style="font-size: 20px"> {{row[0]}} </h7> <img src="{{url_for('static', filename='shutterstock_322199879-e1553865008177.jpg')}}" alt="no image" width="250" height="300"> </a></li>
+                    <li><a href="fundraiser/{{ row[2] }}" style="text-decoration:none">  <h7 style="font-size: 20px"> {{row[0]}} </h7> <img src="/static/{{row[3]}}" alt="no image" width="350" height="350"> </a></li>
                 </center>{{row[1]}}
             </div>
             &nbsp
