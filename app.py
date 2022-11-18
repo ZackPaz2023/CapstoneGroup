@@ -22,7 +22,7 @@ def home_page(): #create landing page later
 
 @app.route('/dashboard')
 def dashboard():
-    cursor.execute("SELECT Title, Description, FundID, ImagePath FROM FUNDRAISER")
+    cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft FROM FUNDRAISER")
     homePageFundraiserData = cursor.fetchall()
 
     if not currentUser.isGuest:

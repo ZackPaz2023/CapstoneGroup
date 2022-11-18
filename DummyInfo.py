@@ -86,6 +86,7 @@ def main():
             dbCursor.execute(donatesInsert, (t[1], t[0], t[2]))
         else:
             dbCursor.execute(donatesUpdate, (t[2] + currentDonateAmount[0], t[0], t[1]))
+        dbCursor.execute("UPDATE FUNDRAISER SET Balance = Balance + %d WHERE FundID = %d" % (t[2], t[0]))
 
     dbConnection.commit()
 
