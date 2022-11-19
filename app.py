@@ -106,6 +106,8 @@ def donation_form_page(fund_ID=None):
 def recordingDonation():
     amount = request.form["amount"]
     fund_id = request.form["fund_id"]
+    #updating balance in Fundraiser
+    cursor.execute("UPDATE FUNDRAISER SET Balance = Balance + %d WHERE FundID = %d" % (int(amount), int(fund_id)))
 
     if not currentUser.isGuest:
         email = request.form["email"]

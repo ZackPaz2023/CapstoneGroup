@@ -28,20 +28,21 @@ def main():
                 ("FirstConsul", "AverageHeightForTheTime", "nbonaparte@yahoo.com", "Napoleon Bonaparte", "582-333-0707", 85947, "4154 Fraternity Street", "Paris", None, "France", 6011352349624030, "2026-01-" + str(monthLengths(1, 2026)), 940650316, 31487884),
                 ("LastConsul", "AcrosstheRhine", "venividivici@outlook.com", "Julius Caesar", "213-708-6937", 61422, "415 SPQR Street", "Rome", None, "Italy", 5456454184555214, "2026-09-" + str(monthLengths(9, 2026)), 663143155, 36846023)]
 
-    #Fundraiser Info: Owner Email, Fund ID, Title, Description, image, Goal, Creation Date, Timeframe
-    FundInfo = [("kansasgirl@gmail.com", "Journey Home", "Dorothy wants to get off the Wizard's Wild Ride and get back home to Kansas.", "PowerfulReasons_hero.jpeg", 1500, "2022-04-16 10-31-22", "2022-10-1 23-59-59"),
-                ("clownin@yahoo.com", "Misfit Academy", "Help fund this academy for impoverished children.", "30virus-pediatrics-01-mobileMasterAt3x-v2.jpeg", 2000, "2022-06-10 09-42-02", "2023-07-11 10-28-40"),
-                ("workingfromhome@gmail.com", "Investment Opportunity Going Fast!!", "Be the hottest invester you know! With me! Trusted by Warren Buffett himself! 10% monthly return guaranteed!! !", "Growing_Graph_Plant-780x438.jpeg" , 100000, "2022-10-31 10-00-00", "2025-12-31 23-59-59"),
-                ("nbonaparte@yahoo.com", "Joplin Disaster", "Raising funds for disaster relief in Joplin MO", "gettyimages-1237246621-3b7c952eadb66cc8d43b0a4fc5bdc302eb1f80fd.jpeg" , 50000, "2022-07-04 13-14-36", "2023-01-01 00-00-00"),
-                ("venividivici@outlook.com", "I DO!!", "Help John and Kate realize their dream wedding!", "bride-groom-getting-married-illustrated_23-2148413588.jpeg" , 30000, "2022-05-05 15-55-13", "2023-08-05 00-00-00")]
+    #Fundraiser Info: Owner Email, Title, Description, image, Goal, Creation Date, Timeframe, tag
+    FundInfo = [("kansasgirl@gmail.com", "Journey Home", "Dorothy wants to get off the Wizard's Wild Ride and get back home to Kansas.", "Travel", "PowerfulReasons_hero.jpeg", 1500, "2022-04-16 10-31-22", "2022-10-1 23-59-59"),
+                ("Tinman@gmail.com", "Aid Ukraine", "Sending relief funds for civilians impacted by the war. All Proceeds go towards food, water, and evacuations. Any help is much appreciated", "Emergencies", "Ukraine_Image.jpeg", 20000, "2022-07-20 12-31-22", "2023-07-20 10-31-22"),
+                ("clownin@yahoo.com", "Misfit Academy", "Help fund this academy for impoverished children.", "Community", "30virus-pediatrics-01-mobileMasterAt3x-v2.jpeg", 2000, "2022-06-10 09-42-02", "2023-07-11 10-28-40"),
+                ("workingfromhome@gmail.com", "Investment Opportunity Going Fast!!", "Be the hottest invester you know! With me! Trusted by Warren Buffett himself! 10% monthly return guaranteed!! !", "Business", "Growing_Graph_Plant-780x438.jpeg" , 100000, "2022-10-31 10-00-00", "2025-12-31 23-59-59"),
+                ("nbonaparte@yahoo.com", "Joplin Disaster", "Raising funds for hurricane relief in FLorida", "Emergencies", "gettyimages-1237246621-3b7c952eadb66cc8d43b0a4fc5bdc302eb1f80fd.jpeg" , 50000, "2022-07-04 13-14-36", "2023-01-01 00-00-00"),
+                ("venividivici@outlook.com", "I DO!!", "Help John and Kate realize their dream wedding!", "Newlyweds", "bride-groom-getting-married-illustrated_23-2148413588.jpeg" , 30000, "2022-05-05 15-55-13", "2023-08-05 00-00-00")]
 
     #Transaction Info: Transaction ID, Fundraiser ID, Donor Email, Donation Amount, Transaction Date
     TranInfo = [(1001, "DenverNotColorodo@gmail.com", 150, "2022-06-23 14-50-33"),
-                (1002, "nbonaparte@yahoo.com", 50, "2022-08-02 03-22-40"),
+                (1002, "nbonaparte@yahoo.com", 100, "2022-08-02 03-22-40"),
                 (1001, "Tinman@gmail.com", 300, "2022-08-05 08-00-00"),
                 (1004, "clownin@yahoo.com", 1, "2022-08-15 17-08-55"),
                 (1005, "clownin@yahoo.com", 10, "2022-08-15 19-03-49"),
-                (1002, "venividivici@outlook.com", 100, "2022-09-13 13-14-09"),
+                (1002, "venividivici@outlook.com", 500, "2022-09-13 13-14-09"),
                 (1001, "2ofakind@gmail.com", 241.56, "2022-09-15 14-38-01"),
                 (1001, "DenverNotColorodo@gmail.com", 100, "2022-09-27 09-45-25"),
                 (1004, "personalcomputer@outlook.com", 1000, "2022-09-30 04-35-09"),
@@ -54,7 +55,7 @@ def main():
 
     #Some basic strings that can be executed by the mySQL cursor when passed the right arguments: cursor.execute(statement, tuple)
     userInsert = 'INSERT INTO user (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, City, State, Country, CardNumber, ExpirationDate, RouteNo, AccountNo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-    fundraiserInsert = 'INSERT INTO fundraiser (Title, Description, ImagePath, Goal, CreationDate, Timeframe) VALUES (%s, %s, %s, %s, %s, %s)'
+    fundraiserInsert = 'INSERT INTO fundraiser (Title, Description, Tag, ImagePath, Goal, CreationDate, Timeframe) VALUES (%s, %s, %s, %s, %s, %s, %s)'
     donationInsert = 'INSERT INTO donation (TransactionDate, DonationAmount) VALUES (%s, %s)'
     ownsInsert = 'INSERT INTO owns (EmailAddress, FundNo) VALUES (%s, %s)'
     donatesInsert = 'INSERT INTO donates (EmailAddress, FundNo, DonationsToFund) VALUES (%s, %s, %s)'

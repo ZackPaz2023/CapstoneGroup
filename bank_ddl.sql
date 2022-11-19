@@ -18,6 +18,7 @@ CREATE TABLE USER
 CREATE TABLE FUNDRAISER
 	(Title char(50) NOT NULL,
 	 Description TEXT(1000),
+	 Tag char(30),
      ImagePath char(100),
 	 Goal decimal(15, 2) NOT NULL CHECK (Goal > 0),
 	 Balance decimal(15, 2) DEFAULT 0.00,
@@ -42,11 +43,13 @@ CREATE TABLE DONATION
 ALTER TABLE DONATION AUTO_INCREMENT=1;
 
 CREATE TABLE TAGS
-	(TagID int NOT NULL,
+	(TagID int NOT NULL AUTO_INCREMENT,
      FundNo int NOT NULL,
      Tag char(20),
      PRIMARY KEY (TagID),
      FOREIGN KEY (FundNo) REFERENCES FUNDRAISER (FundID));
+
+ALTER TABLE TAGS AUTO_INCREMENT=1;
      
 CREATE TABLE OWNS
 	(EmailAddress char(50) NOT NULL,
