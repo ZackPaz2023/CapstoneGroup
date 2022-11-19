@@ -57,6 +57,13 @@ border: 5px solid #73AD21;
 list-style: none;
 background-color: #a0e9ed;
 padding: 10px;
+position: relative;
+}
+
+.bottom {
+position: absolute;
+bottom: 0;
+width: 95%;
 }
 
 </style>
@@ -152,29 +159,32 @@ padding: 10px;
             <div class="fundraiserBoxes" style="margin: 25px">
                 <center>
                     <li><a href="fundraiser/{{ row[2] }}" style="text-decoration:none">  <h7 style="font-size: 20px"> <strong>{{row[0]}} </strong> <br> </h7> <img src="/static/{{row[3]}}" alt="no image" width="350" height="350"> </a></li>
-                    <br>{{row[1]}}
+                    Created By: {{row[7]}} <br> <br>{{row[1]}}
                 </center>
                 <br><br>
-                <p style="text-align:left;">
-                    Balance: ${{row[5]}}
-                    <span style="float:right;">
-                        Goal: ${{row[4]}}
-                    </span>
-                </p>
-                {% if row[6] >= 100 %}
-                <div class="w3-container">
-                    <div class="w3-light-grey w3-round-xlarge">
-                        <div class="w3-container w3-green w3-round-xlarge" style="width: 100%"> <center style="color:black;"> {{row[6]}}% </center> </div>
-                     </div>
+                <div class="bottom">
+                    <p style="text-align:left;">
+                        Balance: ${{row[5]}}
+                        <span style="float:right;">
+                            Goal: ${{row[4]}}
+                        </span>
+                    </p>
+                    {% if row[6] >= 100 %}
+                        <div class="w3-container">
+                            <div class="w3-light-grey w3-round-xlarge">
+                                <div class="w3-container w3-green w3-round-xlarge" style="width: 100%"> <center style="color:black;"> {{row[6]}}% </center> </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if row[6] < 100 %}
+                        <div class="w3-container">
+                            <div class="w3-light-gray w3-round-xlarge">
+                                <div class="w3-container w3-green w3-round-xlarge" style="width: {{row[6]}}%"> <center style="color:black;"> {{row[6]}}% </center></div>
+                            </div>
+                    </div>
+                    {% endif %}
+                    <br>
                 </div>
-                {% endif %}
-                {% if row[6] < 100 %}
-                <div class="w3-container">
-                    <div class="w3-light-gray w3-round-xlarge">
-                        <div class="w3-container w3-green w3-round-xlarge" style="width: {{row[6]}}%"> <center style="color:black;"> {{row[6]}}% </center></div>
-                     </div>
-                </div>
-                {% endif %}
 
             </div>
             &nbsp
