@@ -4,7 +4,7 @@ from flask import render_template
 from DB_Connection import *
 from DummyInfo import monthLengths
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 class User:
     emailPK = ""
@@ -22,7 +22,7 @@ def home_page(): #create landing page later
 
 @app.route('/dashboard')
 def dashboard():
-    cursor.execute("SELECT Title, Description, FundID FROM FUNDRAISER")
+    cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
     homePageFundraiserData = cursor.fetchall()
 
     if not currentUser.isGuest:
@@ -106,6 +106,8 @@ def donation_form_page(fund_ID=None):
 def recordingDonation():
     amount = request.form["amount"]
     fund_id = request.form["fund_id"]
+    #updating balance in Fundraiser
+    cursor.execute("UPDATE FUNDRAISER SET Balance = Balance + %d WHERE FundID = %d" % (int(amount), int(fund_id)))
 
     if not currentUser.isGuest:
         email = request.form["email"]
