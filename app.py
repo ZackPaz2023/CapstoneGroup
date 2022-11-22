@@ -1,5 +1,5 @@
 import time
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, jsonify
 from flask import render_template
 from DB_Connection import *
 from DummyInfo import monthLengths
@@ -25,6 +25,7 @@ def dashboard():
     cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
     homePageFundraiserData = cursor.fetchall()
 
+
     if not currentUser.isGuest:
         cursor.execute("SELECT Title, DonationsToFund, FundNo FROM DONATES INNER JOIN FUNDRAISER ON FundNo = FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
         userDonationsTable = cursor.fetchall()
@@ -34,6 +35,16 @@ def dashboard():
 
     return render_template('dashboard.html', name=currentUser.name, fundraiserTable=homePageFundraiserData, isGuest=currentUser.isGuest)
 
+@app.route('/tagSort/')
+@app.route('/tagSort/<tag>')
+def fundTagSort(tag=None):
+    if tag == None or tag == "All":
+        cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
+        homePageFundraiserData = cursor.fetchall()
+    else:
+        cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND FUNDRAISER.Tag = '%s' " % tag)
+        homePageFundraiserData = cursor.fetchall()
+    return render_template('fundraiserSortedByTagsGenerator.html', fundraiserTable=homePageFundraiserData)
 
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
@@ -181,7 +192,7 @@ def fundraiser_form_page():
     return render_template('new-fundraiser-form.html')
 
 @app.route('/fillingNewFundraiserForm', methods=["POST"])
-def recordNewFundraiserrForm():
+def recordNewFundraiserForm():
     title = request.form["title"]
     description = request.form["description"]
     goal = request.form["goal"]
@@ -229,6 +240,7 @@ def recordNewUserForm():
     currentUser.emailPK = email
     currentUser.username = userName
     return redirect(url_for('dashboard'))
+
 @app.route('/settings')
 def settings_page():
     return 'This is the settings page.'

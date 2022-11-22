@@ -33,7 +33,7 @@ def main():
                 ("Tinman@gmail.com", "Aid Ukraine", "Sending relief funds for civilians impacted by the war. All Proceeds go towards food, water, and evacuations. Any help is much appreciated", "Emergencies", "Ukraine_Image.jpeg", 20000, "2022-07-20 12-31-22", "2023-07-20 10-31-22"),
                 ("clownin@yahoo.com", "Misfit Academy", "Help fund this academy for impoverished children.", "Community", "30virus-pediatrics-01-mobileMasterAt3x-v2.jpeg", 2000, "2022-06-10 09-42-02", "2023-07-11 10-28-40"),
                 ("workingfromhome@gmail.com", "Investment Opportunity Going Fast!!", "Be the hottest invester you know! With me! Trusted by Warren Buffett himself! 10% monthly return guaranteed!! !", "Business", "Growing_Graph_Plant-780x438.jpeg" , 100000, "2022-10-31 10-00-00", "2025-12-31 23-59-59"),
-                ("nbonaparte@yahoo.com", "Joplin Disaster", "Raising funds for hurricane relief in FLorida", "Emergencies", "gettyimages-1237246621-3b7c952eadb66cc8d43b0a4fc5bdc302eb1f80fd.jpeg" , 50000, "2022-07-04 13-14-36", "2023-01-01 00-00-00"),
+                ("nbonaparte@yahoo.com", "Hurricane Disaster", "Raising funds for hurricane relief in FLorida", "Emergencies", "gettyimages-1237246621-3b7c952eadb66cc8d43b0a4fc5bdc302eb1f80fd.jpeg" , 50000, "2022-07-04 13-14-36", "2023-01-01 00-00-00"),
                 ("venividivici@outlook.com", "I DO!!", "Help John and Kate realize their dream wedding!", "Newlyweds", "bride-groom-getting-married-illustrated_23-2148413588.jpeg" , 30000, "2022-05-05 15-55-13", "2023-08-05 00-00-00")]
 
     #Transaction Info: Transaction ID, Fundraiser ID, Donor Email, Donation Amount, Transaction Date
