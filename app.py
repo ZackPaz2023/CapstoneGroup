@@ -1,3 +1,4 @@
+import os
 import time
 from flask import Flask, request, redirect, url_for, jsonify
 from flask import render_template
@@ -189,12 +190,15 @@ def fundraiser_page(fundraiser_ID=None):
 
 @app.route('/new-fundraiser')
 def fundraiser_form_page():
-    return render_template('new-fundraiser-form.html')
+    images = os.listdir('static')
+    return render_template('new-fundraiser-form.html', imageList=images)
 
 @app.route('/fillingNewFundraiserForm', methods=["POST"])
 def recordNewFundraiserForm():
     title = request.form["title"]
     description = request.form["description"]
+    tag = request.form["tag"]
+    image = request.form["imageSelect"]
     goal = request.form["goal"]
     day = request.form["day"]
     if int(day) < 10:
@@ -202,7 +206,7 @@ def recordNewFundraiserForm():
     timeline = request.form["Year"] + '-' + request.form["Month"] + '-' + day
     creation = time.strftime('%Y-%m-%d %H:%M:%S')
 
-    cursor.execute("INSERT INTO FUNDRAISER (Title, Description, Goal, CreationDate, Timeframe) VALUES (%s,%s,%s,%s,%s)", (title, description, goal, creation, timeline))
+    cursor.execute("INSERT INTO FUNDRAISER (Title, Description, Tag, ImagePath, Goal, CreationDate, Timeframe) VALUES (%s,%s,%s,%s,%s,%s,%s)", (title, description, tag, image, goal, creation, timeline))
     cursor.execute("SELECT LAST_INSERT_ID()")
     FundID = cursor.fetchone()[0]
     cursor.execute("INSERT INTO OWNS (EmailAddress, FundNo) VALUES (%s, %s)", (currentUser.emailPK, FundID))

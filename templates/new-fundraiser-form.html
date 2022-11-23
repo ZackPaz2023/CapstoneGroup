@@ -2,7 +2,7 @@
 <html>
 <header>
     <title>Make A Fundraiser</title>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
@@ -113,13 +113,19 @@
                 border-bottom-left-radius: 0;
                 border-bottom-right-radius: 0;
         }
+        select.icon-menu option {
+            background-repeat:no-repeat;
+            background-position:bottom left;
+            padding-left:30px;
+        }
+
     </style>
 </header>
 
 <body>
     <!--menu-->
     <div class="header">
-        <a href="/dashboard" class="logo">
+        <a href="/dashboard" class="logo"></a>
          <a href="/dashboard" class="logo">CapstoneGroup</a>
 
         <div class="header-right">
@@ -128,7 +134,6 @@
 <!--            <a href="#about">About</a>-->
         </div>
     </div>
-
     <!--    form-->
     <form action="/fillingNewFundraiserForm" method="post">
         <div class="wrapper">
@@ -141,7 +146,46 @@
                 <br><br>
                 <label for="goal">Goal: </label><br>
                 <input type="text" id="goal" name="goal" class="form-control" placeholder="Enter your goal amount">
+                <br>
+                <div>
+                    Category:
+                    <br>
+                    <select id="tag" name="tag">
+                        <option value="Animals">Animals</option>
+                        <option value="Business">Business</option>
+                        <option value="Community">Community</option>
+                        <option value="Creative">Creative</option>
+                        <option value="Education">Education</option>
+                        <option value="Emergencies">Emergencies</option>
+                        <option value="Environment">Environment</option>
+                        <option value="Event">Event</option>
+                        <option value="Faith">Faith</option>
+                        <option value="Family">Family</option>
+                        <option value="Funeral and Memorial">Funeral and Memorial</option>
+                        <option value="Medical">Medical</option>
+                        <option value="Monthly Bills">Monthly Bills</option>
+                        <option value="Newlyweds">Newlyweds</option>
+                        <option value="Other">Other</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Volunteer">Volunteer</option>
+                        <option value="Wishes">Wishes</option>
+                    </select>
+                </div>
+                <br>
+                <div>
+                    Image:
+                    <br>
+                    <select  id="imageSelect" name="imageSelect" style="width: 400px;" data-minimum-results-for-search="Infinity">
+                        {% for image in imageList %}
+                            <option data-img_src="/static/{{image}}" value="{{image}}"> </option>
+                        {% endfor %}
+                    </select>
+
+                </div>
                 <br><br>
+                Expiration Date:
+                <br>
                 <div class="month">
                     <select name="Month">
                         <option value="01">January</option>
@@ -183,5 +227,28 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.js"></script>
+    <script type="text/javascript">
+        function custom_template(obj){
+            var data = $(obj.element).data();
+            var text = $(obj.element).text();
+            if(data && data['img_src']){
+                img_src = data['img_src'];
+                template = $("<div><img src=\"" + img_src + "\" style=\"width:390px;padding:5%;height:200px;\"/></div>");
+                return template;
+            }
+        }
+    var options = {
+        'templateSelection': custom_template,
+        'templateResult': custom_template,
+    }
+    $('#imageSelect').select2(options);
+    $('.select2-container--default .select2-selection--single').css({'height': '200px', 'width': '400px'});
+
+</script>
+
+
 </body>
 </html>
