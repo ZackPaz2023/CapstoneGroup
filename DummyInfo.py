@@ -66,7 +66,7 @@ def main():
                 (1012, "personalcomputer@outlook.com", 1000, "2022-10-09 10-55-10"),
                 (1013, "kirayoshikage@aol.com", 30, "2022-10-15 09-33-13"),
                 (1014, "kirayoshikage@aol.com", 100, "2022-11-02 14-44-21"),
-                (1015, "2ofakind@gmail.com", 933.13, "2022-11-05 04-27-12")
+                (1015, "2ofakind@gmail.com", 933.13, "2022-11-05 04-27-12"),
                 (1016, "DenverNotColorodo@gmail.com", 150, "2022-06-23 14-50-33"),
                 (1017, "nbonaparte@yahoo.com", 100, "2022-08-02 03-22-40"),
                 (1018, "Tinman@gmail.com", 300, "2022-08-05 08-00-00"),
