@@ -98,7 +98,8 @@ def profile_page(name=None, email=None):
 
 @app.route('/donation-form/<fund_ID>')
 def donation_form_page(fund_ID=None):
-    cursor.execute("SELECT * FROM FUNDRAISER WHERE FundID = '%s'" % fund_ID)
+    paymentOptionIsCreditCard = True
+    cursor.execute("SELECT Title FROM FUNDRAISER WHERE FundID = '%s'" % fund_ID)
     fundraiserInfo = cursor.fetchall()
     fundraiserInfoList = []
     for line in fundraiserInfo:
@@ -113,7 +114,12 @@ def donation_form_page(fund_ID=None):
             for attribute in row:
                 userInfoList.append(attribute)
         restOfAddress = userInfoList[1] + " " + userInfoList[2] + " " + str(userInfoList[3]) + " " + userInfoList[4]
-        return render_template('new-donation.html', isGuest=currentUser.isGuest, fundraiser_ID=fund_ID ,fundraiser_name = fundraiserInfoList[0], name=currentUser.name, email=currentUser.emailPK, streetAddress=userInfoList[0], restOfAddress=restOfAddress, cardNum=str(userInfoList[5]), expirationDate=str(userInfoList[6]), routeNo=str(userInfoList[7]), accountNo=str(userInfoList[8]))
+        if str(userInfoList[7]) == "None":
+            return render_template('new-donation.html', isGuest=currentUser.isGuest, fundraiser_ID=fund_ID ,fundraiser_name = fundraiserInfoList[0], name=currentUser.name, email=currentUser.emailPK, streetAddress=userInfoList[0], restOfAddress=restOfAddress, cardNum=str(userInfoList[5]), expirationDate=str(userInfoList[6]), creditCardOption = paymentOptionIsCreditCard)
+        else:
+            paymentOptionIsCreditCard = False
+            return render_template('new-donation.html', isGuest=currentUser.isGuest, fundraiser_ID=fund_ID, fundraiser_name=fundraiserInfoList[0], name=currentUser.name, email=currentUser.emailPK, streetAddress=userInfoList[0], restOfAddress=restOfAddress, routingNum=str(userInfoList[7]), accountNum =str(userInfoList[8]), creditCardOption=paymentOptionIsCreditCard)
+
     else:
         return render_template('new-donation.html', isGuest=currentUser.isGuest, fundraiser_ID=fund_ID ,fundraiser_name = fundraiserInfoList[0], name=currentUser.name)
 

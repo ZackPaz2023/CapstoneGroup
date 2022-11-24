@@ -17,19 +17,19 @@ def main():
     dbCursor = dbConnection.cursor()
 
     #User Info: Username, Password, Email, Name, Phone Number, Zip, Street Address, City, State, Country, Card Number, Exp Date, Routing Number, Account Number
-    userInfo = [("fqrqwqy", "0verth3rqinb0w", "kansasgirl@gmail.com", "Dorothy Gale", "202-918-2132", 40293, "4042 Nowear Lane", "Fields", "KS", "United States", 3589481030276534, "2024-12-" + str(monthLengths(12, 2024)), 112549572, 72254548),
-                ("clownschool", "DrunkenClown", "clownin@yahoo.com", "Honk McWaxxer", "320-577-7956", 23464, "1111 State Street", "Blowhorn", "AK", "United States", 4715949713735849, "2025-04-" + str(monthLengths(4, 2025)), 670826054, 71523538),
-                ("HomewardBound", "RADIO", "DenverNotColorodo@gmail.com", "John Denver", "582-482-0588", 48104, "1971 Country Road", "Mountain Mama", "WV", "United States", 4572307398817873, "2023-06-" + str(monthLengths(6, 2023)), 868484062, 70649423),
-                ("Lutece1879", "FreeBird", "2ofakind@gmail.com", "Lutece", "582-203-0838", 10902, "552 Upward Lane", "Columbia", "VA", "United States", 378594259397756, "2026-04-" + str(monthLengths(4, 2026)), 534369903, 93525636),
-                ("Kira1966", "BitesTheDust", "kirayoshikage@aol.com", "Kira Yoshikage", "318-659-6412", 77200, "4156 Villa Road", "Morioh", "", "Japan", 341179894763895, "2025-02-" + str(monthLengths(2, 2025)), 556649355, 31090784),
-                ("NotAScammer", "businessmogel", "workingfromhome@gmail.com", "Bernie Madoff", "309-611-6048", 82985, "12345 Main Street", "New York City", "NY", "United States", 5198066549559914, "2024-09-" + str(monthLengths(9, 2024)), 358769721, 51162661),
-                ("BigSturdy", "Doctor's Office", "personalcomputer@outlook.com", "William Doors", "203-952-2952", 52185, "645 Silicon Alley", "San Jose", "CA", "United States", 4848900679160589, "2024-08-" + str(monthLengths(8, 2024)), 77522155, 56915407),
-                ("Murphy's Law", "OCPStandardPassword", "Tinman@gmail.com", "Alex Murphy", "301-387-4911", 63453, "50399 Justice Road", "Detroit", "MI", "United States", 4599020519227307, "2026-05-" + str(monthLengths(5, 2026)), 270393550, 46045801),
-                ("FirstConsul", "AverageHeightForTheTime", "nbonaparte@yahoo.com", "Napoleon Bonaparte", "582-333-0707", 85947, "4154 Fraternity Street", "Paris", "", "France", 6011352349624030, "2026-01-" + str(monthLengths(1, 2026)), 940650316, 31487884),
-                ("clopez", "asdfasdf", "lopez@gmail.com", "Carlos Lopez", "121-123-1234", 64123, "This is the St.", "Kansas City", "MO", "US", 1234234534564567, "2026-01-" + str(monthLengths(1, 2026)), 123456789, 12345678),
-                ("kwhite", "asdfasdf", "white@gmail.com", "Katie White", "456-567-7890", 64123, "this is the St.", "Kansas City", "MO", "US", 1111222233334444, "2025-03-" + str(monthLengths(3, 2025)), 598765432, 87654321),
-                ("JackMan", "asdfasdf", "Jlopez@gmail.com", "Jack Lopez", "736-204-7295", 64123, "This is the St.", "Kansas City", "MO", "US", 1234789364091263, "2024-06-" + str(monthLengths(6, 2024)), 183609257, 16849206),
-                ("LastConsul", "AcrosstheRhine", "venividivici@outlook.com", "Julius Caesar", "213-708-6937", 61422, "415 SPQR Street", "Rome", "", "Italy", 5456454184555214, "2026-09-" + str(monthLengths(9, 2026)), 663143155, 36846023)]
+    userInfo = [("fqrqwqy", "0verth3rqinb0w", "kansasgirl@gmail.com", "Dorothy Gale", "202-918-2132", 40293, "4042 Nowear Lane", "Fields", "KS", "United States", 3589481030276534, "2024-12-" + str(monthLengths(12, 2024)), None , None),
+                ("clownschool", "DrunkenClown", "clownin@yahoo.com", "Honk McWaxxer", "320-577-7956", 23464, "1111 State Street", "Blowhorn", "AK", "United States",None , None, 670826054, 71523538),
+                ("HomewardBound", "RADIO", "DenverNotColorodo@gmail.com", "John Denver", "582-482-0588", 48104, "1971 Country Road", "Mountain Mama", "WV", "United States", 4572307398817873, "2023-06-" + str(monthLengths(6, 2023)),None ,None ),
+                ("Lutece1879", "FreeBird", "2ofakind@gmail.com", "Lutece", "582-203-0838", 10902, "552 Upward Lane", "Columbia", "VA", "United States", None, None, 534369903, 93525636),
+                ("Kira1966", "BitesTheDust", "kirayoshikage@aol.com", "Kira Yoshikage", "318-659-6412", 77200, "4156 Villa Road", "Morioh", "", "Japan", 341179894763895, "2025-02-" + str(monthLengths(2, 2025)), None, None),
+                ("NotAScammer", "businessmogel", "workingfromhome@gmail.com", "Bernie Madoff", "309-611-6048", 82985, "12345 Main Street", "New York City", "NY", "United States",None , None, 358769721, 51162661),
+                ("BigSturdy", "Doctor's Office", "personalcomputer@outlook.com", "William Doors", "203-952-2952", 52185, "645 Silicon Alley", "San Jose", "CA", "United States", 4848900679160589, "2024-08-" + str(monthLengths(8, 2024)),None ,None ),
+                ("Murphy's Law", "OCPStandardPassword", "Tinman@gmail.com", "Alex Murphy", "301-387-4911", 63453, "50399 Justice Road", "Detroit", "MI", "United States", None, None, 270393550, 46045801),
+                ("FirstConsul", "AverageHeightForTheTime", "nbonaparte@yahoo.com", "Napoleon Bonaparte", "582-333-0707", 85947, "4154 Fraternity Street", "Paris", "", "France", 6011352349624030, "2026-01-" + str(monthLengths(1, 2026)),None ,None ),
+                ("clopez", "asdfasdf", "lopez@gmail.com", "Carlos Lopez", "121-123-1234", 64123, "This is the St.", "Kansas City", "MO", "US", None, None, 123456789, 12345678),
+                ("kwhite", "asdfasdf", "white@gmail.com", "Katie White", "456-567-7890", 64123, "this is the St.", "Kansas City", "MO", "US", 1111222233334444, "2025-03-" + str(monthLengths(3, 2025)), None,None ),
+                ("JackMan", "asdfasdf", "Jlopez@gmail.com", "Jack Lopez", "736-204-7295", 64123, "This is the St.", "Kansas City", "MO", "US", None , None, 183609257, 16849206),
+                ("LastConsul", "AcrosstheRhine", "venividivici@outlook.com", "Julius Caesar", "213-708-6937", 61422, "415 SPQR Street", "Rome", "", "Italy", 5456454184555214, "2026-09-" + str(monthLengths(9, 2026)),None , None)]
 
     #Fundraiser Info: Owner Email, Title, Description, tag, image, Goal, Creation Date, Timeframe
     FundInfo = [("kansasgirl@gmail.com", "Journey Home", "Dorothy wants to get off the Wizard's Wild Ride and get back home to Kansas.", "Travel", "PowerfulReasons_hero.jpeg", 1500, "2022-04-16 10-31-22", "2022-10-1 23-59-59"),

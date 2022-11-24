@@ -164,35 +164,38 @@
             <label for="amount">Donation Amount: </label>
             <br>
             <input type="text" class="form-control" id="amount" name="amount" autocomplete="off" placeholder="enter amount">
-            <br><br>
+            <br>
 
             <!-- email -->
             <label for="email">Email: </label><br>
-            <input type="text" class="form-control" id="email" name="email" value="{{ email }}" readonly="readonly" /><br><br>
+            <input type="text" class="form-control" id="email" name="email" value="{{ email }}" readonly="readonly" /><br>
 
             <!-- billing address -->
             <legend>Billling Address:</legend>
 <!--            <label for="address">Billing Address:</label><br>-->
-            <input type="text" class="form-control" id="address" value="{{streetAddress}}" readonly="readonly" /><br><br>
-            <input type="text" class="form-control" id="inputCountry" value="{{restOfAddress}}" readonly="readonly"/>
+            <input type="text" class="form-control" id="address" value="{{streetAddress}}" readonly="readonly" /><br>
+            <input type="text" class="form-control" id="inputCountry" value="{{restOfAddress}}" readonly="readonly"/><br>
 
+            {% if creditCardOption == True %}
             <div class="form-body">
                 <legend>Banking Information</legend>
                 <!-- Card Number -->
-                <input type="text" class="form-control" value="{{cardNum}}"readonly="readonly"/>
+                <input type="text" class="form-control" value="{{cardNum}}"readonly="readonly"/><br>
 
                 <!-- Date Field -->
                 <div class="date-field">
-                    <input type="text" class="form-control" value = "{{expirationDate}}"readonly="readonly" />
+                    <input type="text" class="form-control" value = "{{expirationDate}}" readonly="readonly" /><br>
                 </div>
 
                 <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
                 <div class="card-verification">
                     <div class="cvv-input">
-                        <input type="text" class="form-control" autocomplete="off" placeholder="CVV">
+                        <input type="text" class="form-control" autocomplete="off" placeholder="CVV"><br>
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% if creditCardOption == False %}
 
             <!-- Bank Account -->
             <div class="form-header">
@@ -200,10 +203,11 @@
             </div>
 
             <label for="RoutingNumber">Routing Number: </label><br>
-            <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control" placeholder="enter routing number"/>
+            <input type="text" id="RoutingNumber" name="RoutingNumber" value="{{routingNum}}" class="form-control" placeholder="enter routing number" readonly="readonly"/>
             <br>
-            <label class="form__label" for="account-number">Account number</label><br>
-            <input type="text" class="account-number" id="account-number" placeholder="enter bank account number"/>
+            <label  for="account-number">Account Number:</label><br>
+            <input type="text" class="form-control" id="account-number" value="{{accountNum}}" placeholder="enter bank account number" readonly="readonly"/><br>
+            {% endif %}
 <!--                <span class="show__account&#45;&#45;number">-->
 <!--                    <i class="fa fa-eye-slash" aria-hidden="true"></i>-->
 <!--&lt;!&ndash;                    <i class="fa fa-eye-slash pword_icon"></i>&ndash;&gt;-->
