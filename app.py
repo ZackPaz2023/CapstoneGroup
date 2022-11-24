@@ -1,11 +1,14 @@
 import os
 import time
+import pathlib
+from werkzeug.utils import secure_filename
 from flask import Flask, request, redirect, url_for, jsonify
 from flask import render_template
 from DB_Connection import *
 from DummyInfo import monthLengths
 
 app = Flask(__name__, static_url_path='/static')
+app.config['UPLOADED_FILES'] = "static/"
 
 class User:
     emailPK = ""
@@ -16,6 +19,7 @@ class User:
         self.name = "Guest"
 
 currentUser = User()
+
 
 @app.route('/')
 def home_page(): #create landing page later
@@ -190,15 +194,14 @@ def fundraiser_page(fundraiser_ID=None):
 
 @app.route('/new-fundraiser')
 def fundraiser_form_page():
-    images = os.listdir('static')
-    return render_template('new-fundraiser-form.html', imageList=images)
+    return render_template('new-fundraiser-form.html')
 
-@app.route('/fillingNewFundraiserForm', methods=["POST"])
+
+@app.route('/fillingNewFundraiserForm', methods=["POST", "GET"])
 def recordNewFundraiserForm():
     title = request.form["title"]
     description = request.form["description"]
     tag = request.form["tag"]
-    image = request.form["imageSelect"]
     goal = request.form["goal"]
     day = request.form["day"]
     if int(day) < 10:
@@ -206,7 +209,43 @@ def recordNewFundraiserForm():
     timeline = request.form["Year"] + '-' + request.form["Month"] + '-' + day
     creation = time.strftime('%Y-%m-%d %H:%M:%S')
 
+    images = os.listdir('static')
+
+    return render_template('new-fundraiser-second-page.html', title=title, description=description, tag=tag, goal=goal, timeline = timeline, creation=creation, imageList=images)
+
+@app.route("/select", methods=["GET", "POST"])
+def selectImage():
+    print("In select image")
+    title = request.form["title"]
+    description = request.form["description"]
+    tag = request.form["tag"]
+    goal = request.form["goal"]
+    timeline = request.form["timeline"]
+    creation = request.form["creation"]
+    image = request.form["imageSelect"]
+
     cursor.execute("INSERT INTO FUNDRAISER (Title, Description, Tag, ImagePath, Goal, CreationDate, Timeframe) VALUES (%s,%s,%s,%s,%s,%s,%s)", (title, description, tag, image, goal, creation, timeline))
+    cursor.execute("SELECT LAST_INSERT_ID()")
+    FundID = cursor.fetchone()[0]
+    cursor.execute("INSERT INTO OWNS (EmailAddress, FundNo) VALUES (%s, %s)", (currentUser.emailPK, FundID))
+    db.commit()
+
+    return redirect(url_for('dashboard'))
+
+
+@app.route('/uploader', methods=["GET", "POST"])
+def upload_file():
+    print("In upload image")
+    title = request.form["title"]
+    print(title)
+    description = request.form["description"]
+    tag = request.form["tag"]
+    goal = request.form["goal"]
+    timeline = request.form["timeline"]
+    creation = request.form["creation"]
+    image = request.files['file']
+    image.save(os.path.join(app.config['UPLOADED_FILES'], secure_filename(image.filename)))
+    cursor.execute("INSERT INTO FUNDRAISER (Title, Description, Tag, ImagePath, Goal, CreationDate, Timeframe) VALUES (%s,%s,%s,%s,%s,%s,%s)",(title, description, tag, image.filename, goal, creation, timeline))
     cursor.execute("SELECT LAST_INSERT_ID()")
     FundID = cursor.fetchone()[0]
     cursor.execute("INSERT INTO OWNS (EmailAddress, FundNo) VALUES (%s, %s)", (currentUser.emailPK, FundID))
@@ -232,7 +271,6 @@ def recordNewUserForm():
     country = request.form["Country"]
     cardNumber = request.form["CardNumber"]
     expirationDate = request.form["Year"] + "-" + request.form["Month"] + "-" + str(monthLengths(int(request.form["Month"]), int(request.form["Year"])))
-    print(expirationDate)
     routingNumber = request.form["RoutingNumber"]
     accountNumber = request.form["AccountNumber"]
 
@@ -245,9 +283,5 @@ def recordNewUserForm():
     currentUser.username = userName
     return redirect(url_for('dashboard'))
 
-@app.route('/settings')
-def settings_page():
-    return 'This is the settings page.'
-
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
