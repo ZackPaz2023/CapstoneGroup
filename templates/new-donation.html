@@ -11,20 +11,19 @@
     <style>
     * {box-sizing: border-box;}
 
-    h2 {text-align: center; margin-left: 25px;}
-    h3 {text-align: center;}
+    h2{
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    h3{
+        text-align: center;
+    }
 
     button{
-        margin-left: 25px;
+        margin-left: 375px;
     }
 
-    input[type=submit]{
-        margin-left: 25px;
-    }
-
-    label{
-        margin-left: 25px;
-    }
 
     body{
         background: #eee !important;
@@ -32,16 +31,21 @@
         font-family: Arial, Helvetica, sans-serif;
     }
 
+    .banner{
+        color: #4CAF50;
+        margin-left: 0px;
+    }
+
     .wrapper{
         margin-top: 300px;
     }
 
     form{
-        margin-top: 75px;
+        margin-top: 50px;
     }
 
     .wrapper{
-        max-width: 380px;
+        max-width: 450px;
         padding: 15px 35px 45px;
         margin: auto;
         background-color: #fff;
@@ -116,213 +120,211 @@
             }
         }
 
-        input[type="text"]{
-                margin-left: 25px;
-                margin-bottom: -1px;
-                border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
+
         }
     }
     </style>
+<!--    h2{-->
+<!--        text-align: center;-->
+<!--        text-transform: uppercase;-->
+<!--        color: #4CAF50;-->
+<!--    }-->
 </head>
 
 <body>
-<h2 class="banner">Make a New Donation!</h2><br>
+<!--responsive banner-->
+<div class="header">
+    <a href="/dashboard" class="logo">CapstoneGroup</a>
+    <div class="header-right">
+        <a class="active" href="/dashboard">Home</a>
+<!--            <a href="#contact">Contact</a>-->
+<!--            <a href="#about">About</a>-->
+    </div>
+</div>
+
+<br>
+
+<!--<h2 class="banner">Make a New Donation!</h2><br>-->
 
 {% if isGuest == False %}
-<h2 class="banner">Hello {{ name }} </h2>
-    <!-- name -->
- <h3 class="banner">Donating To: {{ fundraiser_name }}</h3>
+
+<!-- welcome for user -->
+<h2>Hello, {{ name }}</h2>
+<br>
+
+<!-- donating as user -->
+<h3>Donating To: </h3>
+<br>
+<h3 class="banner">{{ fundraiser_name }}</h3>
 
 <form action="/submittingDonation" method="post">
     <div class="wrapper">
         <div class="container">
-            <input type="hidden" name="fund_id" value="{{ fundraiser_ID }}"/>
-            <label for="amount">Amount: </label><br>
-            <input type="text" class="form-control" id="amount" name="amount" autocomplete="off" placeholder="enter amount"><br><br>
+            <input type="hidden" class="form-control" name="fund_id" value="{{ fundraiser_ID }}"/>
+            <label for="amount">Donation Amount: </label>
+            <br>
+            <input type="text" class="form-control" id="amount" name="amount" autocomplete="off" placeholder="enter amount">
+            <br><br>
 
             <!-- email -->
             <label for="email">Email: </label><br>
             <input type="text" class="form-control" id="email" name="email" value="{{ email }}" readonly="readonly" /><br><br>
 
             <!-- billing address -->
-            <label for="address">Billing Address:</label><br>
+            <legend>Billling Address:</legend>
+<!--            <label for="address">Billing Address:</label><br>-->
             <input type="text" class="form-control" id="address" value="{{streetAddress}}" readonly="readonly" /><br><br>
             <input type="text" class="form-control" id="inputCountry" value="{{restOfAddress}}" readonly="readonly"/>
 
-            <div class="form-header">
-                <h4 class="title">Credit card detail</h4>
-            </div>
-
             <div class="form-body">
+                <legend>Banking Information</legend>
                 <!-- Card Number -->
-                <input type="text" class="card-number" value="{{cardNum}}"readonly="readonly"/>
+                <input type="text" class="form-control" value="{{cardNum}}"readonly="readonly"/>
 
                 <!-- Date Field -->
                 <div class="date-field">
-                    <input type="text" value = "{{expirationDate}}"readonly="readonly" />
+                    <input type="text" class="form-control" value = "{{expirationDate}}"readonly="readonly" />
                 </div>
 
                 <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
                 <div class="card-verification">
                     <div class="cvv-input">
-                        <input type="text" autocomplete="off" placeholder="CVV">
+                        <input type="text" class="form-control" autocomplete="off" placeholder="CVV">
                     </div>
                 </div>
             </div>
 
             <!-- Bank Account -->
             <div class="form-header">
-                <h4 class="title">Bank Account detail</h4>
+                <h5 class="title">Bank Account detail</h5>
             </div>
 
-            <div class="bank--control">
-                <div class="bank--add__body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="row">
-                                <div class="col-xs-12 col-md-8">
-                                    <div class="form__control">
-                                        <label class="form__label" for="routing">Bank number</label>
-                                        <br>
-                                        <input type="text" id="routing" value="{{routeNo}}" readonly="readonly" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-12 col-md-8">
-                                    <div class="form__control">
-                                        <label class="form__label" for="account-number">Account number</label>
-                                        <br>
-                                        <input class="account-number" id="account-number" type="password" value="{{accountNo}}"readonly="readonly" />
-                                        <span class="show__account--number">
-                                            <i class="fa fa-eye-slash pword_icon"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <label for="RoutingNumber">Routing Number: </label><br>
+            <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control" placeholder="enter routing number"/>
+            <br>
+            <label class="form__label" for="account-number">Account number</label><br>
+            <input type="text" class="account-number" id="account-number" placeholder="enter bank account number"/>
+<!--                <span class="show__account&#45;&#45;number">-->
+<!--                    <i class="fa fa-eye-slash" aria-hidden="true"></i>-->
+<!--&lt;!&ndash;                    <i class="fa fa-eye-slash pword_icon"></i>&ndash;&gt;-->
+<!--                </span>-->
+            <br>
+            <input type="submit" value="SUBMIT"/>
         </div>
-        <br>
-
-        <input type="submit" value="SUBMIT"/>
     </div>
-
 </form>
 {% endif %}
 
 {% if isGuest == True %}
-<h2>Hello, you'll be making your donation as a {{ name }} </h2>
-    <!-- name -->
- <h3>Donating To: {{ fundraiser_name }}</h3>
+<!-- welcome for guest -->
+<h2>Hello, you'll be making your donation as a {{ name }}</h2>
+
+<br>
+<!-- donating for guest -->
+<h3>Donating To: </h3>
+<br>
+<h3 class="banner">{{ fundraiser_name }}</h3>
+
 <form action="/submittingDonation" method="post">
-    <input type="hidden" name="fund_id" value="{{ fundraiser_ID }}"/>
-
-    <label for="amount">Amount: </label><br>
-    <input type="text" class="form-control" id="guestAmount" name="amount" autocomplete="off" placeholder="enter amount"><br><br>
-
-    <!-- billing address -->
-    <label for="address">Billing Address:</label><br>
-    <input type="text" class="form-control" placeholder="enter street address" /><br><br>
-    <input type="text" class="form-control" placeholder="enter city" /><br><br>
-    <input type="text" class="form-control" placeholder="enter state" /><br><br>
-    <input type="text" class="form-control" placeholder="enter zip code" /><br><br>
-    <input type="text" class="form-control" placeholder="enter country" /><br><br>
-
-    <div class="form-header">
-        <h4 class="title">Credit card detail</h4>
-    </div>
-
-    <div class="form-body">
-        <!-- Card Number -->
-        <input type="text" class="card-number" placeholder="enter card number"/>
-
-        <!-- Date Field -->
-        <div class="date-field">
+    <div class="wrapper">
+        <div class="container">
+            <input type="hidden" class="form-control" name="fund_id" value="{{ fundraiser_ID }}"/>
+            <legend>Donation Amount:</legend>
             <br>
-            <div class="month">
-                <select name="Month">
-                    <option>January</option>
-                    <option>February</option>
-                    <option>March</option>
-                    <option>April</option>
-                    <option>May</option>
-                    <option>June</option>
-                    <option>July</option>
-                    <option>August</option>
-                    <option>September</option>
-                    <option>October</option>
-                    <option>November</option>
-                    <option>December</option>
-                </select>
-            </div>
+            <input type="text" class="form-control" id="guestAmount" name="amount" autocomplete="off" placeholder="enter amount"><br><br>
 
-            <div class="year">
-                <select name="Year">
-                    <option>2022</option>
-                    <option>2023</option>
-                    <option>2024</option>
-                    <option>2025</option>
-                    <option>2026</option>
-                </select>
-            </div>
-        </div>
+            <legend>Billling Address:</legend>
+            <!-- billing address -->
+            <label for="StreetAddress">Street Address:</label><br>
+            <input type="text" id="StreetAddress" class="form-control" placeholder="street address" />
+            <br>
+            <label for="City">City: </label><br>
+            <input type="text" id="City" class="form-control" placeholder="city"/>
+            <br>
+            <label for="State">State: </label><br>
+            <input type="text" id="State" class="form-control" placeholder="state"/>
+            <br>
+            <label for="ZipCode">Zip Code: </label><br>
+            <input type="text" id="ZipCode" class="form-control" placeholder="zip code"/>
+            <br>
+            <label for="Country">Country: </label><br>
+            <input type="text" id="Country" class="form-control" placeholder="country"/>
+            <br>
+            <hr>
+            <div class="form-body">
+                <legend>Payment Information</legend>
 
-        <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
-        <div class="card-verification">
-            <div class="cvv-input">
-                <input type="text" autocomplete="off" placeholder="CVV">
-            </div>
-        </div>
-    </div>
+                <div class="form-header">
+                    <h5 class="title">Credit Card Information</h5>
+                </div>
 
-    <!-- Bank Account -->
+                <!-- Card Number -->
+                <label  for="CardNumber">Card number: </label><br>
+                <input type="text" id=CardNumber class="form-control" placeholder="enter card number"/>
 
-    <div class="form-header">
-        <h4 class="title">Bank Account detail</h4>
-    </div>
-
-    <div class="bank--control">
-        <div class="bank--add__body">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="row">
-                        <div class="col-xs-12 col-md-8">
-                            <div class="form__control">
-                                <label class="form__label" for="routing">Bank number</label>
-                                <br>
-                                <input type="text" placeholder="enter bank routing number" />
-                            </div>
-                        </div>
+                <!-- Date Field -->
+                <div class="date-field">
+                    <br>
+                    <div class="month">
+                        <select name="Month">
+                            <option>January</option>
+                            <option>February</option>
+                            <option>March</option>
+                            <option>April</option>
+                            <option>May</option>
+                            <option>June</option>
+                            <option>July</option>
+                            <option>August</option>
+                            <option>September</option>
+                            <option>October</option>
+                            <option>November</option>
+                            <option>December</option>
+                        </select>
                     </div>
 
-                    <div class="row">
-                        <div class="col-xs-12 col-md-8">
-                            <div class="form__control">
-                                <label class="form__label" for="account-number">Account number</label>
-                                <br>
-                                <input class="account-number" type="password" placeholder="enter bank account number" />
-                                <span class="show__account--number">
-                                    <i class="fa fa-eye-slash pword_icon"></i>
-                                </span>
-                            </div>
-                        </div>
+                    <div class="year">
+                        <select name="Year">
+                            <option>2022</option>
+                            <option>2023</option>
+                            <option>2024</option>
+                            <option>2025</option>
+                            <option>2026</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
+                <div class="card-verification">
+                    <div class="cvv-input">
+                        <input type="text" class="form-control"" autocomplete="off" placeholder="CVV">
                     </div>
                 </div>
             </div>
+            <br>
+
+            <!-- Bank Account -->
+            <div class="form-header">
+                <h5 class="title">Bank Account detail</h5>
+            </div>
+
+            <label for="RoutingNumber">Routing Number: </label><br>
+            <input type="text" name="RoutingNumber" class="form-control" placeholder="enter routing number">
+            <br>
+            <label class="form__label" for="account-number">Account number</label><br>
+            <input type="password" class="form-control" type="password" placeholder="enter bank account number"/>
+<!--                <span class="show__account&#45;&#45;number">-->
+<!--                    <i class="fa fa-eye-slash" aria-hidden="true"></i>-->
+<!--&lt;!&ndash;                    <i class="fa fa-eye-slash pword_icon"></i>&ndash;&gt;-->
+<!--                </span>-->
+            <br><br>
+            <input type="submit" value="SUBMIT"/>
         </div>
     </div>
-    <br>
-    <input type="submit" value="SUBMIT"/>
 
 </form>
 {% endif %}
 
-    <br><hr>
+    <br>
     <button class="btn btn-default" onclick="history.back()">Go Back</button>
     <br><br>
 

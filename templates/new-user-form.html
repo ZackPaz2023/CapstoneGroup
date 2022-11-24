@@ -12,7 +12,7 @@
     * {box-sizing: border-box;}
 
         button{
-        margin-left: 25px;
+        margin-left: 375px;
         }
 
         fieldset{
@@ -34,18 +34,16 @@
          }
 
         .wrapper{
-            max-width: 380px;
+            max-width: 450px;
             padding: 15px 35px 45px;
             margin: auto;
             background-color: #fff;
             border: 5px solid rgba(0,0,0,0.1);
 
             .container{
-
                 margin-top: 80px;
                 margin-bottom: 80px;
             }
-
 
             .form-details{
                 margin-bottom: 30px;
@@ -138,7 +136,7 @@
     <!--        <div class="container">-->
                 <fieldset>
                     <br>
-                    <legend class="form-details">Personal Details</legend>
+                    <legend class="form-details">Personal Details:</legend>
                     <br>
         <!--            <div class="row">-->
         <!--                <div class="col-sm">-->
@@ -184,8 +182,12 @@
         <!--                </div>-->
                 <fieldset>
                     <br>
-                    <legend>Banking Information</legend>
+                    <legend>Payment Information</legend>
         <!--                    <div class="col-sm">-->
+
+                    <div class="form-header">
+                        <h5 class="title">Credit Card Information</h5>
+                    </div>
                     <label  for="CardNumber">Card number: </label><br>
                     <input type="text" id="CardNumber" name="CardNumber" class="form-control" placeholder="enter card number">
                     <br>
@@ -213,8 +215,18 @@
                                 <option value="2026">2026</option>
                             </select>
                         </div>
+                        <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
+                        <div class="card-verification">
+                            <div class="cvv-input">
+                                <input type="text" class="form-control" autocomplete="off" placeholder="CVV">
+                            </div>
+                        </div>
                     </div>
                     <br>
+
+                    <div class="form-header">
+                        <h5 class="title">Bank Account detail</h5>
+                    </div>
                     <label for="RoutingNumber">Routing Number: </label><br>
                     <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control" placeholder="enter routing number">
                     <br>
@@ -227,7 +239,7 @@
         </form>
     </div>
 
-    <br><hr>
+    <br>
     <button class="btn btn-default" onclick="history.back()">Go Back</button>
     <br><br>
 
