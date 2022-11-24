@@ -153,7 +153,33 @@ width: 95%;
     <h2 class="heading-1 mb4x">Featured Fundraisers</h2>
 </section>
 
-<section>
+<form action="">
+<select id="tag" onchange="getTag(this.value)">
+<option value="All">All Fundraisers</option>
+<option value="Animals">Animals</option>
+<option value="Business">Business</option>
+<option value="Community">Community</option>
+<option value="Creative">Creative</option>
+<option value="Education">Education</option>
+<option value="Emergencies">Emergencies</option>
+<option value="Environment">Environment</option>
+<option value="Event">Event</option>
+<option value="Faith">Faith</option>
+<option value="Family">Family</option>
+<option value="Funeral and Memorial">Funeral and Memorial</option>
+<option value="Medical">Medical</option>
+<option value="Monthly Bills">Monthly Bills</option>
+<option value="Newlyweds">Newlyweds</option>
+<option value="Other">Other</option>
+<option value="Sports">Sports</option>
+<option value="Travel">Travel</option>
+<option value="Volunteer">Volunteer</option>
+<option value="Wishes">Wishes</option>
+</select>
+</form>
+
+
+<div id="fundList">
     <ul>
         {% for row in fundraiserTable %}
             <div class="fundraiserBoxes" style="margin: 25px">
@@ -190,8 +216,24 @@ width: 95%;
             &nbsp
         {% endfor %}
     </ul>
-</section>
+</div>
 <br>
+
+<script>
+function getTag(str) {
+  if (str == "") {
+    document.getElementById("fundList").innerHTML = "";
+    return;
+  }
+
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    document.getElementById("fundList").innerHTML = this.responseText;
+  }
+  xhttp.open("GET", "/tagSort/"+str);
+  xhttp.send();
+}
+</script>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>

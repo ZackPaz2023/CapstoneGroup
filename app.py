@@ -1,5 +1,6 @@
+import os
 import time
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, jsonify
 from flask import render_template
 from DB_Connection import *
 from DummyInfo import monthLengths
@@ -25,6 +26,7 @@ def dashboard():
     cursor.execute("SELECT Title, Description, FundID,  ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
     homePageFundraiserData = cursor.fetchall()
 
+
     if not currentUser.isGuest:
         cursor.execute("SELECT Title, DonationsToFund, FundNo FROM DONATES INNER JOIN FUNDRAISER ON FundNo = FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
         userDonationsTable = cursor.fetchall()
@@ -34,6 +36,16 @@ def dashboard():
 
     return render_template('dashboard.html', name=currentUser.name, fundraiserTable=homePageFundraiserData, isGuest=currentUser.isGuest)
 
+@app.route('/tagSort/')
+@app.route('/tagSort/<tag>')
+def fundTagSort(tag=None):
+    if tag == None or tag == "All":
+        cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
+        homePageFundraiserData = cursor.fetchall()
+    else:
+        cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND FUNDRAISER.Tag = '%s' " % tag)
+        homePageFundraiserData = cursor.fetchall()
+    return render_template('fundraiserSortedByTagsGenerator.html', fundraiserTable=homePageFundraiserData)
 
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
@@ -148,7 +160,7 @@ def recordingDonation():
 
 @app.route('/fundraiser/<fundraiser_ID>')
 def fundraiser_page(fundraiser_ID=None):
-    cursor.execute("SELECT Title, Description, Goal, Balance, CreationDate, Timeframe FROM FUNDRAISER WHERE FundID = '%s'" % fundraiser_ID)
+    cursor.execute("SELECT Title, Description, Goal, Balance, CreationDate, Timeframe, Tag FROM FUNDRAISER WHERE FundID = '%s'" % fundraiser_ID)
     fundraiserInfo = []
     for line in list(cursor):
         for item in line:
@@ -174,16 +186,19 @@ def fundraiser_page(fundraiser_ID=None):
     for donation in donationTable:
         balance += float(donation[1])
 
-    return render_template('fundraiser.html', fund_ID = fundraiser_ID, fund_name=fundraiserInfo[0], fund_desc = fundraiserInfo[1], fund_goal = fundraiserInfo[2], fund_balance = balance, fund_creationdate = fundraiserCreationDate, fund_timeline = fundraiserTimeline, table = donationTable)
+    return render_template('fundraiser.html', fund_ID = fundraiser_ID, fund_name=fundraiserInfo[0], fund_desc = fundraiserInfo[1], fund_goal = fundraiserInfo[2], fund_tag=fundraiserInfo[6], fund_balance = fundraiserInfo[3], fund_creationdate = fundraiserCreationDate, fund_timeline = fundraiserTimeline, table = donationTable)
 
 @app.route('/new-fundraiser')
 def fundraiser_form_page():
-    return render_template('new-fundraiser-form.html')
+    images = os.listdir('static')
+    return render_template('new-fundraiser-form.html', imageList=images)
 
 @app.route('/fillingNewFundraiserForm', methods=["POST"])
-def recordNewFundraiserrForm():
+def recordNewFundraiserForm():
     title = request.form["title"]
     description = request.form["description"]
+    tag = request.form["tag"]
+    image = request.form["imageSelect"]
     goal = request.form["goal"]
     day = request.form["day"]
     if int(day) < 10:
@@ -191,7 +206,7 @@ def recordNewFundraiserrForm():
     timeline = request.form["Year"] + '-' + request.form["Month"] + '-' + day
     creation = time.strftime('%Y-%m-%d %H:%M:%S')
 
-    cursor.execute("INSERT INTO FUNDRAISER (Title, Description, Goal, CreationDate, Timeframe) VALUES (%s,%s,%s,%s,%s)", (title, description, goal, creation, timeline))
+    cursor.execute("INSERT INTO FUNDRAISER (Title, Description, Tag, ImagePath, Goal, CreationDate, Timeframe) VALUES (%s,%s,%s,%s,%s,%s,%s)", (title, description, tag, image, goal, creation, timeline))
     cursor.execute("SELECT LAST_INSERT_ID()")
     FundID = cursor.fetchone()[0]
     cursor.execute("INSERT INTO OWNS (EmailAddress, FundNo) VALUES (%s, %s)", (currentUser.emailPK, FundID))
@@ -229,6 +244,7 @@ def recordNewUserForm():
     currentUser.emailPK = email
     currentUser.username = userName
     return redirect(url_for('dashboard'))
+
 @app.route('/settings')
 def settings_page():
     return 'This is the settings page.'
