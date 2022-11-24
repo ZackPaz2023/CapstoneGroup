@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>User Setup</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
@@ -184,17 +185,27 @@
                     <br>
                     <legend>Payment Information</legend>
         <!--                    <div class="col-sm">-->
+                    Select A Payment Option:
+                    <div>
+                        <input type="radio" id="creditCard" name="paymentOptionToggle" value="creditCard" checked>
+                            <label for="creditCard">Use A Credit Card:</label>
+                        <br>
+                        <input type="radio" id="bankInfo" name="paymentOptionToggle" value="bankInfo">
+                            <label for="bankInfo">Use A Bank Account:</label>
+                    </div>
+                    <br>
 
+                    <div id="selectCreditCardCode">
                     <div class="form-header">
                         <h5 class="title">Credit Card Information</h5>
                     </div>
                     <label  for="CardNumber">Card number: </label><br>
                     <input type="text" id="CardNumber" name="CardNumber" class="form-control" placeholder="enter card number">
-                    <br>
                     <div class="dropdown">
                         <div class="month">
-                            <select name="Month">
-                                <option value="01">January</option>
+                            Expiration Month:
+                            <select id="Month" name="Month">
+                                <option value="01" >January</option>
                                 <option value="02">February</option>
                                 <option value="05">May</option>
                                 <option value="06">June</option>
@@ -207,8 +218,9 @@
                             </select>
                         </div>
                         <div class="year">
-                            <select name="Year">
-                                <option value="2022">2022</option>
+                            Expiration Year:
+                            <select id="Year" name="Year">
+                                <option value="2022" selected>2022</option>
                                 <option value="2023">2023</option>
                                 <option value="2024">2024</option>
                                 <option value="2025">2025</option>
@@ -218,24 +230,28 @@
                         <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
                         <div class="card-verification">
                             <div class="cvv-input">
-                                <input type="text" class="form-control" autocomplete="off" placeholder="CVV">
+                                <input type="text" id="cvv" name="cvv" class="form-control" autocomplete="off" placeholder="CVV">
+                                <br>
                             </div>
                         </div>
                     </div>
-                    <br>
+                    </div>
+
+                    <div id="selectBankAccountCode" style="display:none">
 
                     <div class="form-header">
                         <h5 class="title">Bank Account detail</h5>
-                    </div>
+                        </div>
                     <label for="RoutingNumber">Routing Number: </label><br>
                     <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control" placeholder="enter routing number">
                     <br>
                     <label for="AccountNumber">Account Number: </label><br>
                     <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" placeholder="enter account number">
                     <br>
-                    <input type="submit" value="SUBMIT">
-                </fieldset>
+
             </div>
+            <input type="submit" value="SUBMIT">
+            </fieldset>
         </form>
     </div>
 
@@ -246,5 +262,37 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+<script type="text/javascript">
+    const creditCardSelect = document.getElementById('selectCreditCardCode');
+    const bankAccountSelect = document.getElementById('selectBankAccountCode');
+
+    function handleRadioClick() {
+    if (document.getElementById('creditCard').checked) {
+        creditCardSelect.style.display = 'block';
+        $("#RoutingNumber").val(null);
+        $("#AccountNumber").val(null);
+    } else {
+        creditCardSelect.style.display = 'none';
+    }
+
+    if (document.getElementById('bankInfo').checked) {
+        bankAccountSelect.style.display = 'block';
+        $("#CardNumber").val(null);
+        $("#Month").val(null);
+        $("#Year").val(null);
+        $("#cvv").val(null);
+    } else {
+        bankAccountSelect.style.display = 'none';
+    }
+    }
+
+    const radioButtons = document.querySelectorAll('input[name="paymentOptionToggle"]');
+    radioButtons.forEach(radio => {
+    radio.addEventListener('click', handleRadioClick);
+    });
+    </script>
 </body>
 </html>

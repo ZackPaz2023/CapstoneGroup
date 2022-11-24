@@ -215,7 +215,6 @@ def recordNewFundraiserForm():
 
 @app.route("/select", methods=["GET", "POST"])
 def selectImage():
-    print("In select image")
     title = request.form["title"]
     description = request.form["description"]
     tag = request.form["tag"]
@@ -235,9 +234,7 @@ def selectImage():
 
 @app.route('/uploader', methods=["GET", "POST"])
 def upload_file():
-    print("In upload image")
     title = request.form["title"]
-    print(title)
     description = request.form["description"]
     tag = request.form["tag"]
     goal = request.form["goal"]
@@ -269,14 +266,17 @@ def recordNewUserForm():
     state = request.form["State"]
     city = request.form["City"]
     country = request.form["Country"]
-    cardNumber = request.form["CardNumber"]
-    expirationDate = request.form["Year"] + "-" + request.form["Month"] + "-" + str(monthLengths(int(request.form["Month"]), int(request.form["Year"])))
-    routingNumber = request.form["RoutingNumber"]
-    accountNumber = request.form["AccountNumber"]
-
-    cursor.execute("INSERT INTO USER (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, CardNumber, ExpirationDate, RouteNo, AccountNo) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (userName, password, email, name, phoneNumber, zipCode, streetAddress, state, city, country, cardNumber, expirationDate, routingNumber, accountNumber))
-    db.commit()
-
+    radioToggled = request.form['paymentOptionToggle']
+    if radioToggled == "creditCard":
+        cardNumber = request.form["CardNumber"]
+        expirationDate = request.form["Year"] + "-" + request.form["Month"] + "-" + str(monthLengths(int(request.form["Month"]), int(request.form["Year"])))
+        cursor.execute("INSERT INTO USER (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, CardNumber, ExpirationDate) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(userName, password, email, name, phoneNumber, zipCode, streetAddress, state, city, country, cardNumber, expirationDate))
+        db.commit()
+    elif radioToggled == "bankInfo":
+        routingNumber = request.form["RoutingNumber"]
+        accountNumber = request.form["AccountNumber"]
+        cursor.execute("INSERT INTO USER (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, RouteNo, AccountNo) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(userName, password, email, name, phoneNumber, zipCode, streetAddress, state, city, country, routingNumber, accountNumber))
+        db.commit()
     currentUser.isGuest = False
     currentUser.name = name
     currentUser.emailPK = email
