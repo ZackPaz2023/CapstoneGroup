@@ -141,20 +141,43 @@
                     <br>
         <!--            <div class="row">-->
         <!--                <div class="col-sm">-->
-                    <label for="Name">Full Name: </label><br>
-                    <input type="text" id="Name" name="Name" class="form-control" placeholder="enter full name">
+                    <label for="Name">Full Name:
+                    {% if flag[0] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}
+                    </label><br>
+                    <input type="text" id="Name" name="Name" class="form-control" placeholder="Enter Full Name" value="{{ inputData[0] }}">
                     <br>
-                    <label for="Email">E-Mail: </label><br>
-                    <input type="text" id="Email" name="Email" class="form-control" placeholder="enter email">
+                    <label for="Email">E-Mail:
+                    {% if flag[1] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}
+                    </label><br>
+                    <input type="text" id="Email" name="Email" class="form-control" placeholder="Enter Email" value="{{ inputData[1] }}">
                     <br>
-                    <label for="UserName">UserName: </label><br>
-                    <input type="text" id="UserName" name="UserName" class="form-control" placeholder="enter username">
+                    <label for="UserName">Username:
+                    {% if flag[2] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}
+                    </label><br>
+                    <input type="text" id="UserName" name="UserName" class="form-control" placeholder="Enter Username" value="{{ inputData[2] }}">
                     <br>
-                    <label for="Password">Password: </label><br>
-                    <input type="password" id="Password" name="Password" class="form-control" placeholder="enter password">
+                    <label for="Password">Password:
+                    {% if flag[3] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}
+                    </label><br>
+                    <input type="password" id="Password" name="Password" class="form-control" placeholder="Enter Password" value="{{ inputData[3] }}">
                     <br>
-                    <label for="PhoneNumber">Phone Number: </label><br>
-                    <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" placeholder="enter phone number">
+                    {% if flag[3] == 0 %}
+                        <i style="color:red;">Password must be 8 to 20 characters long and include at least ONE uppercase letter.</i><br>
+                        {% endif %}
+                    <label for="PhoneNumber">Phone Number:
+                    {% if flag[4] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}
+                    </label><br>
+                    <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" placeholder="Enter Phone Number" value="{{ inputData[4] }}">
                     <br>
         <!--                </div>-->
                 </fieldset>
@@ -162,22 +185,37 @@
                 <fieldset>
         <!--                <div class="col-sm">-->
                     <br>
-                    <legend>Billling Address:</legend>
+                    <legend>Billing Address:</legend>
                     <br>
-                    <label for="StreetAddress">Street Address: </label><br>
-                    <input type="text" id="StreetAddress" name="StreetAddress" class="form-control" placeholder="street address">
+                    <label for="StreetAddress">Street Address:
+                    {% if flag[5] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="StreetAddress" name="StreetAddress" class="form-control" placeholder="Street Address" value="{{ inputData[5] }}">
                     <br>
-                    <label for="City">City: </label><br>
-                    <input type="text" id="City" name="City" class="form-control" placeholder="city">
+                    <label for="City">City:
+                    {% if flag[6] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="City" name="City" class="form-control" placeholder="City" value="{{ inputData[6] }}">
                     <br>
-                    <label for="State">State: </label><br>
-                    <input type="text" id="State" name="State" class="form-control" placeholder="state">
+                    <label for="State">State:
+                    {% if flag[7] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="State" name="State" class="form-control" placeholder="State" value="{{ inputData[7] }}">
                     <br>
-                    <label for="ZipCode">Zip Code: </label><br>
-                    <input type="text" id="ZipCode" name="ZipCode" class="form-control" placeholder="zip code">
+                    <label for="ZipCode">Zip Code:
+                    {% if flag[8] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="ZipCode" name="ZipCode" class="form-control" placeholder="Zip Code" value="{{ inputData[8] }}">
                     <br>
-                    <label for="Country">Country: </label><br>
-                    <input type="text" id="Country" name="Country" class="form-control" placeholder="country">
+                    <label for="Country">Country:
+                    {% if flag[9] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="Country" name="Country" class="form-control" placeholder="Country" value="{{ inputData[9] }}">
                     <br>
                 </fieldset>
         <!--                </div>-->
@@ -188,10 +226,10 @@
                     Select A Payment Option:
                     <div>
                         <input type="radio" id="creditCard" name="paymentOptionToggle" value="creditCard" checked>
-                            <label for="creditCard">Use A Credit Card:</label>
+                            <label for="creditCard">Use A Credit Card: </label>
                         <br>
                         <input type="radio" id="bankInfo" name="paymentOptionToggle" value="bankInfo">
-                            <label for="bankInfo">Use A Bank Account:</label>
+                            <label for="bankInfo">Use A Bank Account: </label>
                     </div>
                     <br>
 
@@ -199,13 +237,16 @@
                     <div class="form-header">
                         <h5 class="title">Credit Card Information</h5>
                     </div>
-                    <label  for="CardNumber">Card number: </label><br>
-                    <input type="text" id="CardNumber" name="CardNumber" class="form-control" placeholder="enter card number">
+                    <label  for="CardNumber">Card number:
+                    {% if flag[10] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="CardNumber" name="CardNumber" class="form-control" placeholder="Enter Card Number" value="{{ inputData[11] }}"><br>
                     <div class="dropdown">
                         <div class="month">
                             Expiration Month:
                             <select id="Month" name="Month">
-                                <option value="01" >January</option>
+                                <option value="01" selected>January</option>
                                 <option value="02">February</option>
                                 <option value="05">May</option>
                                 <option value="06">June</option>
@@ -226,11 +267,15 @@
                                 <option value="2025">2025</option>
                                 <option value="2026">2026</option>
                             </select>
-                        </div>
+                        </div><br>
                         <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
                         <div class="card-verification">
                             <div class="cvv-input">
-                                <input type="text" id="cvv" name="cvv" class="form-control" autocomplete="off" placeholder="CVV">
+                                <label for="cvv">CVV:
+                                {% if flag[11] == 0 %}
+                                    <b style="color:red;">*</b>
+                                    {% endif %}</label>
+                                <input type="text" id="cvv" name="cvv" class="form-control" autocomplete="off" placeholder="CVV" value="{{ inputData[14] }}">
                                 <br>
                             </div>
                         </div>
@@ -240,14 +285,20 @@
                     <div id="selectBankAccountCode" style="display:none">
 
                     <div class="form-header">
-                        <h5 class="title">Bank Account detail</h5>
+                        <h5 class="title">Bank Account Details</h5>
                         </div>
-                    <label for="RoutingNumber">Routing Number: </label><br>
-                    <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control" placeholder="enter routing number">
+                    <label for="RoutingNumber">Routing Number:
+                    {% if flag[12] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control" placeholder="Enter Routing Number" value="{{ inputData[15] }}">
                     <br>
-                    <label for="AccountNumber">Account Number: </label><br>
-                    <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" placeholder="enter account number">
-                    <br>
+                    <label for="AccountNumber">Account Number:
+                    {% if flag[13] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" placeholder="Enter Account Number" value="{{ inputData[16] }}">
+                    <br><br><br><br>
 
             </div>
             <input type="submit" value="SUBMIT">
