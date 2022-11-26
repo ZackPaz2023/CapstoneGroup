@@ -117,16 +117,14 @@ def valid_phone_num(phoneNum):
         if (valid_char == False):
             return False
 
-    numParts = phoneNum.split("-")
-
-    if (len(numParts[0]) == 3 and len(numParts[1]) == 3 and len(numParts[2]) == 4):
+    if (len(phoneNum) == 12):
         return True
     else:
         return False
 
 
 def valid_password(password):
-    if (8 <= len(password) <= 20):
+    if not (8 <= len(password) <= 20):
         return False
     has_upper_case = False
     for char in password:
@@ -205,43 +203,58 @@ def valid_length(data, correctLength):
 
 def valid_new_user_input(form_input, payment_type):
     valid_input = True
+    flags = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
     # Check each field
-    if not (5 <= len(form_input["UserName"]) <= 20):
+    if not (5 <= len(form_input["Name"]) <= 40):
         valid_input = False
-    if not valid_password(form_input["Password"]):
-        valid_input = False
+        flags[0] = 0
     if not valid_email(form_input["Email"]):
         valid_input = False
-    if 5 <= len(form_input["Name"]) <= 40:
+        flags[1] = 0
+    if not (5 <= len(form_input["UserName"]) <= 20):
         valid_input = False
+        flags[2] = 0
+    if not valid_password(form_input["Password"]):
+        valid_input = False
+        flags[3] = 0
     if not valid_phone_num(reformat_phone_num(form_input["PhoneNumber"])):
         valid_input = False
-    if not valid_zip_code(form_input["ZipCode"]):
-        valid_input = False
+        flags[4] = 0
     if len(form_input["StreetAddress"]) < 8:
         valid_input = False
-    if len(form_input["State"]) < 2:
-        valid_input = False
+        flags[5] = 0
     if len(form_input["City"]) < 2:
         valid_input = False
+        flags[6] = 0
+    if len(form_input["State"]) < 2:
+        valid_input = False
+        flags[7] = 0
+    if not valid_zip_code(form_input["ZipCode"]):
+        valid_input = False
+        flags[8] = 0
     if len(form_input["Country"]) < 5:
         valid_input = False
+        flags[9] = 0
 
     # If payment type is creditCard
     if (payment_type == "creditCard"):
         if not valid_card_number(form_input["CardNumber"]):
             valid_input = False
+            flags[10] = 0
         if len(form_input["cvv"]) != 3:
             valid_input = False
+            flags[11] = 0
     # If payment type is bankInfo
     if (payment_type == "bankInfo"):
         if not (5 <= len(form_input["AccountNumber"]) <= 17):
             valid_input = False
+            flags[12] = 0
         if not valid_routing_number(form_input["RoutingNumber"]):
             valid_input = False
+            flags[13] = 0
 
-    return valid_input
+    return (valid_input, flags)
 
 
 def valid_new_fundraiser_input(form_input):
