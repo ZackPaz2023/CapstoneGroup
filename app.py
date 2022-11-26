@@ -6,6 +6,9 @@ from flask import Flask, request, redirect, url_for, jsonify
 from flask import render_template
 from DB_Connection import *
 from DummyInfo import monthLengths
+from RecoveryEmailHandler import send_email
+from RecoveryEmailHandler import RecoveryType
+from ValidateNewData import valid_new_user_input, valid_new_donation_input, valid_new_fundraiser_input
 
 app = Flask(__name__, static_url_path='/static')
 app.config['UPLOADED_FILES'] = "static/"
@@ -19,6 +22,10 @@ class User:
         self.name = "Guest"
 
 currentUser = User()
+newUserFlags = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+newFundraiserFlags = []
+newDonationFlags = []
+inputData = []
 
 
 @app.route('/')
@@ -27,6 +34,9 @@ def home_page(): #create landing page later
 
 @app.route('/dashboard')
 def dashboard():
+    global newUserFlags, inputData
+    newUserFlags = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    inputData = []
     cursor.execute("SELECT Title, Description, FundID,  ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
     homePageFundraiserData = cursor.fetchall()
 
@@ -115,11 +125,18 @@ def donation_form_page(fund_ID=None):
                 userInfoList.append(attribute)
         restOfAddress = userInfoList[1] + " " + userInfoList[2] + " " + str(userInfoList[3]) + " " + userInfoList[4]
         if str(userInfoList[7]) == "None":
-            return render_template('new-donation.html', isGuest=currentUser.isGuest, fundraiser_ID=fund_ID ,fundraiser_name = fundraiserInfoList[0], name=currentUser.name, email=currentUser.emailPK, streetAddress=userInfoList[0], restOfAddress=restOfAddress, cardNum=str(userInfoList[5]), expirationDate=str(userInfoList[6]), creditCardOption = paymentOptionIsCreditCard)
+            return render_template('new-donation.html', isGuest=currentUser.isGuest, fundraiser_ID=fund_ID,
+                                   fundraiser_name=fundraiserInfoList[0], name=currentUser.name,
+                                   email=currentUser.emailPK, streetAddress=userInfoList[0],
+                                   restOfAddress=restOfAddress, cardNum=str(userInfoList[5]),
+                                   expirationDate=str(userInfoList[6]), creditCardOption=paymentOptionIsCreditCard)
         else:
             paymentOptionIsCreditCard = False
-            return render_template('new-donation.html', isGuest=currentUser.isGuest, fundraiser_ID=fund_ID, fundraiser_name=fundraiserInfoList[0], name=currentUser.name, email=currentUser.emailPK, streetAddress=userInfoList[0], restOfAddress=restOfAddress, routingNum=str(userInfoList[7]), accountNum =str(userInfoList[8]), creditCardOption=paymentOptionIsCreditCard)
-
+            return render_template('new-donation.html', isGuest=currentUser.isGuest, fundraiser_ID=fund_ID,
+                                   fundraiser_name=fundraiserInfoList[0], name=currentUser.name,
+                                   email=currentUser.emailPK, streetAddress=userInfoList[0],
+                                   restOfAddress=restOfAddress, routingNum=str(userInfoList[7]),
+                                   accountNum=str(userInfoList[8]), creditCardOption=paymentOptionIsCreditCard)
     else:
         return render_template('new-donation.html', isGuest=currentUser.isGuest, fundraiser_ID=fund_ID ,fundraiser_name = fundraiserInfoList[0], name=currentUser.name)
 
@@ -258,10 +275,12 @@ def upload_file():
 
 @app.route('/new-user-form')
 def new_user_form_page():
-   return render_template("new-user-form.html")
+    print(newUserFlags)
+    return render_template("new-user-form.html", flag=newUserFlags, inputData=inputData)
 
 @app.route('/fillingNewUserForm', methods=["POST"])
 def recordNewUserForm():
+    global inputData
     userName = request.form["UserName"]
     password = request.form["Password"]
     email = request.form["Email"]
@@ -276,18 +295,30 @@ def recordNewUserForm():
     if radioToggled == "creditCard":
         cardNumber = request.form["CardNumber"]
         expirationDate = request.form["Year"] + "-" + request.form["Month"] + "-" + str(monthLengths(int(request.form["Month"]), int(request.form["Year"])))
-        cursor.execute("INSERT INTO USER (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, CardNumber, ExpirationDate) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(userName, password, email, name, phoneNumber, zipCode, streetAddress, state, city, country, cardNumber, expirationDate))
-        db.commit()
+        if (valid_new_user_input(request.form, radioToggled)[0]):
+            cursor.execute("INSERT INTO USER (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, CardNumber, ExpirationDate) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(userName, password, email, name, phoneNumber, zipCode, streetAddress, state, city, country, cardNumber, expirationDate))
+            db.commit()
     elif radioToggled == "bankInfo":
         routingNumber = request.form["RoutingNumber"]
         accountNumber = request.form["AccountNumber"]
-        cursor.execute("INSERT INTO USER (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, RouteNo, AccountNo) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(userName, password, email, name, phoneNumber, zipCode, streetAddress, state, city, country, routingNumber, accountNumber))
-        db.commit()
-    currentUser.isGuest = False
-    currentUser.name = name
-    currentUser.emailPK = email
-    currentUser.username = userName
-    return redirect(url_for('dashboard'))
+        if (valid_new_user_input(request.form, radioToggled)[0]):
+            cursor.execute("INSERT INTO USER (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, RouteNo, AccountNo) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(userName, password, email, name, phoneNumber, zipCode, streetAddress, state, city, country, routingNumber, accountNumber))
+            db.commit()
+
+    print(request.form)
+    for values in request.form.values():
+        inputData.append(values)
+        print(values)
+    global newUserFlags
+    newUserFlags = valid_new_user_input(request.form, radioToggled)[1]
+    if (valid_new_user_input(request.form, radioToggled)[0]):
+        currentUser.isGuest = False
+        currentUser.name = name
+        currentUser.emailPK = email
+        currentUser.username = userName
+        return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('new_user_form_page'))
 
 if __name__ == '__main__':
     app.run(debug=True)
