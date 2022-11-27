@@ -6,8 +6,6 @@ from flask import Flask, request, redirect, url_for, jsonify
 from flask import render_template
 from DB_Connection import *
 from DummyInfo import monthLengths
-from RecoveryEmailHandler import send_email
-from RecoveryEmailHandler import RecoveryType
 from ValidateNewData import valid_new_user_input, valid_new_donation_input, valid_new_fundraiser_input
 
 app = Flask(__name__, static_url_path='/static')
@@ -58,7 +56,7 @@ def dashboard():
 def fundTagSort(tag=None):
     if tag == None or tag == "All":
         if not currentUser.isGuest:
-            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND Email != '%s" % currentUser.emailPK)
+            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND Email != '%s'" % currentUser.emailPK)
         else:
             cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
         homePageFundraiserData = cursor.fetchall()
