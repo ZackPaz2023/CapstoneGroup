@@ -116,18 +116,60 @@
                 border-bottom-left-radius: 0;
                 border-bottom-right-radius: 0;
         }
+        /* Style the navbar */
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.header {
+  background-color: #f1f1f1;
+  padding: 30px;
+  text-align: center;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 60px;
+}
     </style>
 </head>
 
 <body>
-    <div class="header">
-        <a href="/dashboard" class="logo">CapstoneGroup</a>
-        <div class="header-right">
-            <a class="active" href="/dashboard">Home</a>
-<!--            <a href="#contact">Contact</a>-->
-<!--            <a href="#about">About</a>-->
-        </div>
-    </div>
+<div class="topnav">
+    <a class="active" href="/dashboard">Home</a>
+    <a href="/login">Login</a>
+</div>
 
     <div>
         <h1 class="container-fluid p-3 bg-success text-white text-center">USER SETUP</h1><br>
@@ -234,75 +276,76 @@
                     <br>
 
                     <div id="selectCreditCardCode">
-                    <div class="form-header">
-                        <h5 class="title">Credit Card Information</h5>
-                    </div>
-                    <label  for="CardNumber">Card number:
-                    {% if flag[10] == 0 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}</label><br>
-                    <input type="text" id="CardNumber" name="CardNumber" class="form-control" placeholder="Enter Card Number" value="{{ inputData[11] }}"><br>
-                    <div class="dropdown">
-                        <div class="month">
-                            Expiration Month:
-                            <select id="Month" name="Month">
-                                <option value="01" selected>January</option>
-                                <option value="02">February</option>
-                                <option value="05">May</option>
-                                <option value="06">June</option>
-                                <option value="07">July</option>
-                                <option value="08">August</option>
-                                <option value="09">September</option>
-                                <option value="10">October</option>
-                                <option value="11">November</option>
-                                <option value="12">December</option>
-                            </select>
+                        <div class="form-header">
+                            <h5 class="title">Credit Card Information</h5>
                         </div>
-                        <div class="year">
-                            Expiration Year:
-                            <select id="Year" name="Year">
-                                <option value="2022" selected>2022</option>
-                                <option value="2023">2023</option>
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                                <option value="2026">2026</option>
-                            </select>
-                        </div><br>
-                        <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
-                        <div class="card-verification">
-                            <div class="cvv-input">
-                                <label for="cvv">CVV:
-                                {% if flag[11] == 0 %}
-                                    <b style="color:red;">*</b>
-                                    {% endif %}</label>
-                                <input type="text" id="cvv" name="cvv" class="form-control" autocomplete="off" placeholder="CVV" value="{{ inputData[14] }}">
-                                <br>
+                        <label  for="CardNumber">Card number:
+                            {% if flag[10] == 0 %}
+                            <b style="color:red;">*</b>
+                            {% endif %}</label><br>
+                        <input type="text" id="CardNumber" name="CardNumber" class="form-control" placeholder="Enter Card Number" value="{{ inputData[11] }}"><br>
+                        <div class="dropdown">
+                            <div class="month">
+                                Expiration Month:
+                                <select id="Month" name="Month">
+                                    <option value="01" selected>January</option>
+                                    <option value="02">February</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                            <div class="year">
+                                Expiration Year:
+                                <select id="Year" name="Year">
+                                    <option value="2022" selected>2022</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                </select>
+                            </div><br>
+
+                            <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
+                            <div class="card-verification">
+                                <div class="cvv-input">
+                                    <label for="cvv">CVV:
+                                        {% if flag[11] == 0 %}
+                                        <b style="color:red;">*</b>
+                                        {% endif %}</label>
+                                    <input type="text" id="cvv" name="cvv" class="form-control" autocomplete="off" placeholder="CVV" value="{{ inputData[14] }}">
+                                    <br>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    </div>
 
                     <div id="selectBankAccountCode" style="display:none">
-
-                    <div class="form-header">
-                        <h5 class="title">Bank Account Details</h5>
+                        <div class="form-header">
+                            <h5 class="title">Bank Account Details</h5>
                         </div>
-                    <label for="RoutingNumber">Routing Number:
-                    {% if flag[12] == 0 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}</label><br>
-                    <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control" placeholder="Enter Routing Number" value="{{ inputData[15] }}">
-                    <br>
-                    <label for="AccountNumber">Account Number:
-                    {% if flag[13] == 0 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}</label><br>
-                    <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" placeholder="Enter Account Number" value="{{ inputData[16] }}">
-                    <br><br><br><br>
-
+                        <label for="RoutingNumber">Routing Number:
+                            {% if flag[12] == 0 %}
+                            <b style="color:red;">*</b>
+                            {% endif %}</label><br>
+                        <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control" placeholder="Enter Routing Number" value="{{ inputData[15] }}">
+                        <br>
+                        <label for="AccountNumber">Account Number:
+                            {% if flag[13] == 0 %}
+                            <b style="color:red;">*</b>
+                            {% endif %}</label><br>
+                        <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" placeholder="Enter Account Number" value="{{ inputData[16] }}">
+                        <br><br><br><br>
+                    </div>
+                </fieldset>
             </div>
+
             <input type="submit" value="SUBMIT">
-            </fieldset>
         </form>
     </div>
 
@@ -345,5 +388,22 @@
     radio.addEventListener('click', handleRadioClick);
     });
     </script>
+
+<script>
+window.onscroll = function() {myFunction()};
+
+var topnav = document.getElementById("topnav");
+var sticky = topnav.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    topnav.classList.add("sticky")
+  } else {
+    topnav.classList.remove("sticky");
+  }
+}
+</script>
+
+
 </body>
 </html>

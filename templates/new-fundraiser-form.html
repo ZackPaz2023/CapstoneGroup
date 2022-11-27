@@ -118,22 +118,83 @@
             background-position:bottom left;
             padding-left:30px;
         }
+        /* Style the navbar */
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.header {
+  background-color: #f1f1f1;
+  padding: 30px;
+  text-align: center;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.content {
+  padding: 16px;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 60px;
+}
 
     </style>
 </header>
 
 <body>
-    <!--menu-->
-    <div class="header">
-        <a href="/dashboard" class="logo"></a>
-         <a href="/dashboard" class="logo">CapstoneGroup</a>
 
-        <div class="header-right">
-            <a class="active" href="/dashboard">Home</a>
-<!--            <a href="#contact">Contact</a>-->
-<!--            <a href="#about">About</a>-->
-        </div>
-    </div>
+<div class="topnav">
+    <a class="active" href="/dashboard">Home</a>
+    <a href="/new-donation/<fund_ID>">Make a Donation</a>
+    <a href="/new-fundraiser">Make a Fundraiser</a>
+</div>
+
+<script>
+window.onscroll = function() {myFunction()};
+
+var topnav = document.getElementById("topnav");
+var sticky = topnav.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    topnav.classList.add("sticky")
+  } else {
+    topnav.classList.remove("sticky");
+  }
+}
+</script>
+
     <!--    form-->
     <form action="/fillingNewFundraiserForm" method="post">
         <div class="wrapper">
@@ -216,6 +277,8 @@
     </form>
     <br>
     <button class="btn btn-default" onclick="history.back()">Go Back</button>
+
+
 
 </body>
 </html>

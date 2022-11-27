@@ -66,6 +66,41 @@ bottom: 0;
 width: 95%;
 }
 
+.options{
+padding: 20px;
+}
+
+/* Style the navbar */
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+/* Navbar links */
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+.topnav a:hover {
+    color: green;
+    }
+
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+.sticky + .content {
+  padding-top: 60px;
+}
+
 </style>
 
 
@@ -73,114 +108,100 @@ width: 95%;
 <body>
 
 {% if isGuest == True  %}
-<div class="btn-group" style="width:100%" >
-    <div class="btn-group" >
-        <form action="/login">
-            <input type="submit" value="LOG IN" class="btn btn-outline-success">
-        </form>
-
-        <form action="/new-user-form">
-            <input type="submit" value="Sign Up" class="btn btn-outline-success">
-        </form>
-
-    </div>
+<div class="topnav">
+    <a class="active" href="/dashboard">Home</a>
+    <a href="/login">Login</a>
+    <a href="/new-user-form">Sign Up!</a>
 </div>
 
 {% endif %}
 
 {% if isGuest == False  %}
 <!--button menu-->
-<div class="btn-group" style="width:100%" >
-    <div class="btn-group" >
-        <form action="/log-out">
-            <input type="submit" value="Log Out" class="btn btn-outline-success">
-        </form>
-
-        <form action="/new-fundraiser">
-            <input type="submit" value="Make A New Fundraiser" class="btn btn-outline-success">
-        </form>
-    </div>
+<div class="topnav">
+    <a class="active" href="/dashboard">Home</a>
+    <a href="/new-fundraiser-form">New fundraiser</a>
+    <a href="/new-donation-form/<fund_ID>">Make a Donation</a>
 </div>
 
 {% endif %}
-
-<div class="container-fluid p-5 bg-success text-white text-center">
-    <h1>Hello {{ name }}!</h1>
-    <br>
-    <h2>Welcome to ComeFundMe Fundraising</h2>
-</div>
+<div class="content">
+    <div class="container-fluid p-5 bg-success text-white text-center">
+        <h1>Hello {{ name }}!</h1>
+        <br>
+        <h2>Welcome to ComeFundMe Fundraising</h2>
+    </div>
 
 {% if isGuest == False%}
-<br>
-<h3>Fundraisers You Own:</h3>
-<table style="border:1px solid black;" align="center">
-    <thread>
-        <tr style="border:1px solid black;">
-            <th style="border:1px solid black;">TITLE</th>
-        </tr>
-    </thread>
-    <tbody>
-    <tr>
+    <br>
+    <h3>Fundraisers You Own:</h3>
+    <table style="border:1px solid black;" align="center">
+        <thread>
+            <tr style="border:1px solid black;">
+                <th style="border:1px solid black;">TITLE</th>
+            </tr>
+        </thread>
+        <tbody>
+        <tr>
         {% for row in userOwnedFund %}
-        <td style="border:1px solid black;"><a href="fundraiser/{{ row[2] }}">{{row[0]}}</a></td>
-    </tr>
-        {% endfor%}
-    </tbody>
-</table>
-
-<br>
-<h4>Donations You Have Made:</h4>
-<table style="border:1px solid black;" align="center">
-    <thread>
-        <tr style="border:1px solid black;">
-            <th style="border:1px solid black;">TITLE</th>
-            <th style="border:1px solid black;">AMOUNT</th>
+            <td style="border:1px solid black;"><a href="fundraiser/{{ row[2] }}">{{row[0]}}</a></td>
         </tr>
-    </thread>
-    <tbody>
-    <tr>
-        {% for row in userDonorTable %}
-        <td style="border:1px solid black;"><a href="fundraiser/{{ row[2] }}">{{row[0]}}</a></td>
-        <td style="border:1px solid black;">{{row[1]}}</td>
-    </tr>
         {% endfor%}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+    <br>
+    <h4>Donations You Have Made:</h4>
+    <table style="border:1px solid black;" align="center">
+        <thread>
+            <tr style="border:1px solid black;">
+                <th style="border:1px solid black;">TITLE</th>
+                <th style="border:1px solid black;">AMOUNT</th>
+            </tr>
+        </thread>
+        <tbody>
+        <tr>
+        {% for row in userDonorTable %}
+            <td style="border:1px solid black;"><a href="fundraiser/{{ row[2] }}">{{row[0]}}</a></td>
+            <td style="border:1px solid black;">{{row[1]}}</td>
+        </tr>
+        {% endfor%}
+        </tbody>
+    </table>
 {% endif %}
-<br>
+    <br>
 
-<section>
-    <h2 class="heading-1 mb4x">Featured Fundraisers</h2>
-</section>
+    <section>
+        <h2 class="heading-1 mb4x">Featured Fundraisers</h2>
+    </section>
 
-<form action="">
-<select id="tag" onchange="getTag(this.value)">
-<option value="All">All Fundraisers</option>
-<option value="Animals">Animals</option>
-<option value="Business">Business</option>
-<option value="Community">Community</option>
-<option value="Creative">Creative</option>
-<option value="Education">Education</option>
-<option value="Emergencies">Emergencies</option>
-<option value="Environment">Environment</option>
-<option value="Event">Event</option>
-<option value="Faith">Faith</option>
-<option value="Family">Family</option>
-<option value="Funeral and Memorial">Funeral and Memorial</option>
-<option value="Medical">Medical</option>
-<option value="Monthly Bills">Monthly Bills</option>
-<option value="Newlyweds">Newlyweds</option>
-<option value="Other">Other</option>
-<option value="Sports">Sports</option>
-<option value="Travel">Travel</option>
-<option value="Volunteer">Volunteer</option>
-<option value="Wishes">Wishes</option>
-</select>
-</form>
+    <form action="" class="options">
+        <select id="tag" onchange="getTag(this.value)">
+            <option value="All">All Fundraisers</option>
+            <option value="Animals">Animals</option>
+            <option value="Business">Business</option>
+            <option value="Community">Community</option>
+            <option value="Creative">Creative</option>
+            <option value="Education">Education</option>
+            <option value="Emergencies">Emergencies</option>
+            <option value="Environment">Environment</option>
+            <option value="Event">Event</option>
+            <option value="Faith">Faith</option>
+            <option value="Family">Family</option>
+            <option value="Funeral and Memorial">Funeral and Memorial</option>
+            <option value="Medical">Medical</option>
+            <option value="Monthly Bills">Monthly Bills</option>
+            <option value="Newlyweds">Newlyweds</option>
+            <option value="Other">Other</option>
+            <option value="Sports">Sports</option>
+            <option value="Travel">Travel</option>
+            <option value="Volunteer">Volunteer</option>
+            <option value="Wishes">Wishes</option>
+        </select>
+    </form>
 
-
-<div id="fundList">
-    <ul>
+    <div id="fundList">
+        <ul>
         {% for row in fundraiserTable %}
             <div class="fundraiserBoxes" style="margin: 25px">
                 <center>
@@ -196,28 +217,28 @@ width: 95%;
                         </span>
                     </p>
                     {% if row[6] >= 100 %}
-                        <div class="w3-container">
-                            <div class="w3-light-grey w3-round-xlarge">
-                                <div class="w3-container w3-green w3-round-xlarge" style="width: 100%"> <center style="color:black;"> {{row[6]}}% </center> </div>
-                            </div>
+                    <div class="w3-container">
+                        <div class="w3-light-grey w3-round-xlarge">
+                            <div class="w3-container w3-green w3-round-xlarge" style="width: 100%"> <center style="color:black;"> {{row[6]}}% </center> </div>
                         </div>
+                    </div>
                     {% endif %}
                     {% if row[6] < 100 %}
-                        <div class="w3-container">
-                            <div class="w3-light-gray w3-round-xlarge">
-                                <div class="w3-container w3-green w3-round-xlarge" style="width: {{row[6]}}%"> <center style="color:black;"> {{row[6]}}% </center></div>
-                            </div>
+                    <div class="w3-container">
+                        <div class="w3-light-gray w3-round-xlarge">
+                            <div class="w3-container w3-green w3-round-xlarge" style="width: {{row[6]}}%"> <center style="color:black;"> {{row[6]}}% </center></div>
+                        </div>
                     </div>
                     {% endif %}
                     <br>
                 </div>
-
             </div>
             &nbsp
         {% endfor %}
-    </ul>
+        </ul>
+    </div>
+    <br>
 </div>
-<br>
 
 <script>
 function getTag(str) {
@@ -235,6 +256,20 @@ function getTag(str) {
 }
 </script>
 
+<script>
+window.onscroll = function() {myFunction()};
+
+var topnav = document.getElementById("topnav");
+var sticky = topnav.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    topnav.classList.add("sticky")
+  } else {
+    topnav.classList.remove("sticky");
+  }
+}
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
