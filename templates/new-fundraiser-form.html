@@ -1,135 +1,89 @@
 <!doctype html>
 <html>
-<header>
+<head>
     <title>Make A Fundraiser</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
-    <style>
-    * {box-sizing: border-box;}
+<style>
+* {box-sizing: border-box;}
 
-        input[type=submit]{
-            margin-left: 10px;
-        }
+input[type=submit]{margin-left: 10px;}
 
-        button{
-            margin-left: 375px;
-        }
+button{margin-left: 375px;}
 
-        body{
-            background: #eee !important;
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-        }
+body{
+    background: #eee !important;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;}
 
-        .wrapper{
-            margin-top: 300px;
-        }
+form{margin-top: 75px;}
 
-        form{
-         margin-top: 75px;
-         }
+.wrapper{
+    max-width: 500px;
+    margin-top: 300px;
+    padding: 15px 35px 45px;
+    margin: auto;
+    background-color: #fff;
+    border: 5px solid rgba(0,0,0,0.1);
 
-        .wrapper{
-            max-width: 500px;
-            padding: 15px 35px 45px;
-            margin: auto;
-            background-color: #fff;
-            border: 5px solid rgba(0,0,0,0.1);
+    .container{
+        margin-top: 80px;
+        margin-bottom: 80px;}
 
-            .container{
-                margin-top: 80px;
-                margin-bottom: 80px;
-            }
+    .form-details{margin-bottom: 30px;}
 
-            .form-details{
-                margin-bottom: 30px;
-            }
+    .form-control{
+        position: relative;
+        font-size: 16px;
+        height: auto;
+        padding: 10px;
+        @include box-sizing(border-box);
 
-            .form-control{
-                position: relative;
-                font-size: 16px;
-                height: auto;
-                padding: 10px;
-                @include box-sizing(border-box);
-
-                &:focus {
-                  z-index: 2;
-                }
-            }
-        }
+        &:focus {
+            z-index: 2;}}}
 
 input[type="text"]{
-                margin-left: 25px;
-                margin-bottom: -1px;
-                border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
-        }
+    margin-left: 25px;
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;}
 
-h3{
-    text-align: center;
-    }
-.banner{
-    color: #4CAF50;
-    }
+h3{text-align: center;}
 
-/* Style the navbar */
+
 .topnav {
-  overflow: hidden;
-  background-color: #333;
-}
+    overflow: hidden;
+    background-color: #333;}
 
 .header {
-  background-color: #f1f1f1;
-  padding: 30px;
-  text-align: center;
-}
-
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
+    background-color: #f1f1f1;
+    padding: 30px;
+    text-align: center;}
 
 .topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;}
 
 .topnav a:hover {
-  background-color: #61C957;
-  color: black;
-}
+    background-color: #61C957;
+    color: black;}
 
-.content {
-  padding: 16px;
-}
+</style>
 
-.sticky {
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
-.sticky + .content {
-  padding-top: 60px;
-}
-
-    </style>
-</header>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</head>
 
 <body>
-
 <div class="topnav">
     <a href="/dashboard">Home</a>
-    <a class="text-right" href="/log-out">Log out</a>
+    <a href="/log-out">Log out</a>
 </div>
-
 
 <div>
     <h2 class="container-fluid p-3 bg-success text-white text-center">Make a Fundraiser!</h2><br>
