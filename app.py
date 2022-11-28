@@ -6,8 +6,6 @@ from flask import Flask, request, redirect, url_for, jsonify
 from flask import render_template
 from DB_Connection import *
 from DummyInfo import monthLengths
-from RecoveryEmailHandler import send_email
-from RecoveryEmailHandler import RecoveryType
 from ValidateNewData import valid_new_user_input, valid_new_donation_input, valid_new_fundraiser_input
 
 app = Flask(__name__, static_url_path='/static')
@@ -37,16 +35,19 @@ def dashboard():
     global newUserFlags, inputData
     newUserFlags = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     inputData = []
-    cursor.execute("SELECT Title, Description, FundID,  ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
+    cursor.execute("SELECT Title, Description, FundID,  ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name, Email FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
     homePageFundraiserData = cursor.fetchall()
 
 
     if not currentUser.isGuest:
+        userOwnedFundraiser = []
+        for fund in homePageFundraiserData:
+            if fund[8] == currentUser.emailPK:
+                userOwnedFundraiser.append(fund)
+                homePageFundraiserData.remove(fund)
         cursor.execute("SELECT Title, DonationsToFund, FundNo FROM DONATES INNER JOIN FUNDRAISER ON FundNo = FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
         userDonationsTable = cursor.fetchall()
-        cursor.execute("SELECT Title, Description, FundNo FROM OWNS INNER JOIN FUNDRAISER ON OWNS.FundNo = FUNDRAISER.FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
-        userOwnedFundraisers = cursor.fetchall()
-        return render_template('dashboard.html', name=currentUser.name, userOwnedFund= userOwnedFundraisers, fundraiserTable=homePageFundraiserData, userDonorTable= userDonationsTable, isGuest=currentUser.isGuest)
+        return render_template('dashboard.html', name=currentUser.name, userOwnedFund= userOwnedFundraiser, fundraiserTable=homePageFundraiserData, userDonorTable= userDonationsTable, isGuest=currentUser.isGuest)
 
     return render_template('dashboard.html', name=currentUser.name, fundraiserTable=homePageFundraiserData, isGuest=currentUser.isGuest)
 
@@ -54,10 +55,16 @@ def dashboard():
 @app.route('/tagSort/<tag>')
 def fundTagSort(tag=None):
     if tag == None or tag == "All":
-        cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
+        if not currentUser.isGuest:
+            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND Email != '%s'" % currentUser.emailPK)
+        else:
+            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
         homePageFundraiserData = cursor.fetchall()
     else:
-        cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND FUNDRAISER.Tag = '%s' " % tag)
+        if not currentUser.isGuest:
+            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND FUNDRAISER.Tag = '%s' AND Email != '%s'" % (tag, currentUser.emailPK))
+        else:
+            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND FUNDRAISER.Tag = '%s' " % tag)
         homePageFundraiserData = cursor.fetchall()
     return render_template('fundraiserSortedByTagsGenerator.html', fundraiserTable=homePageFundraiserData)
 
