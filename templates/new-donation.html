@@ -3,85 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Make a new Donation</title>
+    <title>Make a New Donation</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<style>
+* {box-sizing: border-box;}
 
-    <style>
-    * {box-sizing: border-box;}
+h2{
+    text-align: center;
+    text-transform: uppercase;}
 
-    h2{
-        text-align: center;
-        text-transform: uppercase;
-    }
+h3{text-align: center;}
 
-    h3{
-        text-align: center;
-    }
+button{margin-left: 375px;}
 
-    button{
-        margin-left: 375px;
-    }
+body{
+    background: #eee !important;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;}
 
+.banner{
+    color: #4CAF50;
+    margin-left: 0px;}
 
-    body{
-        background: #eee !important;
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-    }
+form{margin-top: 50px;}
 
-    .banner{
-        color: #4CAF50;
-        margin-left: 0px;
-    }
+.wrapper{
+    margin-top: 300px;
+    max-width: 450px;
+    padding: 15px 35px 45px;
+    margin: auto;
+    background-color: #fff;
+    border: 5px solid rgba(0,0,0,0.1);
 
-    form{
-        margin-top: 50px;
-    }
-
-    .wrapper{
-        margin-top: 300px;
-        max-width: 450px;
-        padding: 15px 35px 45px;
-        margin: auto;
-        background-color: #fff;
-        border: 5px solid rgba(0,0,0,0.1);
-
-        .container{
-            margin-top: 80px;
-            margin-bottom: 80px;
-        }
+    .container{
+        margin-top: 80px;
+        margin-bottom: 80px;}
 
 
-        .form-details{
-            margin-bottom: 30px;
-        }
+    .form-details{margin-bottom: 30px;}
 
-        .form-control{
-            position: relative;
-            font-size: 16px;
-            height: auto;
-            padding: 10px;
-            @include box-sizing(border-box);
-            &:focus {
-                z-index: 2;
-            }
-        }
-    }
+    .form-control{
+        position: relative;
+        font-size: 16px;
+        height: auto;
+        padding: 10px;
+        @include box-sizing(border-box);
 
-/* Style the navbar */
+        &:focus {
+            z-index: 2;}}}
+
+
 .topnav {
   overflow: hidden;
-  background-color: #333;
-}
+  background-color: #333;}
 
 .header {
   background-color: #f1f1f1;
   padding: 30px;
-  text-align: center;
-}
+  text-align: center;}
 
 .topnav a {
   float: left;
@@ -90,33 +69,16 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
-}
+  font-size: 17px;}
 
 .topnav a:hover {
   background-color: #61C957;
-  color: black;
-}
+  color: black;}
+</style>
 
-.content {
-  padding: 16px;
-}
-
-.sticky {
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
-.sticky + .content {
-  padding-top: 60px;
-}
-    </style>
-<!--    h2{-->
-<!--        text-align: center;-->
-<!--        text-transform: uppercase;-->
-<!--        color: #4CAF50;-->
-<!--    }-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -124,29 +86,13 @@
 {% if isGuest == False %}
 <!--responsive banner-->
 <div class="topnav">
-    <a class="active" href="/dashboard">Home</a>
+    <a href="/dashboard">Home</a>
     <a href="/log-out">Log out</a>
     <a href="/new-fundraiser">New fundraiser</a>
     <a href="/settings">Settings</a>
 </div>
 
-<script>
-window.onscroll = function() {myFunction()};
-
-var topnav = document.getElementById("topnav");
-var sticky = topnav.offsetTop;
-
-function myFunction() {
-  if (window.pageYOffset >= sticky) {
-    topnav.classList.add("sticky")
-  } else {
-    topnav.classList.remove("sticky");
-  }
-}
-</script>
-
 <!-- welcome for user -->
-
 <h2 class="container-fluid p-3 bg-success text-white text-center">Hello, {{ name }}</h2>
 <br>
 
@@ -208,10 +154,6 @@ function myFunction() {
             <input type="text" class="form-control" id="account-number" value="{{accountNum}}" placeholder="enter bank account number" readonly="readonly"/>
             * Payment option can be changed to a Credit Card in user settings.<br>
             {% endif %}
-<!--                <span class="show__account&#45;&#45;number">-->
-<!--                    <i class="fa fa-eye-slash" aria-hidden="true"></i>-->
-<!--&lt;!&ndash;                    <i class="fa fa-eye-slash pword_icon"></i>&ndash;&gt;-->
-<!--                </span>-->
             <br>
             <input type="submit" value="SUBMIT"/>
         </div>
@@ -225,21 +167,6 @@ function myFunction() {
     <a href="/login">Login</a>
     <a href="/new-user-form">Sign Up!</a>
 </div>
-
-<script>
-window.onscroll = function() {myFunction()};
-
-var topnav = document.getElementById("topnav");
-var sticky = topnav.offsetTop;
-
-function myFunction() {
-  if (window.pageYOffset >= sticky) {
-    topnav.classList.add("sticky")
-  } else {
-    topnav.classList.remove("sticky");
-  }
-}
-</script>
 
 <!-- welcome for guest -->
 <h2 class="container-fluid p-3 bg-success text-white text-center">Hello, you'll be making your donation as a {{ name }}</h2>
@@ -390,9 +317,23 @@ function myFunction() {
     radioButtons.forEach(radio => {
     radio.addEventListener('click', handleRadioClick);
     });
-    </script>
+</script>
 
 
+<script>
+window.onscroll = function() {myFunction()};
+
+var topnav = document.getElementById("topnav");
+var sticky = topnav.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    topnav.classList.add("sticky")
+  } else {
+    topnav.classList.remove("sticky");
+  }
+}
+</script>
 
 </body>
 </html>
