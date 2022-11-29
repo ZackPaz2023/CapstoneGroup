@@ -8,7 +8,7 @@
 <div id="txtHint">
     <ul>
         {% for row in fundraiserTable %}
-            <div class="fundraiserBoxes" style="margin: 25px">
+            <div class="fundraiser-boxes" style="margin: 25px">
                 <center>
                     <li><a href="fundraiser/{{ row[2] }}" style="text-decoration:none">  <h7 style="font-size: 20px"> <strong>{{row[0]}} </strong> <br> </h7> <img src="/static/{{row[3]}}" alt="no image" width="350" height="350"> </a></li>
                     Created By: {{row[7]}} <br> <br>{{row[1]}}
