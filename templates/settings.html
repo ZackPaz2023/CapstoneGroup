@@ -5,149 +5,330 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Profile: {{ name }}</title>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
   <style>
+
+      * {box-sizing: border-box;}
+
+        button{
+        margin-left: 375px;
+        }
+
+        fieldset{
+            margin-left: 25px;
+        }
+
+        body{
+            background: #eee !important;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        form{
+         margin-top: 75px;
+         }
+
+        .wrapper{
+            margin-top: 300px;
+            max-width: 450px;
+            padding: 15px 35px 45px;
+            margin: auto;
+            background-color: #fff;
+            border: 5px solid rgba(0,0,0,0.1);
+
+            .container{
+                margin-top: 80px;
+                margin-bottom: 80px;
+            }
+
+            .form-details{
+                margin-bottom: 30px;
+            }
+
+            .form-control{
+                position: relative;
+                font-size: 16px;
+                height: auto;
+                padding: 10px;
+                @include box-sizing(border-box);
+
+                &:focus {
+                  z-index: 2;
+                }
+            }
+        }
+
+        input[type="text"]{
+
+                margin-bottom: -1px;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+        }
+
     input[type=text] {
     width: 50%
     }
+
+    .header {
+  background-color: #f1f1f1;
+  padding: 30px;
+  text-align: center;
+}
+
+    .topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+    .topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+    .topnav a:hover {
+  background-color: #61C957;
+  color: black;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 60px;
+}
   </style>
 
 
 </head>
 
 <body>
-<h1>User Information:</h1><br>
-<h3>Name: {{ name }}</h3>
-
-<form action="/action_page.php">
-    <!-- email -->
-    <label for="email">Email: </label><br>
-    <input type="text" class="form-control" id="email" placeholder="Email"><br><br>
-
-    <!-- billing address -->
-    <label for="address">Billing Address:</label><br>
-    <input type="text" class="form-control" id="address" placeholder="Address"><br>
-    <input type="text" class="form-control" id="inputCountry" placeholder="City, State, Country">
-</form>
-
-<hr>
-
-<div class="container mt-5">
-  <div class="row">
-    <div class="col-sm-4">
-      <div class="column">
-        <form class="credit-card">
-          <div class="form-header">
-            <h4 class="title">Credit card detail</h4>
-          </div>
-
-          <div class="form-body"> <!-- Card Number -->
-            <input type="text" class="card-number" placeholder="Card Number">
-            <!-- Date Field -->
-            <div class="date-field">
-              <div class="month">
-                <select name="Month">
-                  <option value="january">January</option>
-                  <option value="february">February</option>
-                  <option value="march">March</option>
-                  <option value="april">April</option>
-                  <option value="may">May</option>
-                  <option value="june">June</option>
-                  <option value="july">July</option>
-                  <option value="august">August</option>
-                  <option value="september">September</option>
-                  <option value="october">October</option>
-                  <option value="november">November</option>
-                  <option value="december">December</option>
-                </select>
-              </div>
-
-              <div class="year">
-                <select name="Year">
-                  <option value="2016">2016</option>
-                  <option value="2017">2017</option>
-                  <option value="2018">2018</option>
-                  <option value="2019">2019</option>
-                  <option value="2020">2020</option>
-                  <option value="2021">2021</option>
-                  <option value="2022">2022</option>
-                  <option value="2023">2023</option>
-                  <option value="2024">2024</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Card Verification Field -->
-            <div class="card-verification">
-              <div class="cvv-input">
-                <input type="text" placeholder="CVV">
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-    <br>
-
-    <div class="col-sm-4">
-      <div class="column">
-        <form>
-          <!-- Bank Account -->
-          <div class="column">
-            <div class="form-header">
-              <h4 class="title">Bank Account detail</h4>
-            </div>
-
-            <div class="bank--control">
-              <div class="bank--add__body">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="row">
-                      <div class="col-xs-12 col-md-8">
-                        <div class="form__control">
-                          <label class="form__label" for="routing">Bank number</label>
-                          <br>
-                          <input type="text" id="routing" placeholder="e.g. 122100024">
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-xs-12 col-md-8">
-                        <div class="form__control">
-                          <label class="form__label" for="account-number">Account number</label>
-                          <br>
-                          <input class="account-number" id="account-number" type="password" placeholder="e.g. 122039827" />
-                          <span class="show__account--number">
-                            <i class="fa fa-eye-slash pword_icon"></i>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+<div class="topnav">
+    <a class="active" href="/dashboard">Home</a>
 </div>
 
-<hr>
+    <div>
+        <h1 class="container-fluid p-3 bg-success text-white text-center">USER SETTINGS</h1><br>
 
-<form action="/action_page.php">
-  <label for="username">Username:</label><br>
-  <input type="text" id="username" name="username"><br><br>
-  <label for="password">Password:</label><br>
-  <input type="text" id="password" name="password"><br>
-  <input type="button" value="change password"><br>
-</form>
+        <form action="/recordingNewUserSettings"  method="post">
+            <div class="wrapper">
+    <!--        <div class="container">-->
+                <fieldset>
+                    <br>
+                    <legend class="form-details">Personal Details:</legend>
+                    <br>
+        <!--            <div class="row">-->
+        <!--                <div class="col-sm">-->
+                    <label for="Name">Full Name:
+                    {% if flag[0] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}
+                    </label><br>
+                    <input type="text" id="Name" name="Name" class="form-control" value="{{name}}">
+                    <br>
+                    <label for="UserName">Username:
+                    {% if flag[2] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}
+                    </label><br>
+                    <input type="text" id="UserName" name="UserName" class="form-control" value="{{ username}}">
+                    <br>
+                    <label for="Password">Password:
+                    {% if flag[3] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}
+                    </label><br>
+                    <input type="password" id="Password" name="Password" class="form-control" value="{{password}}">
+                    <br>
+                    {% if flag[3] == 0 %}
+                        <i style="color:red;">Password must be 8 to 20 characters long and include at least ONE uppercase letter.</i><br>
+                        {% endif %}
+                    <label for="PhoneNumber">Phone Number:
+                    {% if flag[4] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}
+                    </label><br>
+                    <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" value="{{phonenumber}}">
+                    <br>
+        <!--                </div>-->
+                </fieldset>
+
+                <fieldset>
+        <!--                <div class="col-sm">-->
+                    <br>
+                    <legend>Billing Address:</legend>
+                    <br>
+                    <label for="StreetAddress">Street Address:
+                    {% if flag[5] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="StreetAddress" name="StreetAddress" class="form-control" value="{{streetaddress}}">
+                    <br>
+                    <label for="City">City:
+                    {% if flag[6] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="City" name="City" class="form-control" value="{{ city }}">
+                    <br>
+                    <label for="State">State:
+                    {% if flag[7] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="State" name="State" class="form-control" value="{{ state}}">
+                    <br>
+                    <label for="ZipCode">Zip Code:
+                    {% if flag[8] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="ZipCode" name="ZipCode" class="form-control" value="{{ zipcode }}">
+                    <br>
+                    <label for="Country">Country:
+                    {% if flag[9] == 0 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="Country" name="Country" class="form-control" value="{{ country}}">
+                    <br>
+                </fieldset>
+        <!--                </div>-->
+                <fieldset>
+                    <br>
+                    <legend>Payment Information</legend>
+        <!--                    <div class="col-sm">-->
+                    Select A Payment Option:
+
+                    <div>
+                        <input type="radio" id="creditCard" name="paymentOptionToggle" value="creditCard" {{'checked' if isUsingCreditCard else ''}} ></input>
+                            <label for="creditCard">Use A Credit Card: </label>
+                        <br>
+                        <input type="radio" id="bankInfo" name="paymentOptionToggle" value="bankInfo" {{'checked' if not isUsingCreditCard else ''}} ></input>
+                            <label for="bankInfo">Use A Bank Account: </label>
+                    </div>
+                    <br>
+
+                    <div id="selectCreditCardCode">
+                        <div class="form-header">
+                            <h5 class="title">Credit Card Information</h5>
+                        </div>
+                        <label  for="CardNumber">Card number:
+                            {% if flag[10] == 0 %}
+                            <b style="color:red;">*</b>
+                            {% endif %}</label><br>
+                        <input type="text" id="CardNumber" name="CardNumber" class="form-control" value="{{ cardnumber }}"><br>
+                        <div class="dropdown">
+                            <div class="month">
+                                Expiration Month:
+                                <select id="Month" name="Month">
+                                    <option value="{{month}}" selected>{{month}}</option>
+                                    {% for number in range(1, 13)%}
+                                        {% if number != month %}
+                                            <option value="{{number}}">{{number}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="year">
+                                Expiration Year:
+                                <select id="Year" name="Year">
+                                    <option value="{{year}}" selected>{{year}}</option>
+                                    {% for number in range(2022, 2027)%}
+                                        {% if number != year %}
+                                            <option value="{{number}}">{{number}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div><br>
+
+                        </div>
+                    </div>
+
+                    <div id="selectBankAccountCode" style="display:none">
+                        <div class="form-header">
+                            <h5 class="title">Bank Account Details</h5>
+                        </div>
+                        <label for="RoutingNumber">Routing Number:
+                            {% if flag[12] == 0 %}
+                            <b style="color:red;">*</b>
+                            {% endif %}</label><br>
+                        <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control"  value="{{ routeno }}">
+                        <br>
+                        <label for="AccountNumber">Account Number:
+                            {% if flag[13] == 0 %}
+                            <b style="color:red;">*</b>
+                            {% endif %}</label><br>
+                        <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" value="{{ accountno }}">
+                        <br><br><br><br>
+                    </div>
+                    <input type="submit" value="SUBMIT">
+                </fieldset>
+            </div>
+
+
+        </form>
+    </div>
+
+    <br>
+    <button class="btn btn-default" onclick="history.back()">Go Back</button>
+    <br><br>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+<script type="text/javascript">
+    const creditCardSelect = document.getElementById('selectCreditCardCode');
+    const bankAccountSelect = document.getElementById('selectBankAccountCode');
+
+    function handleRadioClick() {
+    if (document.getElementById('creditCard').checked) {
+        creditCardSelect.style.display = 'block';
+        $("#RoutingNumber").val(null);
+        $("#AccountNumber").val(null);
+    } else {
+        creditCardSelect.style.display = 'none';
+    }
+
+    if (document.getElementById('bankInfo').checked) {
+        bankAccountSelect.style.display = 'block';
+        $("#CardNumber").val(null);
+        $("#Month").val(null);
+        $("#Year").val(null);
+        $("#cvv").val(null);
+    } else {
+        bankAccountSelect.style.display = 'none';
+    }
+    }
+
+    const radioButtons = document.querySelectorAll('input[name="paymentOptionToggle"]');
+    radioButtons.forEach(radio => {
+    radio.addEventListener('click', handleRadioClick);
+    });
+    </script>
+
+<script>
+window.onscroll = function() {myFunction()};
+
+var topnav = document.getElementById("topnav");
+var sticky = topnav.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    topnav.classList.add("sticky")
+  } else {
+    topnav.classList.remove("sticky");
+  }
+}
+</script>
+
+
 </body>
 </html>
