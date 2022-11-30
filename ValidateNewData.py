@@ -159,7 +159,6 @@ def valid_zip_code(zipCode):
 
 
 def valid_card_number(cardNum):
-
     try:
         int(cardNum)
     except ValueError:
@@ -242,9 +241,6 @@ def valid_new_user_input(form_input, payment_type):
         if not valid_card_number(form_input["CardNumber"]):
             valid_input = False
             flags[10] = 0
-        if len(form_input["cvv"]) != 3:
-            valid_input = False
-            flags[11] = 0
     # If payment type is bankInfo
     if (payment_type == "bankInfo"):
         if not (5 <= len(form_input["AccountNumber"]) <= 17):
@@ -259,52 +255,68 @@ def valid_new_user_input(form_input, payment_type):
 
 def valid_new_fundraiser_input(form_input):
     valid_input = True
+    flags = [0, 0]
 
     if (len(form_input["title"]) < 1):
         valid_input = False
+        flags[0] = 1
     try:
         if (int(form_input["goal"]) <= 50):
             valid_input = False
+            flags[1] = 1
     except ValueError:
         valid_input = False
+        flags[1] = 1
 
-    return valid_input
+    return (valid_input, flags)
 
 
-def valid_new_donation_input(form_input, is_guest):
+def valid_new_donation_input(form_input, is_guest, payment_type):
     valid_input = True
+    flags = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     try:
-        if (int(form_input["amount"]) < 1):
+        if (float(form_input["amount"]) < 1):
             valid_input = False
+            flags[0] = 1
     except ValueError:
         valid_input = False
+        flags[0] = 1
 
-    if (is_guest):
+    if is_guest:
         if not valid_zip_code(form_input["ZipCode"]):
             valid_input = False
+            flags[1] = 1
         if len(form_input["StreetAddress"]) < 8:
             valid_input = False
+            flags[2] = 1
         if len(form_input["State"]) < 2:
             valid_input = False
+            flags[3] = 1
         if len(form_input["City"]) < 2:
             valid_input = False
+            flags[4] = 1
         if len(form_input["Country"]) < 5:
             valid_input = False
-
-        if not valid_card_number(form_input["CardNumber"]):
-            valid_input = False
-        if len(form_input["cvv"]) != 3:
-            valid_input = False
-
-        if not (5 <= len(form_input["AccountNumber"]) <= 17):
-            valid_input = False
-        if not valid_routing_number(form_input["RoutingNumber"]):
-            valid_input = False
+            flags[5] = 1
+        if payment_type == "creditCard":
+            if not valid_card_number(form_input["CardNumber"]):
+                valid_input = False
+                flags[6] = 1
+            if len(form_input["cvv"]) != 3:
+                valid_input = False
+                flags[7] = 1
+        else:
+            if not (5 <= len(form_input["AccountNumber"]) <= 17):
+                valid_input = False
+                flags[8] = 1
+            if not valid_routing_number(form_input["RoutingNumber"]):
+                valid_input = False
+                flags[9] = 1
     else:
-        if len(form_input["cvv"]) != 3:
-            valid_input = False
-        if not valid_routing_number(form_input["RoutingNumber"]):
-            valid_input = False
+        if payment_type == "creditCard":
+            if (len(form_input["cvv"]) != 3):
+                valid_input = False
+                flags[7] = 1
 
-    return valid_input
+    return (valid_input, flags)
