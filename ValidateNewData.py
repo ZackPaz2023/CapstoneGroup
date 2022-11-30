@@ -57,6 +57,9 @@ def valid_email(email):
     if (len(email.split(".")[-1]) < 2):
         return False
 
+    if not has_address_period or not has_at:
+        return False
+
     return True
 
 
@@ -127,12 +130,18 @@ def valid_password(password):
     if not (8 <= len(password) <= 20):
         return False
     has_upper_case = False
+    has_special_char = False
+    has_number = False
     for char in password:
         ascii_code = ord(char)
         if (65 <= ascii_code <= 90):
             has_upper_case = True
+        if (48 <= ascii_code <= 57):
+            has_number = True
+        if (33 <= ascii_code <= 47 or 58 <= ascii_code <= 64 or 91 <= ascii_code <= 96 or 123 <= ascii_code <= 126):
+            has_special_char = True
 
-    if (has_upper_case):
+    if (has_upper_case and has_number and has_special_char):
         return True
     else:
         return False
@@ -261,7 +270,7 @@ def valid_new_fundraiser_input(form_input):
         valid_input = False
         flags[0] = 1
     try:
-        if (int(form_input["goal"]) <= 50):
+        if (float(form_input["goal"]) <= 50):
             valid_input = False
             flags[1] = 1
     except ValueError:
