@@ -3,9 +3,10 @@
 <head>
     <title>Make A Fundraiser</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css" />
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='custom-fonts.css') }}"/>
 
 <style>
-* {box-sizing: border-box;}
+* {box-sizing: border-box; font-family: ubuntu;}
 
 input[type=submit]{margin-left: 10px;}
 
@@ -92,13 +93,19 @@ h3{text-align: center;}
     <form action="/fillingNewFundraiserForm" method="post">
         <div class="wrapper">
             <div class="container">
-                <label for="title">Title: </label><br>
-                <input type="text" id="title" name="title" class="form-control" placeholder="Enter fundraiser name">
+                <label for="title">Title:
+                {% if flag[0] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                <input type="text" id="title" name="title" class="form-control" placeholder="Enter fundraiser name" value="{{ inputData[0] }}">
                 <br><br>
                 <textarea rows="5" cols="50" name="description"  placeholder="Enter a description for your fundraiser"></textarea>
                 <br><br>
-                <label for="goal">Goal: </label><br>
-                <input type="text" id="goal" name="goal" class="form-control" placeholder="Enter your goal amount">
+                <label for="goal">Goal:
+                {% if flag[1] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                <input type="text" id="goal" name="goal" class="form-control" placeholder="Enter your goal amount" value="{{  inputData[2]  }}">
                 <br>
                 <div>
                     Category:
