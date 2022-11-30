@@ -3,82 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Make a New Donation</title>
+    <title>Make a new Donation</title>
 
-<style>
-* {box-sizing: border-box;}
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='custom-fonts.css') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
-h2{
-    text-align: center;
-    text-transform: uppercase;}
+    <style>
 
-h3{text-align: center;}
+    * {box-sizing: border-box; font-family: ubuntu;}
 
-button{margin-left: 375px;}
+    h2{
+        text-align: center;
+        text-transform: uppercase;}
 
-body{
-    background: #eee !important;
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;}
+    h3{text-align: center;}
 
-.banner{
-    color: #4CAF50;
-    margin-left: 0px;}
+    button{margin-left: 375px;}
 
-form{margin-top: 50px;}
+    body{
+        background: #eee !important;
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;}
 
-.wrapper{
-    margin-top: 300px;
-    max-width: 450px;
-    padding: 15px 35px 45px;
-    margin: auto;
-    background-color: #fff;
-    border: 5px solid rgba(0,0,0,0.1);
+    .banner{
+        color: #4CAF50;
+        margin-left: 0px;}
 
-    .container{
-        margin-top: 80px;
-        margin-bottom: 80px;}
+    form{margin-top: 50px;}
 
+    .wrapper{
+        margin-top: 300px;
+        max-width: 450px;
+        padding: 15px 35px 45px;
+        margin: auto;
+        background-color: #fff;
+        border: 5px solid rgba(0,0,0,0.1);
 
-    .form-details{margin-bottom: 30px;}
-
-    .form-control{
-        position: relative;
-        font-size: 16px;
-        height: auto;
-        padding: 10px;
-        @include box-sizing(border-box);
-
-        &:focus {
-            z-index: 2;}}}
+        .container{
+            margin-top: 80px;
+            margin-bottom: 80px;}
 
 
-.topnav {
-  overflow: hidden;
-  background-color: #333;}
+        .form-details{margin-bottom: 30px;}
 
-.header {
-  background-color: #f1f1f1;
-  padding: 30px;
-  text-align: center;}
+        .form-control{
+            position: relative;
+            font-size: 16px;
+            height: auto;
+            padding: 10px;
+            @include box-sizing(border-box);
 
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;}
+            &:focus {
+                z-index: 2;}}}
 
-.topnav a:hover {
-  background-color: #61C957;
-  color: black;}
-</style>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    .topnav {
+      overflow: hidden;
+      background-color: #333;}
+
+    .header {
+      background-color: #f1f1f1;
+      padding: 30px;
+      text-align: center;}
+
+    .topnav a {
+      float: left;
+      display: block;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;}
+
+    .topnav a:hover {
+      background-color: #61C957;
+      color: black;}
+    </style>
+<!--    h2{-->
+<!--        text-align: center;-->
+<!--        text-transform: uppercase;-->
+<!--        color: #4CAF50;-->
+<!--    }-->
 </head>
 
 <body>
@@ -93,7 +100,7 @@ form{margin-top: 50px;}
 </div>
 
 <!-- welcome for user -->
-<h2 class="container-fluid p-3 bg-success text-white text-center">Hello, {{ name }}</h2>
+<h2>Hello, {{ name }}</h2>
 <br>
 
 <!-- donating as user -->
@@ -105,9 +112,17 @@ form{margin-top: 50px;}
     <div class="wrapper">
         <div class="container">
             <input type="hidden" class="form-control" name="fund_id" value="{{ fundraiser_ID }}"/>
-            <label for="amount">Donation Amount: </label>
+            <label for="amount">Donation Amount:
+            {% if flag[0] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label>
             <br>
-            <input type="text" class="form-control" id="amount" name="amount" autocomplete="off" placeholder="enter amount">
+            <div><p style="float:left; font-size:25px;">$ </p>
+                <input type="text" class="form-control" style="width:95.925%;" id="amount" name="amount" autocomplete="off" placeholder="Enter Amount" value="{{ inputData[1] }}">
+            </div>
+            {% if flag[0] == 1 %}
+                        <i style="color:red;">Invalid donation amount. Donations must be greater than $1.00.</i>
+                        {% endif %}
             <br>
 
             <!-- email -->
@@ -115,7 +130,7 @@ form{margin-top: 50px;}
             <input type="text" class="form-control" id="email" name="email" value="{{ email }}" readonly="readonly" /><br>
 
             <!-- billing address -->
-            <legend>Billling Address:</legend>
+            <legend>Billing Address:</legend>
 <!--            <label for="address">Billing Address:</label><br>-->
             <input type="text" class="form-control" id="address" value="{{streetAddress}}" readonly="readonly" /><br>
             <input type="text" class="form-control" id="inputCountry" value="{{restOfAddress}}" readonly="readonly"/><br>
@@ -134,11 +149,16 @@ form{margin-top: 50px;}
                 <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
                 <div class="card-verification">
                     <div class="cvv-input">
-                        <input type="text" class="form-control" autocomplete="off" placeholder="CVV">
+                        <label for="cvv">CVV:
+                        {% if flag[7] == 1 %}
+                            <b style="color:red;">*</b>
+                        {% endif %}</label>
+                        <input type="text" class="form-control" name="cvv" autocomplete="off" placeholder="CVV" value="{{ inputData[3] }}">
                         * Payment option can be changed to a Bank Account in user settings.<br>
                     </div>
                 </div>
             </div>
+            <input type="hidden" class="form-control" name="paymentOptionToggle" value="creditCard"/>
             {% endif %}
             {% if creditCardOption == False %}
 
@@ -147,12 +167,19 @@ form{margin-top: 50px;}
                 <h5 class="title">Bank Account detail</h5>
             </div>
 
-            <label for="RoutingNumber">Routing Number: </label><br>
-            <input type="text" id="Routing-Number" name="RoutingNumber" value="{{routingNum}}" class="form-control" placeholder="enter routing number" readonly="readonly"/>
+            <label for="RoutingNumber">Routing Number:
+            {% if flag[8] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+            <input type="text" id="Routing-Number" name="RoutingNumber" value="{{routingNum}}" class="form-control" placeholder="Enter Routing Number" readonly="readonly"/>
             <br>
-            <label  for="account-number">Account Number:</label><br>
-            <input type="text" class="form-control" id="account-number" value="{{accountNum}}" placeholder="enter bank account number" readonly="readonly"/>
+            <label  for="account-number">Account Number:
+            {% if flag[9] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+            <input type="text" class="form-control" id="account-number" name="AccountNumber" value="{{accountNum}}" placeholder="Enter Bank Account number" readonly="readonly"/>
             * Payment option can be changed to a Credit Card in user settings.<br>
+            <input type="hidden" class="form-control" name="paymentOptionToggle" value="bankInfo"/>
             {% endif %}
             <br>
             <input type="submit" value="SUBMIT"/>
@@ -167,9 +194,8 @@ form{margin-top: 50px;}
     <a href="/login">Login</a>
     <a href="/new-user-form">Sign Up!</a>
 </div>
-
 <!-- welcome for guest -->
-<h2 class="container-fluid p-3 bg-success text-white text-center">Hello, you'll be making your donation as a {{ name }}</h2>
+<h2>Hello, you'll be making your donation as a {{ name }}</h2>
 
 <br>
 <!-- donating for guest -->
@@ -181,26 +207,50 @@ form{margin-top: 50px;}
     <div class="wrapper">
         <div class="container">
             <input type="hidden" class="form-control" name="fund_id" value="{{ fundraiser_ID }}"/>
-            <legend>Donation Amount:</legend>
+            <legend>Donation Amount:
+            {% if flag[0] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</legend>
             <br>
-            <input type="text" class="form-control" id="guestAmount" name="amount" autocomplete="off" placeholder="enter amount"><br><br>
+            <div><p style="float:left; font-size:25px;">$ </p>
+                <input type="text" class="form-control" style="width:95.925%;" id="guestAmount" name="amount" autocomplete="off" placeholder="Enter Amount" value="{{ inputData[1] }}">
+            </div>
+            {% if flag[0] == 1 %}
+                        <i style="color:red;">Invalid donation amount. Donations must be greater than $1.00.</i>
+                        {% endif %}
+            <br><br>
 
-            <legend>Billling Address:</legend>
+            <legend>Billing Address:</legend>
             <!-- billing address -->
-            <label for="StreetAddress">Street Address:</label><br>
-            <input type="text" id="StreetAddress" class="form-control" placeholder="street address" />
+            <label for="StreetAddress">Street Address:
+            {% if flag[2] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+            <input type="text" id="StreetAddress" name="StreetAddress" class="form-control" placeholder="Street Address" value="{{ inputData[2] }}" />
             <br>
-            <label for="City">City: </label><br>
-            <input type="text" id="City" class="form-control" placeholder="city"/>
+            <label for="City">City:
+            {% if flag[4] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+            <input type="text" id="City" name="City" class="form-control" placeholder="City" value="{{ inputData[3] }}"/>
             <br>
-            <label for="State">State: </label><br>
-            <input type="text" id="State" class="form-control" placeholder="state"/>
+            <label for="State">State:
+            {% if flag[3] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+            <input type="text" id="State" name="State" class="form-control" placeholder="State" value="{{ inputData[4] }}"/>
             <br>
-            <label for="ZipCode">Zip Code: </label><br>
-            <input type="text" id="ZipCode" class="form-control" placeholder="zip code"/>
+            <label for="ZipCode">Zip Code:
+            {% if flag[1] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+            <input type="text" id="ZipCode" name="ZipCode" class="form-control" placeholder="Zip Code" value="{{ inputData[5] }}"/>
             <br>
-            <label for="Country">Country: </label><br>
-            <input type="text" id="Country" class="form-control" placeholder="country"/>
+            <label for="Country">Country:
+            {% if flag[5] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+            <input type="text" id="Country" name="Country" class="form-control" placeholder="Country" value="{{ inputData[6] }}"/>
             <br>
             <hr>
             <div class="form-body">
@@ -220,13 +270,16 @@ form{margin-top: 50px;}
                     <div class="form-header">
                         <h5 class="title">Credit Card Information</h5>
                     </div>
-                    <label  for="CardNumber">Card number: </label><br>
-                    <input type="text" id="CardNumber" name="CardNumber" class="form-control" placeholder="enter card number">
+                    <label  for="CardNumber">Card number:
+                    {% if flag[6] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="CardNumber" name="CardNumber" class="form-control" placeholder="Enter Card Number" value="{{ inputData[8] }}"><br>
                     <div class="dropdown">
                         <div class="month">
                             Expiration Month:
                             <select id="Month" name="Month">
-                                <option value="01" >January</option>
+                                <option value="01" selected>January</option>
                                 <option value="02">February</option>
                                 <option value="05">May</option>
                                 <option value="06">June</option>
@@ -247,11 +300,15 @@ form{margin-top: 50px;}
                                 <option value="2025">2025</option>
                                 <option value="2026">2026</option>
                             </select>
-                        </div>
+                        </div><br>
                         <!-- Card Verification Field :: We cannot verify CVV but we need to constrain it to 3 digits at least-->
                         <div class="card-verification">
                             <div class="cvv-input">
-                                <input type="text" id="cvv" name="cvv" class="form-control" autocomplete="off" placeholder="CVV">
+                                <label for="cvv">CVV:
+                                {% if flag[7] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label>
+                                <input type="text" id="cvv" name="cvv" class="form-control" autocomplete="off" placeholder="CVV" value="{{ inputData[11] }}">
                                 <br>
                             </div>
                         </div>
@@ -263,12 +320,18 @@ form{margin-top: 50px;}
                     <div class="form-header">
                         <h5 class="title">Bank Account detail</h5>
                         </div>
-                    <label for="RoutingNumber">Routing Number: </label><br>
-                    <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control" placeholder="enter routing number">
+                    <label for="RoutingNumber">Routing Number:
+                    {% if flag[8] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control" placeholder="Enter Routing Number" value="{{ inputData[12] }}">
                     <br>
-                    <label for="AccountNumber">Account Number: </label><br>
-                    <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" placeholder="enter account number">
-                    <br>
+                    <label for="AccountNumber">Account Number:
+                    {% if flag[9] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label><br>
+                    <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" placeholder="Enter Account Number" value="{{ inputData[13] }}">
+                    <br><br><br><br>
 
             </div>
             <input type="submit" value="SUBMIT">
@@ -318,7 +381,6 @@ form{margin-top: 50px;}
     radio.addEventListener('click', handleRadioClick);
     });
 </script>
-
 
 <script>
 window.onscroll = function() {myFunction()};
