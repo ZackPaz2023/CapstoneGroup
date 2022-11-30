@@ -111,7 +111,7 @@
 
 <body>
     <div class="topnav">
-        <a class="active" href="/dashboard">Home</a>
+        <a href="/dashboard">Home</a>
         <a href="/login">Login</a>
     </div>
 
@@ -120,8 +120,7 @@
 
         <form action="/fillingNewUserForm"  method="post">
             <div class="wrapper">
-    <!--        <div class="container">-->
-                <fieldset>
+                <div>
                     <br>
                     <legend class="form-details">Personal Details:</legend>
                     <br>
@@ -165,11 +164,9 @@
                     </label><br>
                     <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" placeholder="Enter Phone Number" value="{{ inputData[4] }}" required>
                     <br>
-        <!--                </div>-->
-                </fieldset>
+                </div>
 
-                <fieldset>
-        <!--                <div class="col-sm">-->
+                <div>
                     <br>
                     <legend>Billing Address:</legend>
                     <br>
@@ -203,13 +200,12 @@
                         {% endif %}</label><br>
                     <input type="text" id="Country" name="Country" class="form-control" placeholder="Country" value="{{ inputData[9] }}">
                     <br>
-                </fieldset>
-        <!--                </div>-->
-                <fieldset>
+                </div>
+
+                <div>
                     <br>
                     <legend>Payment Information</legend>
-        <!--                    <div class="col-sm">-->
-                    Select A Payment Option:
+                    <p>Select A Payment Option:</p>
                     <div>
                         <input type="radio" id="creditCard" name="paymentOptionToggle" value="creditCard" checked>
                             <label for="creditCard">Use A Credit Card: </label>
@@ -245,7 +241,7 @@
                             </select>
                         </div>
                         <div class="year">
-                            Expiration Year:
+                            <p>Expiration Year:</p>
                             <select id="Year" name="Year">
                                 <option value="2022" selected>2022</option>
                                 <option value="2023">2023</option>
@@ -275,7 +271,7 @@
                         <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" placeholder="Enter Account Number" value="{{ inputData[16] }}">
                         <br>
                     </div>
-                </fieldset>
+                </div>
 
                 <input type="submit" value="SUBMIT" style="margin-left: 145px;">
             </div>

@@ -16,8 +16,6 @@
 
         label{margin-left: 25px;}
 
-        button{margin-left: 375px;}
-
         body{
             background: #eee !important;
             margin: 0;
@@ -87,6 +85,7 @@
 <body>
 <div class="topnav">
     <a href="/dashboard">Home</a>
+    <a href="/new-user-form">Sign Up!</a>
 </div>
 
 <div>
@@ -108,8 +107,9 @@
     </form>
 </div>
 
+<br>
+<button class="btn btn-default" style="margin-left: 375px" onclick="history.back()">Go Back</button>
 <br><br>
-<button class="btn btn-default" onclick="history.back()">Go Back</button>
 
 <script>
 window.onscroll = function() {myFunction()};

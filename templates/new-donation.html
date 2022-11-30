@@ -81,11 +81,7 @@
       background-color: #61C957;
       color: black;}
     </style>
-<!--    h2{-->
-<!--        text-align: center;-->
-<!--        text-transform: uppercase;-->
-<!--        color: #4CAF50;-->
-<!--    }-->
+
 </head>
 
 <body>
@@ -95,12 +91,12 @@
 <div class="topnav">
     <a href="/dashboard">Home</a>
     <a href="/log-out">Log out</a>
-    <a href="/new-fundraiser">New fundraiser</a>
+    <a href="/new-fundraiser">New Fundraiser</a>
     <a href="/settings">Settings</a>
 </div>
 
 <!-- welcome for user -->
-<h2>Hello, {{ name }}</h2>
+<h2 class="container-fluid p-3 bg-success text-white text-center">Hello, {{ name }}</h2>
 <br>
 
 <!-- donating as user -->
@@ -195,7 +191,7 @@
     <a href="/new-user-form">Sign Up!</a>
 </div>
 <!-- welcome for guest -->
-<h2>Hello, you'll be making your donation as a {{ name }}</h2>
+<h2 class="container-fluid p-3 bg-success text-white text-center">Hello, you'll be making your donation as a {{ name }}</h2>
 
 <br>
 <!-- donating for guest -->
@@ -216,16 +212,16 @@
                 <input type="text" class="form-control" style="width:95.925%;" id="guestAmount" name="amount" autocomplete="off" placeholder="Enter Amount" value="{{ inputData[1] }}">
             </div>
             {% if flag[0] == 1 %}
-                        <i style="color:red;">Invalid donation amount. Donations must be greater than $1.00.</i>
-                        {% endif %}
+            <i style="color:red;">Invalid donation amount. Donations must be greater than $1.00.</i>
+            {% endif %}
             <br><br>
 
             <legend>Billing Address:</legend>
             <!-- billing address -->
             <label for="StreetAddress">Street Address:
             {% if flag[2] == 1 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}</label><br>
+                <b style="color:red;">*</b>
+                {% endif %}</label><br>
             <input type="text" id="StreetAddress" name="StreetAddress" class="form-control" placeholder="Street Address" value="{{ inputData[2] }}" />
             <br>
             <label for="City">City:
