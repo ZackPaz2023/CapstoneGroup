@@ -42,18 +42,19 @@ def dashboard():
     newDonationFlags = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     newFundraiserFlags = [0, 0]
     inputData = []
-    cursor.execute(
-        "SELECT Title, Description, FundID,  ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
+    cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name, Email FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
     homePageFundraiserData = cursor.fetchall()
 
     if not currentUser.isGuest:
+        userOwnedFundraiser = []
+        for fund in homePageFundraiserData:
+            if fund[8] == currentUser.emailPK:
+                userOwnedFundraiser.append(fund)
+                homePageFundraiserData.remove(fund)
         cursor.execute(
             "SELECT Title, DonationsToFund, FundNo FROM DONATES INNER JOIN FUNDRAISER ON FundNo = FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
         userDonationsTable = cursor.fetchall()
-        cursor.execute(
-            "SELECT Title, Description, FundNo FROM OWNS INNER JOIN FUNDRAISER ON OWNS.FundNo = FUNDRAISER.FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
-        userOwnedFundraisers = cursor.fetchall()
-        return render_template('dashboard.html', name=currentUser.name, userOwnedFund=userOwnedFundraisers,
+        return render_template('dashboard.html', name=currentUser.name, userOwnedFund=userOwnedFundraiser,
                                fundraiserTable=homePageFundraiserData, userDonorTable=userDonationsTable,
                                isGuest=currentUser.isGuest)
 
@@ -122,7 +123,43 @@ def loggingOut():
 
 @app.route('/settings')
 def profile_page(name=None, email=None):
-    return render_template('settings.html', name=name, email=email)
+    cursor.execute("SELECT Username, Password, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, CardNumber, ExpirationDate, RouteNo, AccountNo FROM USER WHERE Email = '%s'" % currentUser.emailPK)
+    userInfo = cursor.fetchall()
+    userInfoList = []
+    for userItem in userInfo:
+        for item in userItem:
+            userInfoList.append(item)
+
+    isUsingCreditCard = False
+    if str(userInfoList[11]) == "None":
+        isUsingCreditCard = True
+    return render_template('settings.html', isUsingCreditCard=isUsingCreditCard, flag=newUserFlags, inputData=inputData, name=userInfoList[2], username= userInfoList[0], password=userInfoList[1], phonenumber=userInfoList[3], zipcode=userInfoList[4], streetaddress=userInfoList[5], state=userInfoList[6], city=userInfoList[7], country=userInfoList[8], cardnumber=userInfoList[9], month=str(userInfoList[10])[5:7], year = str(userInfoList[10])[0:5] , routeno=userInfoList[11], accountno=userInfoList[12])
+
+@app.route("/recordingNewUserSettings")
+def updatingUserSettings():
+    userName = request.form["UserName"]
+    password = request.form["Password"]
+    name = request.form["Name"]
+    phoneNumber = request.form["PhoneNumber"]
+    zipCode = request.form["ZipCode"]
+    streetAddress = request.form["StreetAddress"]
+    state = request.form["State"]
+    city = request.form["City"]
+    country = request.form["Country"]
+    radioToggled = request.form['paymentOptionToggle']
+    if radioToggled == "creditCard":
+        cardNumber = request.form["CardNumber"]
+        expirationDate = request.form["Year"] + "-" + request.form["Month"] + "-" + str(monthLengths(int(request.form["Month"]), int(request.form["Year"])))
+        if (valid_new_user_input(request.form, radioToggled)[0]):
+            cursor.execute("UPDATE USER SET Username = '%s', Password = '%s', Name = '%s', PhoneNumber = '%s', ZipCode = '%s', StreetAddress = '%s', State = '%s', City = '%s', Country = '%s', CardNumber = '%s', ExpirationDate = '%s'" % (userName, password, name, phoneNumber, zipCode, streetAddress, state, city, country, cardNumber, expirationDate))
+            db.commit()
+    elif radioToggled == "bankInfo":
+        routingNumber = request.form["RoutingNumber"]
+        accountNumber = request.form["AccountNumber"]
+        if (valid_new_user_input(request.form, radioToggled)[0]):
+            cursor.execute("UPDATE USER SET Username = '%s', Password = '%s', Name = '%s', PhoneNumber = '%s', ZipCode = '%s', StreetAddress = '%s', State = '%s', City = '%s', Country = '%s', RouteNo = '%s', AccountNo = '%s'" % (userName, password, name, phoneNumber, zipCode, streetAddress, state, city, country, routingNumber, accountNumber))
+            db.commit()
+    return redirect(url_for('dashboard'))
 
 
 @app.route('/donation-form/<fund_ID>')
@@ -170,8 +207,7 @@ def recordingDonation():
     print(request.form)
     valid_input = valid_new_donation_input(request.form, currentUser.isGuest, request.form["paymentOptionToggle"])[0]
     global newDonationFlags, inputData
-    newDonationFlags = valid_new_donation_input(request.form, currentUser.isGuest, request.form["paymentOptionToggle"])[
-        1]
+    newDonationFlags = valid_new_donation_input(request.form, currentUser.isGuest, request.form["paymentOptionToggle"])[1]
 
     inputData = []
     for values in request.form.values():
