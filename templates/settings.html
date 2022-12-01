@@ -292,18 +292,12 @@
     function handleRadioClick() {
     if (document.getElementById('creditCard').checked) {
         creditCardSelect.style.display = 'block';
-        $("#RoutingNumber").val(null);
-        $("#AccountNumber").val(null);
     } else {
         creditCardSelect.style.display = 'none';
     }
 
     if (document.getElementById('bankInfo').checked) {
         bankAccountSelect.style.display = 'block';
-        $("#CardNumber").val(null);
-        $("#Month").val(null);
-        $("#Year").val(null);
-        $("#cvv").val(null);
     } else {
         bankAccountSelect.style.display = 'none';
     }

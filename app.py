@@ -121,47 +121,6 @@ def loggingOut():
     return redirect(url_for('dashboard'))
 
 
-@app.route('/settings')
-def profile_page(name=None, email=None):
-    cursor.execute("SELECT Username, Password, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, CardNumber, ExpirationDate, RouteNo, AccountNo FROM USER WHERE Email = '%s'" % currentUser.emailPK)
-    userInfo = cursor.fetchall()
-    userInfoList = []
-    for userItem in userInfo:
-        for item in userItem:
-            userInfoList.append(item)
-
-    isUsingCreditCard = False
-    if str(userInfoList[11]) == "None":
-        isUsingCreditCard = True
-    return render_template('settings.html', isUsingCreditCard=isUsingCreditCard, flag=newUserFlags, inputData=inputData, name=userInfoList[2], username= userInfoList[0], password=userInfoList[1], phonenumber=userInfoList[3], zipcode=userInfoList[4], streetaddress=userInfoList[5], state=userInfoList[6], city=userInfoList[7], country=userInfoList[8], cardnumber=userInfoList[9], month=str(userInfoList[10])[5:7], year = str(userInfoList[10])[0:5] , routeno=userInfoList[11], accountno=userInfoList[12])
-
-@app.route("/recordingNewUserSettings")
-def updatingUserSettings():
-    userName = request.form["UserName"]
-    password = request.form["Password"]
-    name = request.form["Name"]
-    phoneNumber = request.form["PhoneNumber"]
-    zipCode = request.form["ZipCode"]
-    streetAddress = request.form["StreetAddress"]
-    state = request.form["State"]
-    city = request.form["City"]
-    country = request.form["Country"]
-    radioToggled = request.form['paymentOptionToggle']
-    if radioToggled == "creditCard":
-        cardNumber = request.form["CardNumber"]
-        expirationDate = request.form["Year"] + "-" + request.form["Month"] + "-" + str(monthLengths(int(request.form["Month"]), int(request.form["Year"])))
-        if (valid_new_user_input(request.form, radioToggled)[0]):
-            cursor.execute("UPDATE USER SET Username = '%s', Password = '%s', Name = '%s', PhoneNumber = '%s', ZipCode = '%s', StreetAddress = '%s', State = '%s', City = '%s', Country = '%s', CardNumber = '%s', ExpirationDate = '%s'" % (userName, password, name, phoneNumber, zipCode, streetAddress, state, city, country, cardNumber, expirationDate))
-            db.commit()
-    elif radioToggled == "bankInfo":
-        routingNumber = request.form["RoutingNumber"]
-        accountNumber = request.form["AccountNumber"]
-        if (valid_new_user_input(request.form, radioToggled)[0]):
-            cursor.execute("UPDATE USER SET Username = '%s', Password = '%s', Name = '%s', PhoneNumber = '%s', ZipCode = '%s', StreetAddress = '%s', State = '%s', City = '%s', Country = '%s', RouteNo = '%s', AccountNo = '%s'" % (userName, password, name, phoneNumber, zipCode, streetAddress, state, city, country, routingNumber, accountNumber))
-            db.commit()
-    return redirect(url_for('dashboard'))
-
-
 @app.route('/donation-form/<fund_ID>')
 def donation_form_page(fund_ID=None):
     paymentOptionIsCreditCard = True
@@ -436,6 +395,46 @@ def recordNewUserForm():
     else:
         return redirect(url_for('new_user_form_page'))
 
+@app.route('/settings')
+def profile_page(name=None, email=None):
+    cursor.execute("SELECT Username, Password, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, CardNumber, ExpirationDate, RouteNo, AccountNo FROM USER WHERE Email = '%s'" % currentUser.emailPK)
+    userInfo = cursor.fetchall()
+    userInfoList = []
+    for userItem in userInfo:
+        for item in userItem:
+            userInfoList.append(item)
+
+    isUsingCreditCard = False
+    if str(userInfoList[11]) == "None":
+        isUsingCreditCard = True
+    return render_template('settings.html', isUsingCreditCard=isUsingCreditCard, flag=newUserFlags, inputData=inputData, name=userInfoList[2], username= userInfoList[0], password=userInfoList[1], phonenumber=userInfoList[3], zipcode=userInfoList[4], streetaddress=userInfoList[5], state=userInfoList[6], city=userInfoList[7], country=userInfoList[8], cardnumber=userInfoList[9], month=str(userInfoList[10])[5:7], year = str(userInfoList[10])[0:4] , routeno=userInfoList[11], accountno=userInfoList[12])
+
+@app.route("/recordingNewUserSettings", methods=['POST', 'GET'])
+def updatingUserSettings():
+    userName = request.form["UserName"]
+    password = request.form["Password"]
+    name = request.form["Name"]
+    phoneNumber = request.form["PhoneNumber"]
+    zipCode = request.form["ZipCode"]
+    streetAddress = request.form["StreetAddress"]
+    state = request.form["State"]
+    city = request.form["City"]
+    country = request.form["Country"]
+    radioToggled = request.form['paymentOptionToggle']
+    if radioToggled == "creditCard":
+        cardNumber = request.form["CardNumber"]
+        expirationDate = request.form["Year"] + "-" + request.form["Month"] + "-" + str(monthLengths(int(request.form["Month"]), int(request.form["Year"])))
+        cursor.execute("UPDATE USER SET Username = '{}', Password = '{}', Name = '{}', PhoneNumber = '{}', ZipCode = '{}', StreetAddress = '{}', State = '{}', City = '{}', Country = '{}', CardNumber = '{}', ExpirationDate = '{}', RouteNo = {}, AccountNo = {} WHERE Email = '{}'"  .format(userName, password, name, phoneNumber, zipCode, streetAddress, state, city, country, cardNumber, expirationDate, 'Null', 'Null', currentUser.emailPK))
+        db.commit()
+    elif radioToggled == "bankInfo":
+        routingNumber = request.form["RoutingNumber"]
+        accountNumber = request.form["AccountNumber"]
+        cursor.execute("UPDATE USER SET Username = '{}', Password = '{}', Name = '{}', PhoneNumber = '{}', ZipCode = '{}', StreetAddress = '{}', State = '{}', City = '{}', Country = '{}', CardNumber = {}, ExpirationDate = {}, RouteNo = '{}', AccountNo = '{}' WHERE Email = '{}'" .format(userName, password, name, phoneNumber, zipCode, streetAddress, state, city, country, 'Null', 'Null', routingNumber, accountNumber, currentUser.emailPK))
+        db.commit()
+
+    currentUser.name = name
+    currentUser.username = userName
+    return redirect(url_for('dashboard'))
 
 if __name__ == '__main__':
     app.run(debug=True)
