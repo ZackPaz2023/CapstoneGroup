@@ -28,6 +28,7 @@ newFundraiserFlags = [0, 0]
 newDonationFlags = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 inputData = []
 loginFlag = 0
+tagValues = ["Other", "Animals", "Business", "Community", "Creative", "Education", "Emergencies", "Environment", "Event", "Faith", "Family", "Funeral and Memorial", "Medical", "Monthly Bills", "Newlyweds", "Sports", "Travel", "Volunteer", "Wishes"]
 
 
 @app.route('/')
@@ -227,44 +228,6 @@ def recordingDonation():
         return redirect(url_for('donation_form_page', fund_ID=request.form["fund_id"]))
 
 
-@app.route('/fundraiser/<fundraiser_ID>')
-def fundraiser_page(fundraiser_ID=None):
-    cursor.execute(
-        "SELECT Title, Description, Goal, Balance, CreationDate, Timeframe, Tag FROM FUNDRAISER WHERE FundID = '%s'" % fundraiser_ID)
-    fundraiserInfo = []
-    for line in list(cursor):
-        for item in line:
-            fundraiserInfo.append(item)
-
-    # Reformatting time constraints to be more user friendly
-    fundraiserCreationDate = str(fundraiserInfo[4])[0:10]
-    fundraiserCreationDate = fundraiserCreationDate[5:8] + fundraiserCreationDate[8:10] + "-" + fundraiserCreationDate[
-                                                                                                0:4]
-    fundraiserTimeline = str(fundraiserInfo[5])[0:10]
-    fundraiserTimeline = fundraiserTimeline[5:8] + fundraiserTimeline[8:10] + "-" + fundraiserTimeline[0:4]
-
-    # getting donations from registered users
-    cursor.execute(
-        "SELECT Name, DonationsToFund FROM USER INNER JOIN DONATES ON Email = EmailAddress WHERE fundNo = %s" % fundraiser_ID)
-    donationTable = cursor.fetchall()
-
-    # Getting guest donations
-    cursor.execute(
-        "SELECT 'Guest Donor' as Name, DonationAmount FROM (SELECT TransactionNo, DonationAmount, FundNo FROM FUNDS INNER JOIN DONATION ON FUNDS.TransactionNo = DONATION.TransactionID WHERE FundNo = %s) as R WHERE TransactionNo NOT IN (SELECT TransactionNo FROM GIVES)" % fundraiser_ID)
-    guestTable = cursor.fetchall()
-
-    donationTable += guestTable
-
-    balance = 0.00
-    for donation in donationTable:
-        balance += float(donation[1])
-
-    return render_template('fundraiser.html', fund_ID=fundraiser_ID, fund_name=fundraiserInfo[0],
-                           fund_desc=fundraiserInfo[1], fund_goal=fundraiserInfo[2], fund_tag=fundraiserInfo[6],
-                           fund_balance=fundraiserInfo[3], fund_creationdate=fundraiserCreationDate,
-                           fund_timeline=fundraiserTimeline, table=donationTable)
-
-
 @app.route('/new-fundraiser')
 def fundraiser_form_page():
     return render_template('new-fundraiser-form.html', flag=newFundraiserFlags, inputData=inputData)
@@ -276,8 +239,6 @@ def recordNewFundraiserForm():
     inputData = []
     for values in request.form.values():
         inputData.append(values)
-    print(request.form)
-    print(inputData)
     newFundraiserFlags = valid_new_fundraiser_input(request.form)[1]
     valid_fundraiser = valid_new_fundraiser_input(request.form)[0]
     title = request.form["title"]
@@ -297,6 +258,7 @@ def recordNewFundraiserForm():
                                timeline=timeline, creation=creation, imageList=images)
     else:
         return redirect(url_for('fundraiser_form_page'))
+
 
 
 @app.route("/select", methods=["GET", "POST"])
@@ -338,6 +300,106 @@ def upload_file():
     cursor.execute("INSERT INTO OWNS (EmailAddress, FundNo) VALUES (%s, %s)", (currentUser.emailPK, FundID))
     db.commit()
 
+    return redirect(url_for('dashboard'))
+
+@app.route('/fundraiser/<fundraiser_ID>')
+def fundraiser_page(fundraiser_ID=None):
+    cursor.execute(
+        "SELECT Title, Description, Goal, Balance, CreationDate, Timeframe, Tag FROM FUNDRAISER WHERE FundID = '%s'" % fundraiser_ID)
+    fundraiserInfo = []
+    for line in list(cursor):
+        for item in line:
+            fundraiserInfo.append(item)
+
+    # Reformatting time constraints to be more user friendly
+    fundraiserCreationDate = str(fundraiserInfo[4])[0:10]
+    fundraiserCreationDate = fundraiserCreationDate[5:8] + fundraiserCreationDate[8:10] + "-" + fundraiserCreationDate[
+                                                                                                0:4]
+    fundraiserTimeline = str(fundraiserInfo[5])[0:10]
+    fundraiserTimeline = fundraiserTimeline[5:8] + fundraiserTimeline[8:10] + "-" + fundraiserTimeline[0:4]
+
+    # getting donations from registered users
+    cursor.execute(
+        "SELECT Name, DonationsToFund FROM USER INNER JOIN DONATES ON Email = EmailAddress WHERE fundNo = %s" % fundraiser_ID)
+    donationTable = cursor.fetchall()
+
+    # Getting guest donations
+    cursor.execute(
+        "SELECT 'Guest Donor' as Name, DonationAmount FROM (SELECT TransactionNo, DonationAmount, FundNo FROM FUNDS INNER JOIN DONATION ON FUNDS.TransactionNo = DONATION.TransactionID WHERE FundNo = %s) as R WHERE TransactionNo NOT IN (SELECT TransactionNo FROM GIVES)" % fundraiser_ID)
+    guestTable = cursor.fetchall()
+
+    donationTable += guestTable
+
+    #does this user own this fundraiser
+    listOfUserOwnedFundraiser = []
+    cursor.execute("SELECT FundNo FROM OWNS WHERE EmailAddress = '%s'" % currentUser.emailPK)
+    for item in list(cursor):
+        listOfUserOwnedFundraiser.append(item[0])
+    doesThisUserOwnThisFundraiser = False
+    for fund in listOfUserOwnedFundraiser:
+        if str(fund) == str(fundraiser_ID):
+            doesThisUserOwnThisFundraiser = True
+            break
+
+    return render_template('fundraiser.html', fund_ID=fundraiser_ID, fund_name=fundraiserInfo[0],
+                           fund_desc=fundraiserInfo[1], fund_goal=fundraiserInfo[2], fund_tag=fundraiserInfo[6],
+                           fund_balance=fundraiserInfo[3], fund_creationdate=fundraiserCreationDate,
+                           fund_timeline=fundraiserTimeline, table=donationTable, isOwner = doesThisUserOwnThisFundraiser)
+
+@app.route('/fundraiser-edit-settings/<fundID>')
+def editingFundraiserFirstPage(fundID=None):
+    cursor.execute("SELECT Title, Description, Goal, Tag, Timeframe, ImagePath FROM FUNDRAISER WHERE FundID = '%s'" % fundID)
+    fundItems = []
+    for line in list(cursor):
+        for item in line:
+            fundItems.append(item)
+
+    return render_template("editFundraiser.html", image = fundItems[5], fundID= fundID, title = fundItems[0], description=fundItems[1], goal = fundItems[2], tagsList = tagValues, thisTag= fundItems[3], timeframeMonth = int(str(fundItems[4])[5:7]), timeframeYear = int(str(fundItems[4])[0:4]), timeframeDay = int(str(fundItems[4])[8:10]), flag=newFundraiserFlags, inputData=inputData)
+
+@app.route('/submittingEditForFundraiserFirstPage/<fundID>', methods=["GET", "POST"])
+def editingFundraiserSecondPage(fundID=None):
+    title = request.form['title']
+    description = request.form['description']
+    goal = request.form['goal']
+    tag = request.form['tag']
+    day = request.form['day']
+    if int(day) < 10:
+        day = "0%s" % day
+    timeline = request.form["Year"] + '-' + request.form["Month"] + '-' + day
+    images = os.listdir('static')
+    thisImage = request.form['image']
+
+    return render_template('edit-fundraiser-second-page.html', fundID= fundID, title=title, description=description, tag=tag, goal=goal,
+                           timeline=timeline, imageList=images, thisImage = thisImage)
+
+@app.route("/editingSelect", methods=["GET", "POST"])
+def editingSelectImage():
+    title = request.form["title"]
+    description = request.form["description"]
+    tag = request.form["tag"]
+    goal = request.form["goal"]
+    timeline = request.form["timeline"]
+    image = request.form["imageSelect"]
+    fundID = request.form["fundID"]
+
+    cursor.execute("UPDATE FUNDRAISER SET Title = '%s', Description = '%s', Tag = '%s', ImagePath = '%s', Goal = '%s', Timeframe = '%s' WHERE FundID = %d " % (title, description, tag, image, goal, timeline, int(fundID)))
+    db.commit()
+
+    return redirect(url_for('dashboard'))
+
+@app.route('/editingUploader', methods=["GET", "POST"])
+def editing_upload_file():
+    title = request.form["title"]
+    description = request.form["description"]
+    tag = request.form["tag"]
+    goal = request.form["goal"]
+    timeline = request.form["timeline"]
+    image = request.files['file']
+    fundID = request.form["fundID"]
+
+    image.save(os.path.join(app.config['UPLOADED_FILES'], secure_filename(image.filename)))
+    cursor.execute("UPDATE FUNDRAISER SET Title = '%s', Description = '%s', Tag = '%s', ImagePath = '%s', Goal = '%s', Timeframe = '%s' WHERE FundID = %d " % (title, description, tag, image.filename, goal, timeline, int(fundID)))
+    db.commit()
     return redirect(url_for('dashboard'))
 
 
@@ -407,7 +469,7 @@ def profile_page(name=None, email=None):
     isUsingCreditCard = False
     if str(userInfoList[11]) == "None":
         isUsingCreditCard = True
-    return render_template('settings.html', isUsingCreditCard=isUsingCreditCard, flag=newUserFlags, inputData=inputData, name=userInfoList[2], username= userInfoList[0], password=userInfoList[1], phonenumber=userInfoList[3], zipcode=userInfoList[4], streetaddress=userInfoList[5], state=userInfoList[6], city=userInfoList[7], country=userInfoList[8], cardnumber=userInfoList[9], month=str(userInfoList[10])[5:7], year = str(userInfoList[10])[0:4] , routeno=userInfoList[11], accountno=userInfoList[12])
+    return render_template('UserSettings.html', isUsingCreditCard=isUsingCreditCard, flag=newUserFlags, inputData=inputData, name=userInfoList[2], username= userInfoList[0], password=userInfoList[1], phonenumber=userInfoList[3], zipcode=userInfoList[4], streetaddress=userInfoList[5], state=userInfoList[6], city=userInfoList[7], country=userInfoList[8], cardnumber=userInfoList[9], month=str(userInfoList[10])[5:7], year = str(userInfoList[10])[0:4] , routeno=userInfoList[11], accountno=userInfoList[12])
 
 @app.route("/recordingNewUserSettings", methods=['POST', 'GET'])
 def updatingUserSettings():
@@ -437,4 +499,4 @@ def updatingUserSettings():
     return redirect(url_for('dashboard'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

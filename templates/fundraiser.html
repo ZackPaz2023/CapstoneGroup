@@ -87,6 +87,9 @@
 <body>
 <div class="topnav">
     <a href="/dashboard">Home</a>
+    {% if isOwner %}
+        <a href="/fundraiser-edit-settings/{{fund_ID}}">Edit This Fundraiser</a>
+    {% endif %}
 </div>
 
 <h1 class="container-fluid p-3 bg-success text-white text-center">{{ fund_name }} Fundraiser </h1>
