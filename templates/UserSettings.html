@@ -18,7 +18,7 @@
         margin-left: 375px;
         }
 
-        fieldset{
+        div{
             margin-left: 25px;
         }
 
@@ -121,13 +121,10 @@
 
         <form action="/recordingNewUserSettings"  method="post">
             <div class="wrapper">
-    <!--        <div class="container">-->
-                <fieldset>
+                <div>
                     <br>
                     <legend class="form-details">Personal Details:</legend>
                     <br>
-        <!--            <div class="row">-->
-        <!--                <div class="col-sm">-->
                     <label for="Name">Full Name:
                     {% if flag[0] == 0 %}
                         <b style="color:red;">*</b>
@@ -160,9 +157,9 @@
                     <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" value="{{phonenumber}}">
                     <br>
         <!--                </div>-->
-                </fieldset>
+                </div>
 
-                <fieldset>
+                <div>
         <!--                <div class="col-sm">-->
                     <br>
                     <legend>Billing Address:</legend>
@@ -197,9 +194,9 @@
                         {% endif %}</label><br>
                     <input type="text" id="Country" name="Country" class="form-control" value="{{ country}}">
                     <br>
-                </fieldset>
+                </div>
         <!--                </div>-->
-                <fieldset>
+                <div>
                     <br>
                     <legend>Payment Information</legend>
         <!--                    <div class="col-sm">-->
@@ -268,7 +265,7 @@
                         <br><br><br><br>
                     </div>
                     <input type="submit" value="SUBMIT">
-                </fieldset>
+                </div>
             </div>
 
 
