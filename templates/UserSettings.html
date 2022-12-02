@@ -18,9 +18,6 @@
         margin-left: 375px;
         }
 
-        div{
-            margin-left: 25px;
-        }
 
         body{
             background: #eee !important;
@@ -34,7 +31,7 @@
 
         .wrapper{
             margin-top: 300px;
-            max-width: 450px;
+            max-width: 600px;
             padding: 15px 35px 45px;
             margin: auto;
             background-color: #fff;
@@ -63,7 +60,6 @@
         }
 
         input[type="text"]{
-
                 margin-bottom: -1px;
                 border-bottom-left-radius: 0;
                 border-bottom-right-radius: 0;
@@ -97,15 +93,6 @@
   color: black;
 }
 
-.sticky {
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
-.sticky + .content {
-  padding-top: 60px;
-}
   </style>
 
 
@@ -116,7 +103,7 @@
     <a class="active" href="/dashboard">Home</a>
 </div>
 
-    <div>
+<div>
         <h1 class="container-fluid p-3 bg-success text-white text-center">USER SETTINGS</h1><br>
 
         <form action="/recordingNewUserSettings"  method="post">
@@ -125,88 +112,60 @@
                     <br>
                     <legend class="form-details">Personal Details:</legend>
                     <br>
-                    <label for="Name">Full Name:
-                    {% if flag[0] == 0 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}
-                    </label><br>
+                    <label for="Name">Full Name:</label>
+                    <br>
                     <input type="text" id="Name" name="Name" class="form-control" value="{{name}}">
                     <br>
-                    <label for="UserName">Username:
-                    {% if flag[2] == 0 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}
-                    </label><br>
+                    <label for="UserName">Username:</label>
+                    <br>
                     <input type="text" id="UserName" name="UserName" class="form-control" value="{{ username}}">
                     <br>
-                    <label for="Password">Password:
-                    {% if flag[3] == 0 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}
-                    </label><br>
+                    <label for="Password">Password:</label>
+                    <br>
                     <input type="password" id="Password" name="Password" class="form-control" value="{{password}}">
                     <br>
-                    {% if flag[3] == 0 %}
-                        <i style="color:red;">Password must be 8 to 20 characters long and include at least ONE uppercase letter.</i><br>
-                        {% endif %}
-                    <label for="PhoneNumber">Phone Number:
-                    {% if flag[4] == 0 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}
-                    </label><br>
+                    <label for="PhoneNumber">Phone Number:</label>
+                    <br>
                     <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" value="{{phonenumber}}">
                     <br>
-        <!--                </div>-->
                 </div>
 
                 <div>
-        <!--                <div class="col-sm">-->
                     <br>
                     <legend>Billing Address:</legend>
                     <br>
-                    <label for="StreetAddress">Street Address:
-                    {% if flag[5] == 0 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}</label><br>
+                    <label for="StreetAddress">Street Address:</label>
+                    <br>
                     <input type="text" id="StreetAddress" name="StreetAddress" class="form-control" value="{{streetaddress}}">
                     <br>
-                    <label for="City">City:
-                    {% if flag[6] == 0 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}</label><br>
+                    <label for="City">City:</label>
+                    <br>
                     <input type="text" id="City" name="City" class="form-control" value="{{ city }}">
                     <br>
-                    <label for="State">State:
-                    {% if flag[7] == 0 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}</label><br>
+                    <label for="State">State:</label>
+                    <br>
                     <input type="text" id="State" name="State" class="form-control" value="{{ state}}">
                     <br>
-                    <label for="ZipCode">Zip Code:
-                    {% if flag[8] == 0 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}</label><br>
+                    <label for="ZipCode">Zip Code:</label>
+                    <br>
                     <input type="text" id="ZipCode" name="ZipCode" class="form-control" value="{{ zipcode }}">
                     <br>
-                    <label for="Country">Country:
-                    {% if flag[9] == 0 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}</label><br>
+                    <label for="Country">Country:</label>
+                    <br>
                     <input type="text" id="Country" name="Country" class="form-control" value="{{ country}}">
                     <br>
                 </div>
-        <!--                </div>-->
+
                 <div>
                     <br>
                     <legend>Payment Information</legend>
-        <!--                    <div class="col-sm">-->
-                    Select A Payment Option:
 
+                    <p>Select A Payment Option:</p>
                     <div>
-                        <input type="radio" id="creditCard" name="paymentOptionToggle" value="creditCard"> {{'checked' if isUsingCreditCard else ''}} ></input>
+                        <input type="radio" id="creditCard" name="paymentOptionToggle" value="creditCard">{{'checked' if isUsingCreditCard else ''}}</input>
                             <label for="creditCard">Use A Credit Card: </label>
                         <br>
-                        <input type="radio" id="bankInfo" name="paymentOptionToggle" value="bankInfo">{{'checked' if not isUsingCreditCard else ''}} ></input>
+                        <input type="radio" id="bankInfo" name="paymentOptionToggle" value="bankInfo">{{'checked' if not isUsingCreditCard else ''}}</input>
                             <label for="bankInfo">Use A Bank Account: </label>
                     </div>
                     <br>
@@ -215,14 +174,12 @@
                         <div class="form-header">
                             <h5 class="title">Credit Card Information</h5>
                         </div>
-                        <label  for="CardNumber">Card number:
-                            {% if flag[10] == 0 %}
-                            <b style="color:red;">*</b>
-                            {% endif %}</label><br>
+                        <label  for="CardNumber">Card number:</label>
+                        <br>
                         <input type="text" id="CardNumber" name="CardNumber" class="form-control" value="{{ cardnumber }}"><br>
                         <div class="dropdown">
                             <div class="month">
-                                Expiration Month:
+                                <p>Expiration Month:</p>
                                 <select id="Month" name="Month">
                                     <option value="{{month}}" selected>{{month}}</option>
                                     {% for number in range(1, 13)%}
@@ -233,7 +190,7 @@
                                 </select>
                             </div>
                             <div class="year">
-                                Expiration Year:
+                                <p>Expiration Year:</p>
                                 <select id="Year" name="Year">
                                     <option value="{{year}}" selected>{{year}}</option>
                                     {% for number in range(2022, 2027)%}
@@ -251,24 +208,18 @@
                         <div class="form-header">
                             <h5 class="title">Bank Account Details</h5>
                         </div>
-                        <label for="RoutingNumber">Routing Number:
-                            {% if flag[12] == 0 %}
-                            <b style="color:red;">*</b>
-                            {% endif %}</label><br>
+                        <label for="RoutingNumber">Routing Number: </label>
+                        <br>
                         <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control"  value="{{ routeno }}">
                         <br>
-                        <label for="AccountNumber">Account Number:
-                            {% if flag[13] == 0 %}
-                            <b style="color:red;">*</b>
-                            {% endif %}</label><br>
+                        <label for="AccountNumber">Account Number:</label>
+                        <br>
                         <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" value="{{ accountno }}">
                         <br><br><br><br>
                     </div>
                     <input type="submit" value="SUBMIT">
                 </div>
             </div>
-
-
         </form>
     </div>
 
