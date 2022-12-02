@@ -44,7 +44,6 @@ form{margin-top: 75px;}
             z-index: 2;}}}
 
 input[type="text"]{
-    margin-left: 25px;
     margin-bottom: -1px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;}
@@ -87,7 +86,7 @@ h3{text-align: center;}
 </div>
 
 <div>
-    <h2 class="container-fluid p-3 bg-success text-white text-center">Make a Fundraiser!</h2><br>
+    <h1 class="container-fluid p-3 bg-success text-white text-center">Make a Fundraiser!</h1><br>
 
     <!--    form-->
     <form action="/fillingNewFundraiserForm" method="post">
@@ -99,6 +98,7 @@ h3{text-align: center;}
                         {% endif %}</label><br>
                 <input type="text" id="title" name="title" class="form-control" placeholder="Enter fundraiser name" value="{{ inputData[0] }}">
                 <br><br>
+                <p>Description:</p>
                 <textarea rows="5" cols="45" name="description"  placeholder="Enter a description for your fundraiser"></textarea>
                 <br><br>
                 <label for="goal">Goal:
@@ -106,10 +106,9 @@ h3{text-align: center;}
                         <b style="color:red;">*</b>
                         {% endif %}</label><br>
                 <input type="text" id="goal" name="goal" class="form-control" placeholder="Enter your goal amount" value="{{  inputData[2]  }}">
-                <br>
+                <br><br>
                 <div>
-                    Category:
-                    <br>
+                    <p>Category:</p>
                     <select id="tag" name="tag">
                         <option value="Other">Other</option>
                         <option value="Animals">Animals</option>
@@ -132,10 +131,8 @@ h3{text-align: center;}
                         <option value="Wishes">Wishes</option>
                     </select>
                 </div>
-                <br>
                 <br><br>
-                Expiration Date:
-                <br>
+                <p>Expiration Date:</p>
                 <div class="month">
                     <select name="Month">
                         <option value="01">January</option>

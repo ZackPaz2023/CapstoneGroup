@@ -15,13 +15,11 @@
     * {box-sizing: border-box; font-family: ubuntu;}
 
         button{
-        margin-left: 45%;
-        width: 10%;
+        margin-left: 375px;
+
         }
 
-        fieldset{
-            margin-left: 25px;
-        }
+
 
         body{
             background: #eee !important;
@@ -64,7 +62,6 @@
         }
 
         input[type="text"]{
-
                 margin-bottom: -1px;
                 border-bottom-left-radius: 0;
                 border-bottom-right-radius: 0;
@@ -96,16 +93,6 @@
           background-color: #61C957;
           color: black;
         }
-
-        .sticky {
-          position: fixed;
-          top: 0;
-          width: 100%;
-        }
-
-        .sticky + .content {
-          padding-top: 60px;
-        }
     </style>
 </head>
 
@@ -120,13 +107,10 @@
 
         <form action="/fillingNewUserForm"  method="post">
             <div class="wrapper">
-    <!--        <div class="container">-->
-                <fieldset>
+                <div>
                     <br>
                     <legend class="form-details">Personal Details:</legend>
                     <br>
-        <!--            <div class="row">-->
-        <!--                <div class="col-sm">-->
                     <label for="Name">Full Name:
                     {% if flag[0] == 0 %}
                         <b style="color:red;">*</b>
@@ -165,11 +149,9 @@
                     </label><br>
                     <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" placeholder="Enter Phone Number" value="{{ inputData[4] }}" required>
                     <br>
-        <!--                </div>-->
-                </fieldset>
+                </div>
 
-                <fieldset>
-        <!--                <div class="col-sm">-->
+                <div>
                     <br>
                     <legend>Billing Address:</legend>
                     <br>
@@ -203,9 +185,9 @@
                         {% endif %}</label><br>
                     <input type="text" id="Country" name="Country" class="form-control" placeholder="Country" value="{{ inputData[9] }}">
                     <br>
-                </fieldset>
+                </div>
         <!--                </div>-->
-                <fieldset>
+                <div>
                     <br>
                     <legend>Payment Information</legend>
         <!--                    <div class="col-sm">-->
@@ -275,9 +257,9 @@
                         <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" placeholder="Enter Account Number" value="{{ inputData[16] }}">
                         <br>
                     </div>
-                </fieldset>
+                </div>
 
-                <input type="submit" value="SUBMIT" style="margin-left: 145px;">
+                <input type="submit" value="SUBMIT">
             </div>
 
         </form>

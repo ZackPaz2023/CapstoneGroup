@@ -81,11 +81,6 @@
       background-color: #61C957;
       color: black;}
     </style>
-<!--    h2{-->
-<!--        text-align: center;-->
-<!--        text-transform: uppercase;-->
-<!--        color: #4CAF50;-->
-<!--    }-->
 </head>
 
 <body>
@@ -95,12 +90,12 @@
 <div class="topnav">
     <a href="/dashboard">Home</a>
     <a href="/log-out">Log out</a>
-    <a href="/new-fundraiser">New fundraiser</a>
+    <a href="/new-fundraiser">New Fundraiser</a>
     <a href="/settings">Settings</a>
 </div>
 
 <!-- welcome for user -->
-<h2>Hello, {{ name }}</h2>
+<h2 class="container-fluid p-3 bg-success text-white text-center">Hello, {{ name }}</h2>
 <br>
 
 <!-- donating as user -->
@@ -131,7 +126,6 @@
 
             <!-- billing address -->
             <legend>Billing Address:</legend>
-<!--            <label for="address">Billing Address:</label><br>-->
             <input type="text" class="form-control" id="address" value="{{streetAddress}}" readonly="readonly" /><br>
             <input type="text" class="form-control" id="inputCountry" value="{{restOfAddress}}" readonly="readonly"/><br>
 
@@ -195,7 +189,7 @@
     <a href="/new-user-form">Sign Up!</a>
 </div>
 <!-- welcome for guest -->
-<h2>Hello, you'll be making your donation as a {{ name }}</h2>
+<h2 class="container-fluid p-3 bg-success text-white text-center">Hello, you'll be making your donation as a {{ name }}</h2>
 
 <br>
 <!-- donating for guest -->
@@ -256,7 +250,7 @@
             <div class="form-body">
                 <legend>Payment Information</legend>
 
-                Select A Payment Option:
+                <p>Select A Payment Option:</p>
                     <div>
                         <input type="radio" id="creditCard" name="paymentOptionToggle" value="creditCard" checked>
                             <label for="creditCard">Use A Credit Card:</label>
@@ -292,7 +286,7 @@
                             </select>
                         </div>
                         <div class="year">
-                            Expiration Year:
+                            <p>Expiration Year:</p>
                             <select id="Year" name="Year">
                                 <option value="2022" selected>2022</option>
                                 <option value="2023">2023</option>
@@ -339,7 +333,7 @@
             </div>
         </div>
     </div>
-        </form>
+</form>
 {% endif %}
 
     <br>
