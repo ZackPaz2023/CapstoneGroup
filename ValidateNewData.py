@@ -229,19 +229,19 @@ def valid_new_user_input(form_input, payment_type):
     if not valid_phone_num(reformat_phone_num(form_input["PhoneNumber"])):
         valid_input = False
         flags[4] = 0
-    if len(form_input["StreetAddress"]) < 8:
+    if len(form_input["StreetAddress"]) < 1:
         valid_input = False
         flags[5] = 0
-    if len(form_input["City"]) < 2:
+    if len(form_input["City"]) < 1:
         valid_input = False
         flags[6] = 0
-    if len(form_input["State"]) < 2:
+    if len(form_input["State"]) < 1:
         valid_input = False
         flags[7] = 0
     if not valid_zip_code(form_input["ZipCode"]):
         valid_input = False
         flags[8] = 0
-    if len(form_input["Country"]) < 5:
+    if len(form_input["Country"]) < 1:
         valid_input = False
         flags[9] = 0
 
