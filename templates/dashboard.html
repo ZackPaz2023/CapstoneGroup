@@ -182,24 +182,44 @@ body{
 
     <br>
 
-    <div id="donations">
-    <h4>Donations You Have Made:</h4>
-    <table style="border:1px solid black;" align="center">
-        <thread>
-            <tr style="border:1px solid black;">
-                <th style="border:1px solid black;">TITLE</th>
-                <th style="border:1px solid black;">AMOUNT</th>
-            </tr>
-        </thread>
-        <tbody>
-        <tr>
-        {% for row in userDonorTable %}
-            <td style="border:1px solid black;"><a href="fundraiser/{{ row[2] }}">{{row[0]}}</a></td>
-            <td style="border:1px solid black;">{{row[1]}}</td>
-        </tr>
-        {% endfor%}
-        </tbody>
-    </table>
+        <h4>Donations You Have Made:</h4>
+        <div id="donations" class="fundraiser-container">
+            {% for row in userDonorTable %}
+            <div class="fundraiser-boxes">
+                <center>
+                    <li><a href="fundraiser/{{ row[2] }}" style="text-decoration:none">  <h7 style="font-size: 20px"> <strong>{{row[0]}} </strong> <br> </h7> <img src="/static/{{row[3]}}" alt="no image" width="350" height="350"> </a></li>
+                    Created By: {{row[7]}} <br> <br>
+                    <div class="container">
+                        <p>{{row[1]}}</p>
+                    </div>
+                </center>
+                <br><br>
+                <div class="bottom">
+                    <p style="text-align:left;">
+                        Balance: ${{row[5]}}
+                        <span style="float:right;">
+                            Goal: ${{row[4]}}
+                        </span>
+                    </p>
+                    {% if row[6] >= 100 %}
+                    <div class="w3-container">
+                        <div class="w3-light-grey w3-round-xlarge">
+                            <div class="w3-container w3-green w3-round-xlarge" style="width: 100%"> <center style="color:black;"> {{row[6]}}% </center> </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if row[6] < 100 %}
+                    <div class="w3-container">
+                        <div class="w3-light-gray w3-round-xlarge">
+                            <div class="w3-container w3-green w3-round-xlarge" style="width: {{row[6]}}%"> <center style="color:black;"> {{row[6]}}% </center></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <br>
+                </div>
+            </div>
+            {% endfor %}
+
     </div>
 {% endif %}
     <br>
