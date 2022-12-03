@@ -99,7 +99,7 @@ h3{text-align: center;}
                 <input type="text" id="title" name="title" class="form-control" placeholder="Enter fundraiser name" value="{{ inputData[0] }}">
                 <br><br>
                 <p>Description:</p>
-                <textarea rows="5" cols="45" name="description"  placeholder="Enter a description for your fundraiser"></textarea>
+                <textarea rows="5" cols="40" name="description"  placeholder="Enter a description for your fundraiser"></textarea>
                 <br><br>
                 <label for="goal">Goal:
                 {% if flag[1] == 1 %}
@@ -139,7 +139,7 @@ h3{text-align: center;}
                         <option value="02">February</option>
                         <option value="03">March</option>
                         <option value="04">April</option>
-                        <option value="05">May</option>
+                        <option value="05" >May</option>
                         <option value="06">June</option>
                         <option value="07">July</option>
                         <option value="08">August</option>
@@ -158,8 +158,7 @@ h3{text-align: center;}
                 </div>
                     <div class="year">
                         <select name="Year">
-                            <option value="2022">2022</option>
-                            <option value="2023">2023</option>
+                            <option value="2023" selected>2023</option>
                             <option value="2024">2024</option>
                             <option value="2025">2025</option>
                         </select>
