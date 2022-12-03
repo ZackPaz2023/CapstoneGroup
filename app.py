@@ -5,7 +5,8 @@ from flask import Flask, request, redirect, url_for, jsonify
 from flask import render_template
 from DB_Connection import *
 from DummyInfo import monthLengths
-from ValidateNewData import valid_new_user_input, valid_new_donation_input, valid_new_fundraiser_input
+from RecoveryEmailHandler import *
+from ValidateNewData import valid_new_user_input, valid_new_donation_input, valid_new_fundraiser_input, valid_email
 
 app = Flask(__name__, static_url_path='/static')
 app.config['UPLOADED_FILES'] = "static/"
@@ -27,6 +28,7 @@ newFundraiserFlags = [0, 0]
 newDonationFlags = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 inputData = []
 loginFlag = 0
+accountRecoveryFlag = 0
 tagValues = ["Other", "Animals", "Business", "Community", "Creative", "Education", "Emergencies", "Environment", "Event", "Faith", "Family", "Funeral and Memorial", "Medical", "Monthly Bills", "Newlyweds", "Sports", "Travel", "Volunteer", "Wishes"]
 
 
@@ -82,6 +84,8 @@ def fundTagSort(tag=None):
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    global accountRecoveryFlag
+    accountRecoveryFlag = 0
     cursor.execute("SELECT Username FROM USER")
     DB_Usernames = list(cursor)
     # DB_Usernames usernames returned in ("string",) format. Usernames were reformatted below for comparison operations.
@@ -124,6 +128,55 @@ def loggingOut():
     currentUser.username = ""
     currentUser.isGuest = True
     return redirect(url_for('dashboard'))
+
+@app.route("/recover-username")
+def recover_username():
+    return render_template("user-recovery.html", recovery="username", flag=accountRecoveryFlag)
+
+@app.route("/recoverUsername", methods=["POST"])
+def send_username_email():
+    print(request.form)
+    global accountRecoveryFlag
+    accountRecoveryFlag = 0
+    email = request.form['email']
+    if valid_email(email):
+        cursor.execute("SELECT * FROM USER WHERE Email = '%s'" % email)
+        dataRecovered = cursor.fetchone()
+        print(dataRecovered)
+        if dataRecovered != None:
+            send_email(RecoveryType.USERNAME, dataRecovered[0], email)
+            print("Email sent")
+        else:
+            accountRecoveryFlag = 1
+            print("No email found")
+    else:
+        accountRecoveryFlag = 1
+
+    return redirect(url_for('recover_username'))
+
+@app.route("/recover-password")
+def recover_password():
+    return render_template("user-recovery.html", recovery="password", flag=accountRecoveryFlag)
+
+@app.route("/recoverPassword", methods=["POST"])
+def send_password_email():
+    global accountRecoveryFlag
+    accountRecoveryFlag = 0
+    email = request.form['email']
+    username = request.form['username']
+    if valid_email(email):
+        cursor.execute("SELECT * FROM USER WHERE Email = '%s' AND Username = '%s'" % (email, username))
+        dataRecovered = cursor.fetchone()
+        if dataRecovered != None:
+            send_email(RecoveryType.PASSWORD, dataRecovered[1], email)
+            print("Email sent")
+        else:
+            accountRecoveryFlag = 1
+            print("No email found")
+    else:
+        accountRecoveryFlag = 1
+
+    return redirect(url_for('recover_password'))
 
 
 @app.route('/donation-form/<fund_ID>')
