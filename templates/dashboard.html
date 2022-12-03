@@ -85,6 +85,18 @@ body{
     gap: 25px;
     justify-content: center;
 }
+
+.container {
+  max-width: 80ch;
+  padding: 20px;
+}
+
+.container p {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
 </style>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
@@ -132,7 +144,10 @@ body{
             <div class="fundraiser-boxes">
                 <center>
                     <li><a href="fundraiser/{{ row[2] }}" style="text-decoration:none">  <h7 style="font-size: 20px"> <strong>{{row[0]}} </strong> <br> </h7> <img src="/static/{{row[3]}}" alt="no image"> </a></li>
-                    Created By: {{row[7]}} <br> <br>{{row[1]}}
+                    Created By: {{row[7]}} <br> <br>
+                    <div class="container">
+                        <p>{{row[1]}}</p>
+                    </div>
                 </center>
                 <br><br>
                 <div class="bottom">
@@ -224,7 +239,10 @@ body{
             <div class="fundraiser-boxes">
                 <center>
                     <li><a href="fundraiser/{{ row[2] }}" style="text-decoration:none">  <h7 style="font-size: 20px"> <strong>{{row[0]}} </strong> <br> </h7> <img src="/static/{{row[3]}}" alt="no image" width="350" height="350"> </a></li>
-                    Created By: {{row[7]}} <br> <br>{{row[1]}}
+                    Created By: {{row[7]}} <br> <br>
+                    <div class="container">
+                        <p>{{row[1]}}</p>
+                    </div>
                 </center>
                 <br><br>
                 <div class="bottom">
@@ -255,7 +273,6 @@ body{
 
     </div>
     <br>
-</div>
 
 <script>
 function getTag(str) {
