@@ -398,7 +398,7 @@ def upload_file():
 @app.route('/fundraiser/<fundraiser_ID>')
 def fundraiser_page(fundraiser_ID=None):
     cursor.execute(
-        "SELECT Title, Description, Goal, Balance, CreationDate, Timeframe, Tag FROM FUNDRAISER WHERE FundID = '%s'" % fundraiser_ID)
+        "SELECT Title, Description, Goal, Balance, CreationDate, Timeframe, Tag, ImagePath, ROUND((Balance / Goal) * 100, 1) AS PercentLeft FROM FUNDRAISER WHERE FundID = '%s'" % fundraiser_ID)
     fundraiserInfo = []
     for line in list(cursor):
         for item in line:
@@ -437,7 +437,7 @@ def fundraiser_page(fundraiser_ID=None):
     return render_template('fundraiser.html', fund_ID=fundraiser_ID, fund_name=fundraiserInfo[0],
                            fund_desc=fundraiserInfo[1], fund_goal=fundraiserInfo[2], fund_tag=fundraiserInfo[6],
                            fund_balance=fundraiserInfo[3], fund_creationdate=fundraiserCreationDate,
-                           fund_timeline=fundraiserTimeline, table=donationTable, isOwner = doesThisUserOwnThisFundraiser)
+                           fund_timeline=fundraiserTimeline, table=donationTable, isOwner = doesThisUserOwnThisFundraiser, image=fundraiserInfo[7], percentage=fundraiserInfo[8])
 
 @app.route('/fundraiser-edit-settings/<fundID>')
 def editingFundraiserFirstPage(fundID=None):

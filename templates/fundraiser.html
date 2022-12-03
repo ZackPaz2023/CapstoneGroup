@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>{{ fund_name }}</title>
 
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='custom-fonts.css') }}"/>
@@ -73,6 +74,8 @@
         .topnav a:hover {
           background-color: #61C957;
           color: black;}
+
+
     </style>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
@@ -93,12 +96,34 @@
 
 <div class="wrapper">
     <div class="container">
+        <center>
+        <img src="/static/{{image}}" alt="no image" width="350" height="350"> </center>
+        <br>
         <h3>Description : {{ fund_desc }}
             <br><br>
-            GOAL: ${{ fund_goal }}
-            <br>
-            CURRENT BALANCE: ${{fund_balance}}
-            <br><br>
+            <div class="bottom">
+                    <p style="text-align:left;">
+                        Balance: ${{fund_balance}}
+                        <span style="float:right;">
+                            Goal: ${{fund_goal}}
+                        </span>
+                    </p>
+                    {% if percentage >= 100 %}
+                    <div class="w3-container">
+                        <div class="w3-light-grey w3-round-xlarge">
+                            <div class="w3-container w3-green w3-round-xlarge" style="width: 100%"> <center style="color:black;"> {{percentage}}% </center> </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if percentage < 100 %}
+                    <div class="w3-container">
+                        <div class="w3-light-gray w3-round-xlarge">
+                            <div class="w3-container w3-green w3-round-xlarge" style="width: {{percentage}}%"> <center style="color:black;"> {{percentage}}% </center></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <br>
+                </div>
             Created: {{fund_creationdate}}
             <br><br>
             Fundraiser End Date: {{fund_timeline}}
