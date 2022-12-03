@@ -44,7 +44,6 @@ form{margin-top: 75px;}
             z-index: 2;}}}
 
 input[type="text"]{
-    margin-left: 25px;
     margin-bottom: -1px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;}
@@ -93,74 +92,75 @@ h3{text-align: center;}
     <form action="/submittingEditForFundraiserFirstPage/{{fundID}}" method="post">
         <div class="wrapper">
             <div class="container">
-
                 <input type="hidden" name="image" value="{{image}}">
-
                 <label for="title">Title:
                 {% if flag[0] == 1 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}</label><br>
-                <input type="text" id="title" name="title" class="form-control"  value="{{title}}">
-                <br><br>
+                    <b style="color:red;">*</b>
+                    {% endif %}
+                </label>
+                <br>
+                <input type="text" id="title" name="title" class="form-control" value="{{title}}">
+                <br>
+                <p>Description:</p>
                 <textarea rows="5" cols="40" name="description"  value="{{description}}"> {{description}} </textarea>
                 <br><br>
                 <label for="goal">Goal:
                 {% if flag[1] == 1 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}</label><br>
+                    <b style="color:red;">*</b>
+                    {% endif %}
+                </label>
+                <br>
                 <input type="text" id="goal" name="goal" class="form-control" value="{{goal}}">
                 <br>
                 <div>
-                    Category:
-                    <br>
-
+                    <p>Category:</p>
                     <select id="tag" name="tag">
                         <option value="{{thisTag}}" selected>{{thisTag}}</option>
-                    {% for tag in tagsList %}
+                        {% for tag in tagsList %}
                         {% if tag != thisTag %}
-                            <option value="{{tag}}">{{tag}}</option>
+                        <option value="{{tag}}">{{tag}}</option>
                         {% endif %}
-                    {% endfor %}
-
+                        {% endfor %}
                     </select>
                 </div>
                 <br>
-                <br><br>
-                Expiration Date:
+                <hr>
+                <h5>Expiration Date:</h5>
+                <div class="month">
+                    <label>Expiration Month (MM): </label>
+                    <select id="Month" name="Month">
+                        <option value="{{timeframeMonth}}" selected>{{timeframeMonth}}</option>
+                        {% for number in range(1, 13)%}
+                        {% if number != timeframeMonth %}
+                        <option value="{{number}}">{{number}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
                 <br>
-                         <div class="month">
-                                Expiration Month:
-                                <select id="Month" name="Month">
-                                    <option value="{{timeframeMonth}}" selected>{{timeframeMonth}}</option>
-                                    {% for number in range(1, 13)%}
-                                        {% if number != timeframeMonth %}
-                                            <option value="{{number}}">{{number}}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </div>
-
                 <div class="day">
+                    <label>Expiration Day (DD):</label>
                     <select name="day">
                         <option value="{{timeframeDay}}" selected>{{timeframeDay}}</option>
-                            {% for num in range(1, 32)%}
-                                    {% if num != timeframeDay %}
-                                        <option value="{{num}}">{{num}}</option>
-                                    {%  endif %}
-                            {% endfor %}
+                        {% for num in range(1, 32)%}
+                        {% if num != timeframeDay %}
+                        <option value="{{num}}">{{num}}</option>
+                        {%  endif %}
+                        {% endfor %}
                     </select>
                 </div>
-                    <div class="year">
-                                Expiration Year:
-                                <select id="Year" name="Year">
-                                    <option value="{{timeframeYear}}" selected>{{timeframeYear}}</option>
-                                    {% for number in range(2022, 2027)%}
-                                        {% if number != timeframeYear %}
-                                            <option value="{{number}}">{{number}}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </div><br>
+                <br>
+                <div class="year">
+                    <label>Expiration Year (YYYY): </label>
+                    <select id="Year" name="Year">
+                        <option value="{{timeframeYear}}" selected>{{timeframeYear}}</option>
+                        {% for number in range(2022, 2027)%}
+                        {% if number != timeframeYear %}
+                        <option value="{{number}}">{{number}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
             <br>
             <input type="submit" value="Next">
