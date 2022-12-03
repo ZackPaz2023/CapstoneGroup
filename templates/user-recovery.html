@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='custom-fonts.css') }}"/>
+
+    <style>
+        * {box-sizing: border-box; font-family: ubuntu;}
+
+        h2 {text-align: left;}
+
+        input[type=submit]{margin-left: 25px;}
+
+        label{margin-left: 25px;}
+
+        body{
+            background: #eee !important;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;}
+
+        form{margin-top: 100px;}
+
+        .wrapper{
+            margin-top: 300px;
+            max-width: 380px;
+            padding: 15px 35px 45px;
+            margin: auto;
+            background-color: #fff;
+            border: 5px solid rgba(0,0,0,0.1);
+
+            .checkbox{
+                margin-bottom: 30px;
+                font-weight: normal;}
+
+            .form-control{
+                position: relative;
+                font-size: 16px;
+                height: auto;
+                padding: 10px;
+
+                &:focus {
+                    z-index: 2;}}}
+
+            input[type="text"]{
+                margin-bottom: -1px;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;}
+
+        .login-btn {
+            position: fixed;
+            left: 42.5%;
+            width: 40%;
+        }
+
+        .topnav {
+            overflow: hidden;
+            background-color: #333;}
+
+        .header {
+            background-color: #f1f1f1;
+            padding: 30px;
+            text-align: center;}
+
+        .topnav a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;}
+
+        .topnav a:hover {
+            background-color: #61C957;
+            color: black;}
+</style>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div class="topnav">
+    <a href="/dashboard">Home</a>
+    <a href="/new-user-form">Sign Up!</a>
+</div>
+
+{% if recovery == "username" %}
+<div>
+    <form action="/recoverUsername" method="post">
+        <div class="wrapper">
+            <h2>Username Recovery</h2>
+            <p>Please enter your email address on the account.</p>
+            {% if flag == 1 %}
+                <i style="color:red;">Incorrect email entered. Please try again.</i>
+            {% endif %}
+            <input type="text" class="form-control" name="email" autocomplete="off" placeholder="Email" required="">
+            <br>
+            <div class="login-btn">
+                <input type="submit" class="btn btn-success btn-block" value="Send Email">
+            </div>
+
+        </div>
+    </form>
+</div>
+{% endif %}
+
+{% if recovery == "password" %}
+<div>
+    <form action="/recoverPassword" method="post">
+        <div class="wrapper">
+            <h2>Password Recovery</h2>
+            <p>Please enter your email address and username on the account.</p>
+            {% if flag == 1 %}
+                <i style="color:red;">Incorrect username or email entered. Please try again.</i>
+            {% endif %}
+            <input type="text" class="form-control" name="email" autocomplete="off" placeholder="Email" required="">
+            <br>
+            <input type="text" class="form-control" name="username" autocomplete="off" placeholder="Username" required="">
+            <br>
+            <div class="login-btn">
+                <input type="submit" class="btn btn-success btn-block" value="Send Email">
+            </div>
+
+        </div>
+    </form>
+</div>
+{% endif %}
+
+<br><br>
+<button class="btn btn-default" onclick="history.back()" style="margin-left: 375px">Go Back</button>
+
+<script>
+window.onscroll = function() {myFunction()};
+
+var topnav = document.getElementById("topnav");
+var sticky = topnav.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    topnav.classList.add("sticky")
+  } else {
+    topnav.classList.remove("sticky");
+  }
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+</body>
+</html>
