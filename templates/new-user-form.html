@@ -140,7 +140,7 @@
                     <input type="password" id="Password" name="Password" class="form-control" placeholder="Enter Password" value="{{ inputData[3] }}" required>
                     <br>
                     {% if flag[3] == 0 %}
-                        <i style="color:red;">Password must be 8 to 20 characters long and include at least ONE uppercase letter.</i><br>
+                        <i style="color:red;">Password must be 8 to 20 characters long and include at least one uppercase letter, one number, and one special character.</i><br>
                         {% endif %}
                     <label for="PhoneNumber">Phone Number:
                     {% if flag[4] == 0 %}
