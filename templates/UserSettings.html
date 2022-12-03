@@ -162,10 +162,10 @@
 
                     <p>Select A Payment Option:</p>
                     <div>
-                        <input type="radio" id="creditCard" name="paymentOptionToggle" value="creditCard">{{'checked' if isUsingCreditCard else ''}}</input>
+                        <input type="radio" id="creditCard" name="paymentOptionToggle" value="creditCard" {{'checked' if isUsingCreditCard else ''}}></input>
                             <label for="creditCard">Use A Credit Card: </label>
                         <br>
-                        <input type="radio" id="bankInfo" name="paymentOptionToggle" value="bankInfo">{{'checked' if not isUsingCreditCard else ''}}</input>
+                        <input type="radio" id="bankInfo" name="paymentOptionToggle" value="bankInfo" {{'checked' if not isUsingCreditCard else ''}}></input>
                             <label for="bankInfo">Use A Bank Account: </label>
                     </div>
                     <br>
