@@ -414,10 +414,18 @@ def fundraiser_page(fundraiser_ID=None):
     #Five most recent donations
     cursor.execute("SELECT Name, DonationAmount, TransactionDate FROM USER RIGHT JOIN (SELECT EmailAddress, DonationAmount, TransactionDate FROM GIVES RIGHT JOIN (SELECT DonationAmount, TransactionID, TransactionDate FROM DONATION INNER JOIN FUNDS ON TransactionID = FUNDS.TransactionNo AND FundNo = %s) AS R ON GIVES.TransactionNo = TransactionID) as B ON Email = EmailAddress ORDER BY TransactionDate DESC limit 5" % fundraiser_ID)
     fiveMostRecentDonationsTable = cursor.fetchall()
+    padding = 5 - len(fiveMostRecentDonationsTable)
+    if padding != 5:
+        for num in range(padding):
+            fiveMostRecentDonationsTable.append(("", "",""))
 
     #top 5 donations
     cursor.execute("SELECT Name, DonationAmount, TransactionDate FROM USER RIGHT JOIN (SELECT EmailAddress, DonationAmount, TransactionDate FROM GIVES RIGHT JOIN (SELECT DonationAmount, TransactionID, TransactionDate FROM DONATION INNER JOIN FUNDS ON TransactionID = FUNDS.TransactionNo AND FundNo = %s) AS R ON GIVES.TransactionNo = TransactionID) as B ON Email = EmailAddress ORDER BY DonationAmount DESC limit 5" % fundraiser_ID)
     topFiveDonationsTable = cursor.fetchall()
+    paddingMax = 5 - len(topFiveDonationsTable)
+    if paddingMax != 5:
+        for num in range(paddingMax):
+            topFiveDonationsTable.append(("", "", ""))
 
     #does this user own this fundraiser
     listOfUserOwnedFundraiser = []
