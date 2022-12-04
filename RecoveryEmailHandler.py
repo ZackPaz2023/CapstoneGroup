@@ -57,7 +57,7 @@ def construct_email(email_type, recovered_data, receiver):
                 <div style="margin-top: 300px; max-width: 380px; padding: 15px 35px 45px; color: black;
                             margin: auto; background-color: #fff; border: 5px solid rgba(0,0,0,0.1);">
                     <p>
-                        Your current password is: %s
+                        Click <a href="http://127.0.0.1:5000/new-password">here</a> to reset your password.
                     </p>
                     <p> 
                         If you we not expecting to receive this email, <i>contact support immediately</i> at 573-555-0107.
@@ -71,7 +71,7 @@ def construct_email(email_type, recovered_data, receiver):
                 </div>
             </body>
         </html>
-        """ % (recovered_data)
+        """
 
     em = MIMEMultipart("alternative")
     em['From'] = email_sender

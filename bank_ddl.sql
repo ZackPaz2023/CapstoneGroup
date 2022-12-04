@@ -1,6 +1,6 @@
 CREATE TABLE USER
 	(Username char(30) NOT NULL,
-	 Password char(30) NOT NULL,
+	 Password char(100) NOT NULL,
 	 Email char(50) NOT NULL,
 	 Name char(30) NOT NULL,
 	 PhoneNumber char(15) NOT NULL,

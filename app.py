@@ -7,7 +7,8 @@ from flask import render_template
 from DB_Connection import *
 from DummyInfo import monthLengths
 from RecoveryEmailHandler import *
-from ValidateNewData import valid_new_user_input, valid_new_donation_input, valid_new_fundraiser_input, valid_email
+from ValidateNewData import valid_new_user_input, valid_new_donation_input, valid_new_fundraiser_input, valid_email, valid_password
+from PasswordHasher import hash_password, verify_password, check_for_rehash
 
 app = Flask(__name__, static_url_path='/static')
 app.config['UPLOADED_FILES'] = "static/"
@@ -31,7 +32,7 @@ inputData = []
 loginFlag = 0
 accountRecoveryFlag = 0
 tagValues = ["Other", "Animals", "Business", "Community", "Creative", "Education", "Emergencies", "Environment", "Event", "Faith", "Family", "Funeral and Memorial", "Medical", "Monthly Bills", "Newlyweds", "Sports", "Travel", "Volunteer", "Wishes"]
-
+accountRecoveryEmail = ""
 
 @app.route('/')
 def home_page():  # create landing page later
@@ -134,7 +135,8 @@ def fundTagSort(tag=None):
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    global accountRecoveryFlag
+    global accountRecoveryFlag, accountRecoveryEmail
+    accountRecoveryEmail = ""
     accountRecoveryFlag = 0
     cursor.execute("SELECT Username FROM USER")
     DB_Usernames = list(cursor)
@@ -151,13 +153,18 @@ def login():
         if userName in DB_UsernamesReformatted:
             cursor.execute("SELECT Password FROM USER WHERE Username = %(username)s", {'username': userName})
             DB_Password = cursor.fetchone()[0]
-            if password == DB_Password:
+            if verify_password(password, DB_Password):
                 currentUser.isGuest = False
                 cursor.execute("SELECT Name, Email, Username FROM USER WHERE UserName = %(username)s", {'username': userName})
                 nameAndEmail = cursor.fetchmany(2)
                 currentUser.name = nameAndEmail[0][0]
                 currentUser.emailPK = nameAndEmail[0][1]
                 currentUser.username = userName
+                if check_for_rehash(DB_Password):
+                    cursor.execute("""UPDATE USER
+                                      SET Password = %(password)s
+                                      WHERE Email = %(email)s""",
+                                   {'password': hash_password(password), 'email': nameAndEmail[0][1]})
                 return redirect(url_for('dashboard'))
             else:
                 # incorrect password
@@ -213,7 +220,7 @@ def recover_password():
 
 @app.route("/recoverPassword", methods=["POST"])
 def send_password_email():
-    global accountRecoveryFlag
+    global accountRecoveryFlag, accountRecoveryEmail
     accountRecoveryFlag = 0
     email = request.form['email']
     username = request.form['username']
@@ -224,8 +231,9 @@ def send_password_email():
                        {'email': email, 'username': username})
         dataRecovered = cursor.fetchone()
         if dataRecovered != None:
-            send_email(RecoveryType.PASSWORD, dataRecovered[1], email)
+            send_email(RecoveryType.PASSWORD, "", email)
             print("Email sent")
+            accountRecoveryEmail = email
         else:
             accountRecoveryFlag = 1
             print("No email found")
@@ -233,6 +241,26 @@ def send_password_email():
         accountRecoveryFlag = 1
 
     return redirect(url_for('recover_password'))
+
+@app.route("/new-password")
+def new_password():
+    return render_template("user-recovery.html", recovery="new-password", flag=accountRecoveryFlag)
+
+@app.route("/submittingNewPassword", methods=["POST"])
+def submitting_new_password():
+    global accountRecoveryFlag
+    password = request.form['password']
+    confirmPassword = request.form['confirm-password']
+
+    if valid_password(password) and password == confirmPassword:
+        cursor.execute("""UPDATE USER
+                          SET Password = %(password)s
+                          WHERE Email = %(email)s""",
+                       {'email': accountRecoveryEmail, 'password': hash_password(password)})
+        return redirect(url_for('login'))
+    else:
+        accountRecoveryFlag = 1
+        return redirect(url_for('new_password'))
 
 
 @app.route('/donation-form/<fund_ID>')
@@ -292,7 +320,7 @@ def recordingDonation():
         amount = request.form["amount"]
         fund_id = request.form["fund_id"]
         # updating balance in Fundraiser
-        cursor.execute("UPDATE FUNDRAISER SET Balance = Balance + %d WHERE FundID = %d" % (int(amount), int(fund_id)))
+        cursor.execute("UPDATE FUNDRAISER SET Balance = Balance + %s WHERE FundID = %d" % (amount, int(fund_id)))
 
         if not currentUser.isGuest:
             email = request.form["email"]
@@ -657,4 +685,4 @@ def updatingUserSettings():
         return redirect(url_for('profile_page'))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
