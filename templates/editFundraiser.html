@@ -111,6 +111,9 @@ h3{text-align: center;}
                 </label>
                 <br>
                 <input type="text" id="goal" name="goal" class="form-control" value="{{goal}}">
+                {% if flag[1] == 1 %}
+                        <i style="color:red;">Goal must be greater than $50.</i>
+                        {% endif %}
                 <br>
                 <div>
                     <p>Category:</p>

@@ -112,21 +112,45 @@
                     <br>
                     <legend class="form-details">Personal Details:</legend>
                     <br>
-                    <label for="Name">Full Name:</label>
+                    <label for="Name">Full Name:
+                    {% if flag[0] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label>
                     <br>
                     <input type="text" id="Name" name="Name" class="form-control" value="{{name}}">
+                    {% if flag[0] == 1 %}
+                        <i style="color:red;">Must be between 5 to 40 characters long.</i>
+                        {% endif %}
                     <br>
-                    <label for="UserName">Username:</label>
+                    <label for="UserName">Username:
+                    {% if flag[2] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label>
                     <br>
                     <input type="text" id="UserName" name="UserName" class="form-control" value="{{ username}}">
+                    {% if flag[2] == 1 %}
+                        <i style="color:red;">Username must be between 5 to 20 characters.</i>
+                        {% endif %}
                     <br>
-                    <label for="Password">Password:</label>
+                    <label for="Password">Password:
+                    {% if flag[3] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label>
                     <br>
                     <input type="password" id="Password" name="Password" class="form-control" value="{{password}}">
+                    {% if flag[3] == 1 %}
+                        <i style="color:red;">Password must be 8 to 20 characters long and include at least ONE uppercase letter, ONE special character, and ONE number.</i><br>
+                        {% endif %}
                     <br>
-                    <label for="PhoneNumber">Phone Number:</label>
+                    <label for="PhoneNumber">Phone Number:
+                    {% if flag[4] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label>
                     <br>
                     <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" value="{{phonenumber}}">
+                    {% if flag[4] == 1 %}
+                        <i style="color:red;">An invalid phone number was entered.</i>
+                        {% endif %}
                     <br>
                 </div>
 
@@ -134,11 +158,17 @@
                     <br>
                     <legend>Billing Address:</legend>
                     <br>
-                    <label for="StreetAddress">Street Address:</label>
+                    <label for="StreetAddress">Street Address:
+                    {% if flag[5] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label>
                     <br>
                     <input type="text" id="StreetAddress" name="StreetAddress" class="form-control" value="{{streetaddress}}">
                     <br>
-                    <label for="City">City:</label>
+                    <label for="City">City:
+                    {% if flag[6] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label>
                     <br>
                     <input type="text" id="City" name="City" class="form-control" value="{{ city }}">
                     <br>
@@ -146,11 +176,20 @@
                     <br>
                     <input type="text" id="State" name="State" class="form-control" value="{{ state}}">
                     <br>
-                    <label for="ZipCode">Zip Code:</label>
+                    <label for="ZipCode">Zip Code:
+                    {% if flag[8] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label>
                     <br>
                     <input type="text" id="ZipCode" name="ZipCode" class="form-control" value="{{ zipcode }}">
+                    {% if flag[8] == 1 %}
+                        <i style="color:red;">An invalid zip code was entered</i>
+                        {% endif %}
                     <br>
-                    <label for="Country">Country:</label>
+                    <label for="Country">Country:
+                    {% if flag[9] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label>
                     <br>
                     <input type="text" id="Country" name="Country" class="form-control" value="{{ country}}">
                     <br>
@@ -174,9 +213,15 @@
                         <div class="form-header">
                             <h5 class="title">Credit Card Information</h5>
                         </div>
-                        <label  for="CardNumber">Card number:</label>
+                        <label  for="CardNumber">Card number:
+                        {% if flag[10] == 1 %}
+                        <b style="color:red;">*</b>
+                        {% endif %}</label>
                         <br>
-                        <input type="text" id="CardNumber" name="CardNumber" class="form-control" value="{{ cardnumber }}"><br>
+                        <input type="text" id="CardNumber" name="CardNumber" class="form-control" value="{{ cardnumber }}">
+                        {% if flag[10] == 1 %}
+                            <i style="color:red;">An invalid card number was entered. Card numbers must be 16 digits long.</i>
+                        {% endif %}<br>
                         <div class="dropdown">
                             <div class="month">
                                 <p>Expiration Month:</p>
@@ -208,13 +253,25 @@
                         <div class="form-header">
                             <h5 class="title">Bank Account Details</h5>
                         </div>
-                        <label for="RoutingNumber">Routing Number: </label>
+                        <label for="RoutingNumber">Routing Number:
+                        {% if flag[12] == 1 %}
+                            <b style="color:red;">*</b>
+                            {% endif %}</label>
                         <br>
                         <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control"  value="{{ routeno }}">
+                        {% if flag[12] == 1 %}
+                            <i style="color:red;">An invalid routing number was entered.</i>
+                            {% endif %}
                         <br>
-                        <label for="AccountNumber">Account Number:</label>
+                        <label for="AccountNumber">Account Number:
+                        {% if flag[13] == 1 %}
+                            <b style="color:red;">*</b>
+                            {% endif %}</label>
                         <br>
                         <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" value="{{ accountno }}">
+                        {% if flag[13] == 1 %}
+                            <i style="color:red;">An invalid account number was entered.</i>
+                            {% endif %}
                         <br><br><br><br>
                     </div>
                     <input type="submit" value="SUBMIT">

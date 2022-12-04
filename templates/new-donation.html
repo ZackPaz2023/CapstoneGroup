@@ -148,6 +148,9 @@
                             <b style="color:red;">*</b>
                         {% endif %}</label>
                         <input type="text" class="form-control" name="cvv" autocomplete="off" placeholder="CVV" value="{{ inputData[3] }}">
+                        {% if flag[7] == 1 %}
+                            <i style="color:red;">An invalid cvv was entered.</i>
+                        {% endif %}<br>
                         * Payment option can be changed to a Bank Account in user settings.<br>
                     </div>
                 </div>
@@ -166,12 +169,18 @@
                         <b style="color:red;">*</b>
                         {% endif %}</label><br>
             <input type="text" id="Routing-Number" name="RoutingNumber" value="{{routingNum}}" class="form-control" placeholder="Enter Routing Number" readonly="readonly"/>
+            {% if flag[8] == 1 %}
+                        <i style="color:red;">An invalid routing number was entered.</i>
+                        {% endif %}
             <br>
             <label  for="account-number">Account Number:
             {% if flag[9] == 1 %}
                         <b style="color:red;">*</b>
                         {% endif %}</label><br>
             <input type="text" class="form-control" id="account-number" name="AccountNumber" value="{{accountNum}}" placeholder="Enter Bank Account number" readonly="readonly"/>
+            {% if flag[9] == 1 %}
+                        <i style="color:red;">An invalid account number was entered.</i>
+                        {% endif %}<br>
             * Payment option can be changed to a Credit Card in user settings.<br>
             <input type="hidden" class="form-control" name="paymentOptionToggle" value="bankInfo"/>
             {% endif %}
@@ -228,10 +237,7 @@
                         {% endif %}</label><br>
             <input type="text" id="City" name="City" class="form-control" placeholder="City" value="{{ inputData[3] }}"/>
             <br>
-            <label for="State">State:
-            {% if flag[3] == 1 %}
-                        <b style="color:red;">*</b>
-                        {% endif %}</label><br>
+            <label for="State">State:</label><br>
             <input type="text" id="State" name="State" class="form-control" placeholder="State" value="{{ inputData[4] }}"/>
             <br>
             <label for="ZipCode">Zip Code:
@@ -239,6 +245,9 @@
                         <b style="color:red;">*</b>
                         {% endif %}</label><br>
             <input type="text" id="ZipCode" name="ZipCode" class="form-control" placeholder="Zip Code" value="{{ inputData[5] }}"/>
+            {% if flag[1] == 1 %}
+                        <i style="color:red;">An invalid zip code was entered.</i>
+                        {% endif %}
             <br>
             <label for="Country">Country:
             {% if flag[5] == 1 %}
@@ -268,7 +277,10 @@
                     {% if flag[6] == 1 %}
                         <b style="color:red;">*</b>
                         {% endif %}</label><br>
-                    <input type="text" id="CardNumber" name="CardNumber" class="form-control" placeholder="Enter Card Number" value="{{ inputData[8] }}"><br>
+                    <input type="text" id="CardNumber" name="CardNumber" class="form-control" placeholder="Enter Card Number" value="{{ inputData[8] }}">
+                        {% if flag[6] == 1 %}
+                        <i style="color:red;">An invalid card number was entered.</i>
+                        {% endif %}<br>
                     <div class="dropdown">
                         <div class="month">
                             Expiration Month:
@@ -286,9 +298,9 @@
                             </select>
                         </div>
                         <div class="year">
-                            Expiration Year:
+                            <p>Expiration Year:</p>
                             <select id="Year" name="Year">
-                                <option value="2023">2023</option>
+                                <option value="2023" selected>2023</option>
                                 <option value="2024">2024</option>
                                 <option value="2025">2025</option>
                                 <option value="2026">2026</option>
@@ -302,6 +314,9 @@
                         <b style="color:red;">*</b>
                         {% endif %}</label>
                                 <input type="text" id="cvv" name="cvv" class="form-control" autocomplete="off" placeholder="CVV" value="{{ inputData[11] }}">
+                                {% if flag[7] == 1 %}
+                        <i style="color:red;">An invalid cvv was entered.</i>
+                        {% endif %}
                                 <br>
                             </div>
                         </div>
@@ -318,13 +333,19 @@
                         <b style="color:red;">*</b>
                         {% endif %}</label><br>
                     <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control" placeholder="Enter Routing Number" value="{{ inputData[12] }}">
-                    <br>
+                    {% if flag[8] == 1 %}
+                        <i style="color:red;">An invalid routing number was entered.</i>
+                        {% endif %}
+                        <br>
                     <label for="AccountNumber">Account Number:
                     {% if flag[9] == 1 %}
                         <b style="color:red;">*</b>
                         {% endif %}</label><br>
                     <input type="text" id="AccountNumber" name="AccountNumber" class="form-control" placeholder="Enter Account Number" value="{{ inputData[13] }}">
-                    <br><br><br><br>
+                    {% if flag[9] == 1 %}
+                        <i style="color:red;">An invalid account number was entered.</i>
+                        {% endif %}
+                        <br><br><br><br>
 
             </div>
             <input type="submit" value="SUBMIT">
