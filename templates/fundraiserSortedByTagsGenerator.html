@@ -21,8 +21,8 @@ h5 {text-align: center;}
     border-radius: 25px;
     float: left;
     display: inline-block;
-    width: 30%;
-    height: 650px;
+    width: 400px;
+    height: 600px;
     border: 5px solid #46D44B;
     list-style: none;
     background-color: #8DFA89;
@@ -105,8 +105,7 @@ body{
 
 
 <body>
-<div id="txtHint">
-    <div id="fundList" class="fundraiser-container">
+    <div id="thisList" class="fundraiser-container">
 
             {% for row in fundraiserTable %}
             <div class="fundraiser-boxes">
@@ -145,9 +144,23 @@ body{
             {% endfor %}
 
     </div>
-</div>
 <br>
 
+<script>
+function getTag(str) {
+  if (str == "") {
+    document.getElementById("thisList").innerHTML = "";
+    return;
+  }
+
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    document.getElementById("thisList").innerHTML = this.responseText;
+  }
+  xhttp.open("GET", "/tagSort/"+str);
+  xhttp.send();
+}
+</script>
 <script>
 window.onscroll = function() {myFunction()};
 
