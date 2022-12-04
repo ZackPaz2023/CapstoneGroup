@@ -74,7 +74,44 @@
         .topnav a:hover {
           background-color: #61C957;
           color: black;}
+* {
+  box-sizing: border-box;
+}
 
+.row {
+  margin-left:-5px;
+  margin-right:-5px;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 16px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+</style>
 
     </style>
 
@@ -130,28 +167,53 @@
         </h3>
         <hr>
 
-        <div class="donation">
-            <h3> Donations: </h3>
-
-            <table style="border:1px solid black;">
-                <thread>
-                    <tr style="border:1px solid black;">
-                        <th style="border:1px solid black;">Donor</th>
-                        <th style="border:1px solid black;">Amount</th>
+        <div class="row">
+            <div class="column">
+                <h3>Five Most Recent Donations:</h3>
+                <table>
+                    <tr>
+                        <th>Donor</th>
+                        <th>Amount</th>
+                        <th>Date (YYYY-MM-DD HH-MM-SS)</th>
                     </tr>
-                </thread>
-
-                <tbody>
-
-                {% for row in table %}
+                    {% for row in recentDonortable %}
                 <tr>
+                    {% if row[0] == None %}
+                    <td style="border:1px solid black;">Guest</td>
+                    {% else %}
                     <td style="border:1px solid black;">{{row[0]}}</td>
+                    {% endif %}
                     <td style="border:1px solid black;">${{row[1]}}</td>
-                </tr>
+                    <td style="border:1px solid black;">{{row[2]}}</td>
 
-                {% endfor %}
-                </tbody>
-            </table>
+                </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <br><br>
+            <h3> Five Greatest Donations: </h3>
+            <div class="column">
+                <table>
+                    <tr>
+                        <th>Donor</th>
+                        <th>Amount</th>
+                        <th>Date (YYYY-MM-DD HH-MM-SS)</th>
+                    </tr>
+                    {% for row in topFiveDonations %}
+                <tr>
+                    {% if row[0] == None %}
+                    <td style="border:1px solid black;">Guest</td>
+                    {% else %}
+                    <td style="border:1px solid black;">{{row[0]}}</td>
+                    {% endif %}
+                    <td style="border:1px solid black;">${{row[1]}}</td>
+                    <td style="border:1px solid black;">{{row[2]}}</td>
+                </tr>
+                    {% endfor %}
+    </table>
+  </div>
+</div>
+
         </div>
 
         <form action="/donation-form/{{fund_ID}}">

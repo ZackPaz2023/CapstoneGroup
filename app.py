@@ -411,17 +411,13 @@ def fundraiser_page(fundraiser_ID=None):
     fundraiserTimeline = str(fundraiserInfo[5])[0:10]
     fundraiserTimeline = fundraiserTimeline[5:8] + fundraiserTimeline[8:10] + "-" + fundraiserTimeline[0:4]
 
-    # getting donations from registered users
-    cursor.execute(
-        "SELECT Name, DonationsToFund FROM USER INNER JOIN DONATES ON Email = EmailAddress WHERE fundNo = %s" % fundraiser_ID)
-    donationTable = cursor.fetchall()
+    #Five most recent donations
+    cursor.execute("SELECT Name, DonationAmount, TransactionDate FROM USER RIGHT JOIN (SELECT EmailAddress, DonationAmount, TransactionDate FROM GIVES RIGHT JOIN (SELECT DonationAmount, TransactionID, TransactionDate FROM DONATION INNER JOIN FUNDS ON TransactionID = FUNDS.TransactionNo AND FundNo = %s) AS R ON GIVES.TransactionNo = TransactionID) as B ON Email = EmailAddress ORDER BY TransactionDate DESC limit 5" % fundraiser_ID)
+    fiveMostRecentDonationsTable = cursor.fetchall()
 
-    # Getting guest donations
-    cursor.execute(
-        "SELECT 'Guest Donor' as Name, DonationAmount FROM (SELECT TransactionNo, DonationAmount, FundNo FROM FUNDS INNER JOIN DONATION ON FUNDS.TransactionNo = DONATION.TransactionID WHERE FundNo = %s) as R WHERE TransactionNo NOT IN (SELECT TransactionNo FROM GIVES)" % fundraiser_ID)
-    guestTable = cursor.fetchall()
-
-    donationTable += guestTable
+    #top 5 donations
+    cursor.execute("SELECT Name, DonationAmount, TransactionDate FROM USER RIGHT JOIN (SELECT EmailAddress, DonationAmount, TransactionDate FROM GIVES RIGHT JOIN (SELECT DonationAmount, TransactionID, TransactionDate FROM DONATION INNER JOIN FUNDS ON TransactionID = FUNDS.TransactionNo AND FundNo = %s) AS R ON GIVES.TransactionNo = TransactionID) as B ON Email = EmailAddress ORDER BY DonationAmount DESC limit 5" % fundraiser_ID)
+    topFiveDonationsTable = cursor.fetchall()
 
     #does this user own this fundraiser
     listOfUserOwnedFundraiser = []
@@ -437,7 +433,7 @@ def fundraiser_page(fundraiser_ID=None):
     return render_template('fundraiser.html', fund_ID=fundraiser_ID, fund_name=fundraiserInfo[0],
                            fund_desc=fundraiserInfo[1], fund_goal=fundraiserInfo[2], fund_tag=fundraiserInfo[6],
                            fund_balance=fundraiserInfo[3], fund_creationdate=fundraiserCreationDate,
-                           fund_timeline=fundraiserTimeline, table=donationTable, isOwner = doesThisUserOwnThisFundraiser, image=fundraiserInfo[7], percentage=fundraiserInfo[8])
+                           fund_timeline=fundraiserTimeline, isOwner = doesThisUserOwnThisFundraiser, image=fundraiserInfo[7], percentage=fundraiserInfo[8], recentDonortable = fiveMostRecentDonationsTable, topFiveDonations = topFiveDonationsTable)
 
 @app.route('/fundraiser-edit-settings/<fundID>')
 def editingFundraiserFirstPage(fundID=None):
