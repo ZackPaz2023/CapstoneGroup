@@ -1,3 +1,4 @@
+import datetime
 import os
 import time
 from werkzeug.utils import secure_filename
@@ -44,8 +45,12 @@ def dashboard():
     newDonationFlags = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     newFundraiserFlags = [0, 0]
     inputData = []
-    cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name, Email FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
+    cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name, Email, Timeframe FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
     homePageFundraiserData = cursor.fetchall()
+    generalFundPopulation = []
+    for fund in homePageFundraiserData:
+        if datetime.datetime.now() < fund[9]:
+            generalFundPopulation.append(fund)
 
     if not currentUser.isGuest:
         userOwnedFundraiser = []
@@ -61,17 +66,17 @@ def dashboard():
         userDonationsTable = []
         for fund in restOfFundraisers:
             for fundDonatedToo in fundraisersThisUserDonatedToo:
-                if fund[2] == fundDonatedToo[0]:
+                if fund[2] == fundDonatedToo[0] and datetime.datetime.now() < fund[9]:
                     userDonationsTable.append(fund)
             else:
-                if fund not in userDonationsTable:
+                if fund not in userDonationsTable and datetime.datetime.now() < fund[9]:
                     restRestOfFundraiser.append(fund)
 
         return render_template('dashboard.html', name=currentUser.name, userOwnedFund=userOwnedFundraiser,
                                fundraiserTable=restRestOfFundraiser, userDonorTable=userDonationsTable,
                                isGuest=currentUser.isGuest)
 
-    return render_template('dashboard.html', name=currentUser.name, fundraiserTable=homePageFundraiserData,
+    return render_template('dashboard.html', name=currentUser.name, fundraiserTable=generalFundPopulation,
                            isGuest=currentUser.isGuest)
 
 
@@ -82,39 +87,47 @@ def fundTagSort(tag=None):
         if not currentUser.isGuest:
             cursor.execute("SELECT FundID, EmailAddress FROM DONATES INNER JOIN FUNDRAISER ON FundNo = FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
             fundsDonatedToo = cursor.fetchall()
-            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND Email != '%s'" % currentUser.emailPK)
+            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name, Timeframe FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND Email != '%s'" % currentUser.emailPK)
             homePageFundraiserData = cursor.fetchall()
             restRestOfFundraiser = []
             userDonationsTable = []
             for fund in homePageFundraiserData:
                 for fundDonatedToo in fundsDonatedToo:
-                    if fund[2] == fundDonatedToo[0]:
+                    if fund[2] == fundDonatedToo[0] and datetime.datetime.now() < fund[8]:
                         userDonationsTable.append(fund)
                 else:
-                    if fund not in userDonationsTable:
+                    if fund not in userDonationsTable and datetime.datetime.now() < fund[8]:
                         restRestOfFundraiser.append(fund)
         else:
-            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
-            restRestOfFundraiser = cursor.fetchall()
+            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name, Timeframe FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
+            homePageFundraiserData = cursor.fetchall()
+            restRestOfFundraiser = []
+            for fund in homePageFundraiserData:
+                if datetime.datetime.now() < fund[8]:
+                    restRestOfFundraiser.append(fund)
 
     else:
         if not currentUser.isGuest:
             cursor.execute("SELECT FundID, EmailAddress FROM DONATES INNER JOIN FUNDRAISER ON FundNo = FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
             fundsDonatedToo = cursor.fetchall()
-            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND FUNDRAISER.Tag = '%s' AND Email != '%s'" % (tag, currentUser.emailPK))
+            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name, Timeframe FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND FUNDRAISER.Tag = '%s' AND Email != '%s'" % (tag, currentUser.emailPK))
             homePageFundraiserData = cursor.fetchall()
             restRestOfFundraiser = []
             userDonationsTable = []
             for fund in homePageFundraiserData:
                 for fundDonatedToo in fundsDonatedToo:
-                    if fund[2] == fundDonatedToo[0]:
+                    if fund[2] == fundDonatedToo[0] and datetime.datetime.now() < fund[8]:
                         userDonationsTable.append(fund)
                 else:
-                    if fund not in userDonationsTable:
+                    if fund not in userDonationsTable and datetime.datetime.now() < fund[8]:
                         restRestOfFundraiser.append(fund)
         else:
-            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND FUNDRAISER.Tag = '%s' " % tag)
-            restRestOfFundraiser = cursor.fetchall()
+            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name, Timeframe FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID AND FUNDRAISER.Tag = '%s' " % tag)
+            homePageFundraiserData = cursor.fetchall()
+            restRestOfFundraiser = []
+            for fund in homePageFundraiserData:
+                if datetime.datetime.now() < fund[8]:
+                    restRestOfFundraiser.append(fund)
 
     return render_template('fundraiserSortedByTagsGenerator.html', fundraiserTable=restRestOfFundraiser)
 
