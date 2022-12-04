@@ -24,7 +24,7 @@ class User:
 
 
 currentUser = User()
-newUserFlags = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+newUserFlags = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 newFundraiserFlags = [0, 0]
 newDonationFlags = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 inputData = []
@@ -41,7 +41,7 @@ def home_page():  # create landing page later
 @app.route('/dashboard')
 def dashboard():
     global newUserFlags, newDonationFlags, newFundraiserFlags, inputData
-    newUserFlags = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    newUserFlags = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     newDonationFlags = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     newFundraiserFlags = [0, 0]
     inputData = []
@@ -60,7 +60,8 @@ def dashboard():
                 userOwnedFundraiser.append(fund)
             else:
                 restOfFundraisers.append(fund)
-        cursor.execute("SELECT FundID, EmailAddress FROM DONATES INNER JOIN FUNDRAISER ON FundNo = FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
+        cursor.execute(
+            "SELECT FundID, EmailAddress FROM DONATES INNER JOIN FUNDRAISER ON FundNo = FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
         fundraisersThisUserDonatedToo = cursor.fetchall()
         restRestOfFundraiser = []
         userDonationsTable = []
@@ -71,7 +72,6 @@ def dashboard():
             else:
                 if fund not in userDonationsTable and datetime.datetime.now() < fund[9]:
                     restRestOfFundraiser.append(fund)
-
         return render_template('dashboard.html', name=currentUser.name, userOwnedFund=userOwnedFundraiser,
                                fundraiserTable=restRestOfFundraiser, userDonorTable=userDonationsTable,
                                isGuest=currentUser.isGuest)
@@ -99,13 +99,14 @@ def fundTagSort(tag=None):
                     if fund not in userDonationsTable and datetime.datetime.now() < fund[8]:
                         restRestOfFundraiser.append(fund)
         else:
+            cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
+            restRestOfFundraiser = cursor.fetchall()
             cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name, Timeframe FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
             homePageFundraiserData = cursor.fetchall()
             restRestOfFundraiser = []
             for fund in homePageFundraiserData:
                 if datetime.datetime.now() < fund[8]:
                     restRestOfFundraiser.append(fund)
-
     else:
         if not currentUser.isGuest:
             cursor.execute("SELECT FundID, EmailAddress FROM DONATES INNER JOIN FUNDRAISER ON FundNo = FundID WHERE EmailAddress = '%s'" % currentUser.emailPK)
@@ -148,11 +149,11 @@ def login():
         password = request.form["password"]
 
         if userName in DB_UsernamesReformatted:
-            cursor.execute("SELECT Password FROM USER WHERE Username = '%s'" % userName)
+            cursor.execute("SELECT Password FROM USER WHERE Username = %(username)s", {'username': userName})
             DB_Password = cursor.fetchone()[0]
             if password == DB_Password:
                 currentUser.isGuest = False
-                cursor.execute("SELECT Name, Email, Username FROM USER WHERE UserName = '%s'" % userName)
+                cursor.execute("SELECT Name, Email, Username FROM USER WHERE UserName = %(username)s", {'username': userName})
                 nameAndEmail = cursor.fetchmany(2)
                 currentUser.name = nameAndEmail[0][0]
                 currentUser.emailPK = nameAndEmail[0][1]
@@ -189,7 +190,10 @@ def send_username_email():
     accountRecoveryFlag = 0
     email = request.form['email']
     if valid_email(email):
-        cursor.execute("SELECT * FROM USER WHERE Email = '%s'" % email)
+        cursor.execute("""SELECT * 
+                          FROM USER 
+                          WHERE Email = %(email)s""",
+                       {'email': email})
         dataRecovered = cursor.fetchone()
         print(dataRecovered)
         if dataRecovered != None:
@@ -214,7 +218,10 @@ def send_password_email():
     email = request.form['email']
     username = request.form['username']
     if valid_email(email):
-        cursor.execute("SELECT * FROM USER WHERE Email = '%s' AND Username = '%s'" % (email, username))
+        cursor.execute("""SELECT * 
+                          FROM USER 
+                          WHERE Email = %(email)s AND Username = %(username)s""",
+                       {'email': email, 'username': username})
         dataRecovered = cursor.fetchone()
         if dataRecovered != None:
             send_email(RecoveryType.PASSWORD, dataRecovered[1], email)
@@ -424,16 +431,18 @@ def fundraiser_page(fundraiser_ID=None):
     fundraiserTimeline = str(fundraiserInfo[5])[0:10]
     fundraiserTimeline = fundraiserTimeline[5:8] + fundraiserTimeline[8:10] + "-" + fundraiserTimeline[0:4]
 
-    #Five most recent donations
-    cursor.execute("SELECT Name, DonationAmount, TransactionDate FROM USER RIGHT JOIN (SELECT EmailAddress, DonationAmount, TransactionDate FROM GIVES RIGHT JOIN (SELECT DonationAmount, TransactionID, TransactionDate FROM DONATION INNER JOIN FUNDS ON TransactionID = FUNDS.TransactionNo AND FundNo = %s) AS R ON GIVES.TransactionNo = TransactionID) as B ON Email = EmailAddress ORDER BY TransactionDate DESC limit 5" % fundraiser_ID)
+    # Five most recent donations
+    cursor.execute(
+        "SELECT Name, DonationAmount, TransactionDate FROM USER RIGHT JOIN (SELECT EmailAddress, DonationAmount, TransactionDate FROM GIVES RIGHT JOIN (SELECT DonationAmount, TransactionID, TransactionDate FROM DONATION INNER JOIN FUNDS ON TransactionID = FUNDS.TransactionNo AND FundNo = %s) AS R ON GIVES.TransactionNo = TransactionID) as B ON Email = EmailAddress ORDER BY TransactionDate DESC limit 5" % fundraiser_ID)
     fiveMostRecentDonationsTable = cursor.fetchall()
     padding = 5 - len(fiveMostRecentDonationsTable)
     if padding != 5:
         for num in range(padding):
-            fiveMostRecentDonationsTable.append(("", "",""))
+            fiveMostRecentDonationsTable.append(("", "", ""))
 
-    #top 5 donations
-    cursor.execute("SELECT Name, DonationAmount, TransactionDate FROM USER RIGHT JOIN (SELECT EmailAddress, DonationAmount, TransactionDate FROM GIVES RIGHT JOIN (SELECT DonationAmount, TransactionID, TransactionDate FROM DONATION INNER JOIN FUNDS ON TransactionID = FUNDS.TransactionNo AND FundNo = %s) AS R ON GIVES.TransactionNo = TransactionID) as B ON Email = EmailAddress ORDER BY DonationAmount DESC limit 5" % fundraiser_ID)
+    # top 5 donations
+    cursor.execute(
+        "SELECT Name, DonationAmount, TransactionDate FROM USER RIGHT JOIN (SELECT EmailAddress, DonationAmount, TransactionDate FROM GIVES RIGHT JOIN (SELECT DonationAmount, TransactionID, TransactionDate FROM DONATION INNER JOIN FUNDS ON TransactionID = FUNDS.TransactionNo AND FundNo = %s) AS R ON GIVES.TransactionNo = TransactionID) as B ON Email = EmailAddress ORDER BY DonationAmount DESC limit 5" % fundraiser_ID)
     topFiveDonationsTable = cursor.fetchall()
     paddingMax = 5 - len(topFiveDonationsTable)
     if paddingMax != 5:
@@ -468,6 +477,9 @@ def editingFundraiserFirstPage(fundID=None):
 
 @app.route('/submittingEditForFundraiserFirstPage/<fundID>', methods=["GET", "POST"])
 def editingFundraiserSecondPage(fundID=None):
+    global newFundraiserFlags
+    newFundraiserFlags = valid_new_fundraiser_input(request.form)[1]
+    valid_fundraiser = valid_new_fundraiser_input(request.form)[0]
     title = request.form['title']
     description = request.form['description']
     goal = request.form['goal']
@@ -479,8 +491,11 @@ def editingFundraiserSecondPage(fundID=None):
     images = os.listdir('static')
     thisImage = request.form['image']
 
-    return render_template('edit-fundraiser-second-page.html', fundID= fundID, title=title, description=description, tag=tag, goal=goal,
-                           timeline=timeline, imageList=images, thisImage = thisImage)
+    if valid_fundraiser:
+        return render_template('edit-fundraiser-second-page.html', fundID= fundID, title=title, description=description, tag=tag, goal=goal,
+                               timeline=timeline, imageList=images, thisImage = thisImage)
+    else:
+        return redirect(url_for('editingFundraiserFirstPage', fundID=fundID))
 
 @app.route("/editingSelect", methods=["GET", "POST"])
 def editingSelectImage():
@@ -492,7 +507,12 @@ def editingSelectImage():
     image = request.form["imageSelect"]
     fundID = request.form["fundID"]
 
-    cursor.execute("UPDATE FUNDRAISER SET Title = '%s', Description = '%s', Tag = '%s', ImagePath = '%s', Goal = '%s', Timeframe = '%s' WHERE FundID = %d " % (title, description, tag, image, goal, timeline, int(fundID)))
+    cursor.execute("""UPDATE FUNDRAISER 
+                      SET Title = %(title)s, Description = %(description)s, Tag = %(tag)s, 
+                      ImagePath = %(image)s, Goal = %(goal)s, Timeframe = %(timeline)s 
+                      WHERE FundID = %(fundID)s """,
+                   {'title': title, 'description': description, 'tag': tag, 'image': image,
+                    'goal': goal, 'timeline': timeline, 'fundID': fundID})
     db.commit()
 
     return redirect(url_for('dashboard'))
@@ -508,7 +528,12 @@ def editing_upload_file():
     fundID = request.form["fundID"]
 
     image.save(os.path.join(app.config['UPLOADED_FILES'], secure_filename(image.filename)))
-    cursor.execute("UPDATE FUNDRAISER SET Title = '%s', Description = '%s', Tag = '%s', ImagePath = '%s', Goal = '%s', Timeframe = '%s' WHERE FundID = %d " % (title, description, tag, image.filename, goal, timeline, int(fundID)))
+    cursor.execute("""UPDATE FUNDRAISER 
+                      SET Title = %(title)s, Description = %(description)s, Tag = %(tag)s, 
+                      ImagePath = %(image)s, Goal = %(goal)s, Timeframe = %(timeline)s 
+                      WHERE FundID = %(fundID)s """,
+                   {'title': title, 'description': description, 'tag': tag, 'image': image.filename,
+                    'goal': goal, 'timeline': timeline, 'fundID': fundID})
     db.commit()
     return redirect(url_for('dashboard'))
 
@@ -596,17 +621,40 @@ def updatingUserSettings():
     if radioToggled == "creditCard":
         cardNumber = request.form["CardNumber"]
         expirationDate = request.form["Year"] + "-" + request.form["Month"] + "-" + str(monthLengths(int(request.form["Month"]), int(request.form["Year"])))
-        cursor.execute("UPDATE USER SET Username = '{}', Password = '{}', Name = '{}', PhoneNumber = '{}', ZipCode = '{}', StreetAddress = '{}', State = '{}', City = '{}', Country = '{}', CardNumber = '{}', ExpirationDate = '{}', RouteNo = {}, AccountNo = {} WHERE Email = '{}'"  .format(userName, password, name, phoneNumber, zipCode, streetAddress, state, city, country, cardNumber, expirationDate, 'Null', 'Null', currentUser.emailPK))
-        db.commit()
+        if valid_new_user_input(request.form, radioToggled, True)[0]:
+            cursor.execute("""UPDATE USER 
+                              SET Username = %(username)s, Password = %(password)s, Name = %(name)s, 
+                              PhoneNumber = %(phoneNumber)s, ZipCode = %(zipCode)s, StreetAddress = %(streetAddress)s, 
+                              State = %(state)s, City = %(city)s, Country = %(country)s, CardNumber = %(cardNumber)s, 
+                              ExpirationDate = %(expirationDate)s, RouteNo = NULL, AccountNo = NULL 
+                              WHERE Email = %(email)s""",
+                           {'username': userName, 'password': password, 'name': name, 'phoneNumber': phoneNumber,
+                            'zipCode': zipCode, 'streetAddress': streetAddress, 'state': state, 'city': city, 'country': country,
+                            'cardNumber': cardNumber, 'expirationDate': expirationDate, 'email': currentUser.emailPK})
+            db.commit()
     elif radioToggled == "bankInfo":
         routingNumber = request.form["RoutingNumber"]
         accountNumber = request.form["AccountNumber"]
-        cursor.execute("UPDATE USER SET Username = '{}', Password = '{}', Name = '{}', PhoneNumber = '{}', ZipCode = '{}', StreetAddress = '{}', State = '{}', City = '{}', Country = '{}', CardNumber = {}, ExpirationDate = {}, RouteNo = '{}', AccountNo = '{}' WHERE Email = '{}'" .format(userName, password, name, phoneNumber, zipCode, streetAddress, state, city, country, 'Null', 'Null', routingNumber, accountNumber, currentUser.emailPK))
-        db.commit()
+        if valid_new_user_input(request.form, radioToggled, True)[0]:
+            cursor.execute("""UPDATE USER 
+                                      SET Username = %(username)s, Password = %(password)s, Name = %(name)s, 
+                                      PhoneNumber = %(phoneNumber)s, ZipCode = %(zipCode)s, StreetAddress = %(streetAddress)s, 
+                                      State = %(state)s, City = %(city)s, Country = %(country)s, CardNumber = NULL, 
+                                      ExpirationDate = NULL, RouteNo = %(routeNo)s, AccountNo = %(accountNo)s 
+                                      WHERE Email = %(email)s""",
+                           {'username': userName, 'password': password, 'name': name, 'phoneNumber': phoneNumber,
+                            'zipCode': zipCode, 'streetAddress': streetAddress, 'state': state, 'city': city,
+                            'country': country, 'routeNo': routingNumber, 'accountNo': accountNumber, 'email': currentUser.emailPK})
+            db.commit()
 
-    currentUser.name = name
-    currentUser.username = userName
-    return redirect(url_for('dashboard'))
+    global newUserFlags
+    newUserFlags = valid_new_user_input(request.form, radioToggled, True)[1]
+    if valid_new_user_input(request.form, radioToggled, True)[0]:
+        currentUser.name = name
+        currentUser.username = userName
+        return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('profile_page'))
 
 if __name__ == '__main__':
     app.run()
