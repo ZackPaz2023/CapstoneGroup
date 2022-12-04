@@ -130,6 +130,29 @@
 </div>
 {% endif %}
 
+{% if recovery == "new-password" %}
+<div>
+    <form action="/submittingNewPassword" method="post">
+        <div class="wrapper">
+            <h2>Password Recovery</h2>
+            <p>Please create a new password.</p>
+            {% if flag == 1 %}
+                <i style="color:red;">Passwords don't match or an invalid password was entered.
+                Password must be 8 to 20 characters long and include at least ONE uppercase letter, ONE special character, and ONE number.</i>
+            {% endif %}
+            <input type="password" class="form-control" name="password" autocomplete="off" placeholder="Password" required="">
+            <br>
+            <input type="password" class="form-control" name="confirm-password" autocomplete="off" placeholder="Confirm Password" required="">
+            <br>
+            <div class="login-btn">
+                <input type="submit" class="btn btn-success btn-block" value="Submit">
+            </div>
+
+        </div>
+    </form>
+</div>
+{% endif %}
+
 <br><br>
 <button class="btn btn-default" onclick="history.back()" style="margin-left: 375px">Go Back</button>
 
