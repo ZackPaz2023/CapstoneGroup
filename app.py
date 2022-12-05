@@ -602,7 +602,7 @@ def recordNewUserForm():
         if valid_new_user_input(request.form, radioToggled)[0]:
             cursor.execute(
                 "INSERT INTO USER (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, RouteNo, AccountNo) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                (userName, password, email, name, phoneNumber, zipCode, streetAddress, state, city, country,
+                (userName, hash_password(password), email, name, phoneNumber, zipCode, streetAddress, state, city, country,
                  routingNumber, accountNumber))
             db.commit()
 
@@ -671,7 +671,7 @@ def updatingUserSettings():
                                       State = %(state)s, City = %(city)s, Country = %(country)s, CardNumber = NULL, 
                                       ExpirationDate = NULL, RouteNo = %(routeNo)s, AccountNo = %(accountNo)s 
                                       WHERE Email = %(email)s""",
-                           {'username': userName, 'password': password, 'name': name, 'phoneNumber': phoneNumber,
+                           {'username': userName, 'password': hash_password(password), 'name': name, 'phoneNumber': phoneNumber,
                             'zipCode': zipCode, 'streetAddress': streetAddress, 'state': state, 'city': city,
                             'country': country, 'routeNo': routingNumber, 'accountNo': accountNumber, 'email': currentUser.emailPK})
             db.commit()
