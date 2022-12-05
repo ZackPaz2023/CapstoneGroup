@@ -41,10 +41,11 @@ def home_page():  # create landing page later
 
 @app.route('/dashboard')
 def dashboard():
-    global newUserFlags, newDonationFlags, newFundraiserFlags, inputData
+    global newUserFlags, newDonationFlags, newFundraiserFlags, inputData, loginFlag
     newUserFlags = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     newDonationFlags = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     newFundraiserFlags = [0, 0]
+    loginFlag = 0
     inputData = []
     cursor.execute("SELECT Title, Description, FundID, ImagePath, Goal, Balance, ROUND((Balance / Goal) * 100, 1) AS PercentLeft, Name, Email, Timeframe FROM FUNDRAISER INNER JOIN OWNS INNER JOIN USER ON OWNS.EmailAddress = USER.Email WHERE OWNS.FundNo = FUNDRAISER.FundID")
     homePageFundraiserData = cursor.fetchall()
@@ -592,7 +593,7 @@ def recordNewUserForm():
         if valid_new_user_input(request.form, radioToggled)[0]:
             cursor.execute(
                 "INSERT INTO USER (Username, Password, Email, Name, PhoneNumber, ZipCode, StreetAddress, State, City, Country, CardNumber, ExpirationDate) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                (userName, password, email, name, phoneNumber, zipCode, streetAddress, state, city, country, cardNumber,
+                (userName, hash_password(password), email, name, phoneNumber, zipCode, streetAddress, state, city, country, cardNumber,
                  expirationDate))
             db.commit()
     elif radioToggled == "bankInfo":
@@ -656,7 +657,7 @@ def updatingUserSettings():
                               State = %(state)s, City = %(city)s, Country = %(country)s, CardNumber = %(cardNumber)s, 
                               ExpirationDate = %(expirationDate)s, RouteNo = NULL, AccountNo = NULL 
                               WHERE Email = %(email)s""",
-                           {'username': userName, 'password': password, 'name': name, 'phoneNumber': phoneNumber,
+                           {'username': userName, 'password': hash_password(password), 'name': name, 'phoneNumber': phoneNumber,
                             'zipCode': zipCode, 'streetAddress': streetAddress, 'state': state, 'city': city, 'country': country,
                             'cardNumber': cardNumber, 'expirationDate': expirationDate, 'email': currentUser.emailPK})
             db.commit()
@@ -685,4 +686,4 @@ def updatingUserSettings():
         return redirect(url_for('profile_page'))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
